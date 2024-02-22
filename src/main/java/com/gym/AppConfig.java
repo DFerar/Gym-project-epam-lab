@@ -12,7 +12,6 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan
 @PropertySource("classpath:application.yml")
 public class AppConfig {
-
     @Bean
     public Storage storage() {
         return new Storage();

@@ -5,6 +5,7 @@ import com.gym.customer.Customer;
 import com.gym.training.Training;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -16,25 +17,24 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 @Setter
 public class Storage {
-    private  Map<Integer, Customer> customerStorage = new ConcurrentHashMap<>();
-    private  Map<Integer, com.gym.instructor.Instructor> instructorStorage = new ConcurrentHashMap<>();
-    private  Map<Integer, Training> trainingStorage = new ConcurrentHashMap<>();
+    private Map<Integer, Customer> customerStorage = new ConcurrentHashMap<>();
+    private Map<Integer, com.gym.instructor.Instructor> instructorStorage = new ConcurrentHashMap<>();
+    private Map<Integer, Training> trainingStorage = new ConcurrentHashMap<>();
+    @Value("${datasource.path}")
+    private String filepath;
 
-    public Map<String, Object> getStorageData() {
+    public void updateDatasource() throws IOException {
+        Map<String, Object> storageData = getStorageData();
+        File file = new File(filepath);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(file, storageData);
+    }
+
+    private Map<String, Object> getStorageData() {
         Map<String, Object> dataStorage = new ConcurrentHashMap<>();
         dataStorage.put("customerStorage", customerStorage);
         dataStorage.put("instructorStorage", instructorStorage);
         dataStorage.put("trainingStorage", trainingStorage);
         return dataStorage;
-    }
-
-    public void updateDatasource(Map<String, Object> datastorage) throws IOException {
-        File file  = new File("/home/denis/IdeaProjects/Spring-core-task/datasource.json");
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(file, datastorage);
-    }
-
-    public void clearStorage(Map<String, Object> datastorage) {
-        datastorage.clear();
     }
 }
