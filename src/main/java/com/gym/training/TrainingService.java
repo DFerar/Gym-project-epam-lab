@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 
+import static com.gym.utils.Utils.getLastMapObjectId;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -13,6 +15,8 @@ public class TrainingService {
     private final TrainingRepository trainingRepository;
 
     public Training createTraining(Training training) {
+        Integer trainingId = getLastMapObjectId(trainingRepository.getTrainingStorage().keySet()) + 1;
+        training.setTrainingId(trainingId);
         log.info("Creating training");
         return trainingRepository.createTraining(training);
     }

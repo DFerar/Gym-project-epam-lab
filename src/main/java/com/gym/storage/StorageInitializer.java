@@ -3,11 +3,11 @@ package com.gym.storage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 
 
 @Component
@@ -15,23 +15,17 @@ import java.io.IOException;
 public class StorageInitializer {
 
     private final Storage storage;
+    @Value("${datasource.path}")
+    private String filepath;
 
     @PostConstruct
-    public void loadDataFromFiles() {
-        String filePath = "/home/denis/IdeaProjects/Spring-core-task/datasource.json";
-        loadEntityData(filePath);
-    }
-
-    private void loadEntityData(String filePath) {
-        try {
-            File file = new File(filePath);
-            ObjectMapper objectMapper = new ObjectMapper();
-            Storage entityMap = objectMapper.readValue(file, Storage.class);
-            storage.setCustomerStorage(entityMap.getCustomerStorage());
-            storage.setInstructorStorage(entityMap.getInstructorStorage());
-            storage.setTrainingStorage(entityMap.getTrainingStorage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @SneakyThrows
+    public void loadEntityData() {
+        File file = new File(filepath);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Storage entityMap = objectMapper.readValue(file, Storage.class);
+        storage.setCustomerStorage(entityMap.getCustomerStorage());
+        storage.setInstructorStorage(entityMap.getInstructorStorage());
+        storage.setTrainingStorage(entityMap.getTrainingStorage());
     }
 }

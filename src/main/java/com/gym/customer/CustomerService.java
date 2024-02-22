@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 
+import static com.gym.utils.Utils.*;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -13,6 +15,11 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     public Customer createCustomer(Customer customer) {
+        Integer userId = getLastMapObjectId(customerRepository.getCustomerMap().keySet()) + 1;
+        customer.setPassword(generatePassword());
+        customer.setUserId(userId);
+        String userName = generateUniqueCustomerName(customer.getFirstName(), customer.getLastName(), userId);
+        customer.setUserName(userName);
         log.info("Creating customer: {}", customer);
         return customerRepository.createCustomer(customer);
     }
@@ -41,11 +48,28 @@ public class CustomerService {
 
     public Customer updateCustomer(Customer newData) {
         if (customerRepository.getCustomerById(newData.getUserId()) != null) {
-            log.info("Updating customer");
-            return customerRepository.updateCustomer(newData);
+            Customer customerToUpdate = getCustomerById(newData.getUserId());
+            String newUserName = generateUniqueCustomerName(newData.getFirstName(), newData.getLastName(), customerToUpdate.getUserId());
+            customerToUpdate.setUserName(newUserName);
+            customerToUpdate.setFirstName(newData.getFirstName());
+            customerToUpdate.setLastName(newData.getLastName());
+            customerToUpdate.setIsActive(newData.getIsActive());
+            customerToUpdate.setAddress(newData.getAddress());
+            customerToUpdate.setDateOfBirth(newData.getDateOfBirth());
+            log.info("Updating customer with ID:{}", newData.getUserId());
+            return customerRepository.updateCustomer(customerToUpdate);
         } else {
             log.warn("Customer was not found");
             throw new NoSuchElementException("Customer not found");
+        }
+    }
+
+    private String generateUniqueCustomerName(String firstName, String lastName, Integer userId) {
+        String userName = generateUsername(firstName, lastName);
+        if (!(customerRepository.ifUsernameExists(userName))) {
+            return userName;
+        } else {
+            return userName + userId;
         }
     }
 }

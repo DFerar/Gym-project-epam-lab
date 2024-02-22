@@ -12,8 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.NoSuchElementException;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = AppConfig.class)
@@ -45,8 +46,9 @@ public class TrainingTest {
         assertNotNull(trainingFromBase);
         assertEquals(createdTraining.getTrainingName(), trainingFromBase.getTrainingName());
 
-        //removing test training from base
+        //removing test training from base and checking exception
         storage.getTrainingStorage().remove(createdTraining.getTrainingId());
-        storage.updateDatasource(storage.getStorageData());
+        storage.updateDatasource();
+        assertThrows(NoSuchElementException.class, () -> gymCRMFacade.getTrainingById(createdTraining.getTrainingId()));
     }
 }
