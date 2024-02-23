@@ -2,7 +2,7 @@ package customerTests;
 
 import com.gym.AppConfig;
 import com.gym.GymCRMFacade;
-import com.gym.customer.Customer;
+import com.gym.entities.Customer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = AppConfig.class)
-public class CustomerTest {
+public class CustomerIntegrationTest {
     @Autowired
     private GymCRMFacade gymCRMFacade;
 

@@ -1,8 +1,9 @@
 package com.gym.storage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gym.customer.Customer;
-import com.gym.training.Training;
+import com.gym.entities.Customer;
+import com.gym.entities.Instructor;
+import com.gym.entities.Training;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Setter
 public class Storage {
     private Map<Integer, Customer> customerStorage = new ConcurrentHashMap<>();
-    private Map<Integer, com.gym.instructor.Instructor> instructorStorage = new ConcurrentHashMap<>();
+    private Map<Integer, Instructor> instructorStorage = new ConcurrentHashMap<>();
     private Map<Integer, Training> trainingStorage = new ConcurrentHashMap<>();
     @Value("${datasource.path}")
     private String filepath;

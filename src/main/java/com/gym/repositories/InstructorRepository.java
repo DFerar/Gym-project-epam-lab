@@ -1,5 +1,6 @@
-package com.gym.instructor;
+package com.gym.repositories;
 
+import com.gym.entities.Instructor;
 import com.gym.storage.Storage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

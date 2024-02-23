@@ -1,9 +1,10 @@
 package com.gym;
 
-import com.gym.customer.Customer;
+import com.gym.entities.Customer;
+import com.gym.entities.Instructor;
+import com.gym.entities.Training;
+import com.gym.entities.TrainingType;
 import com.gym.storage.StorageInitializer;
-import com.gym.training.Training;
-import com.gym.training.TrainingType;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class GymCRMApp {
@@ -41,7 +42,7 @@ public class GymCRMApp {
             updatedCustomer.setIsActive(false);
             gymCRMFacade.updateCustomer(updatedCustomer);
             //createInstructor
-            com.gym.instructor.Instructor newInstructor = new com.gym.instructor.Instructor();
+            Instructor newInstructor = new Instructor();
             newInstructor.setFirstName("trainer");
             newInstructor.setLastName("kek");
             newInstructor.setSpecialization("keklol");
@@ -51,7 +52,7 @@ public class GymCRMApp {
             //gymCRMFacade.deleteInstructor(5);
             //gymCRMFacade.getInstructorById(5);
             //updateTrainer
-            com.gym.instructor.Instructor updateData = new com.gym.instructor.Instructor();
+            Instructor updateData = new Instructor();
             updateData.setUserId(4);
             updateData.setFirstName("trainer4");
             updateData.setLastName("kek4");

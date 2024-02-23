@@ -1,5 +1,7 @@
-package com.gym.customer;
+package com.gym.services;
 
+import com.gym.entities.Customer;
+import com.gym.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,7 +51,8 @@ public class CustomerService {
     public Customer updateCustomer(Customer newData) {
         if (customerRepository.getCustomerById(newData.getUserId()) != null) {
             Customer customerToUpdate = getCustomerById(newData.getUserId());
-            String newUserName = generateUniqueCustomerName(newData.getFirstName(), newData.getLastName(), customerToUpdate.getUserId());
+            String newUserName = generateUniqueCustomerName(newData.getFirstName(), newData.getLastName(),
+                    customerToUpdate.getUserId());
             customerToUpdate.setUserName(newUserName);
             customerToUpdate.setFirstName(newData.getFirstName());
             customerToUpdate.setLastName(newData.getLastName());

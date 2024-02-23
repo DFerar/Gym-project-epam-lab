@@ -22,6 +22,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
     testImplementation 'org.springframework:spring-test:6.1.3'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
     //lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
@@ -47,9 +49,13 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "com/gym/GymCRMApp.*",
-                    "com/gym/customer/Customer.*",
-                    "com/gym/instructor/Instructor.*",
-                    "com/gym/training/Training.*",
+                    "com/gym/entities/Customer.*",
+                    "com/gym/entities/Instructor.*",
+                    "com/gym/entities/Training.*",
+                    "com/gym/entities/TrainingType.*",
+                    "com/gym/storage/**.*",
+                    "com/gym/AppConfig.*",
+                    "com/gym/GymCRMFacade.*"
             ])
         }))
     }

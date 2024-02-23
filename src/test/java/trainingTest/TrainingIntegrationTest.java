@@ -2,9 +2,9 @@ package trainingTest;
 
 import com.gym.AppConfig;
 import com.gym.GymCRMFacade;
+import com.gym.entities.Training;
+import com.gym.entities.TrainingType;
 import com.gym.storage.Storage;
-import com.gym.training.Training;
-import com.gym.training.TrainingType;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = AppConfig.class)
-public class TrainingTest {
+public class TrainingIntegrationTest {
     @Autowired
     private GymCRMFacade gymCRMFacade;
     @Autowired

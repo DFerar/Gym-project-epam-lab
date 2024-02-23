@@ -2,7 +2,7 @@ package instructorTest;
 
 import com.gym.AppConfig;
 import com.gym.GymCRMFacade;
-import com.gym.instructor.Instructor;
+import com.gym.entities.Instructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = AppConfig.class)
-public class InstructorTest {
+public class InstructorIntegrationTest {
     @Autowired
     private GymCRMFacade gymCRMFacade;
 

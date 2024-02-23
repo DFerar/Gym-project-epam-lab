@@ -1,4 +1,4 @@
-package com.gym.training;
+package com.gym.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

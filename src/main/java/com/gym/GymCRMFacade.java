@@ -1,10 +1,11 @@
 package com.gym;
 
-import com.gym.customer.Customer;
-import com.gym.customer.CustomerService;
-import com.gym.instructor.InstructorService;
-import com.gym.training.Training;
-import com.gym.training.TrainingService;
+import com.gym.entities.Customer;
+import com.gym.entities.Instructor;
+import com.gym.entities.Training;
+import com.gym.services.CustomerService;
+import com.gym.services.InstructorService;
+import com.gym.services.TrainingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +32,7 @@ public class GymCRMFacade {
         return customerService.getCustomerById(customerId);
     }
 
-    public com.gym.instructor.Instructor createInstructor(com.gym.instructor.Instructor instructor) {
+    public Instructor createInstructor(Instructor instructor) {
         return instructorService.createInstructor(instructor);
     }
 
@@ -39,11 +40,11 @@ public class GymCRMFacade {
         instructorService.deleteInstructor(instructorId);
     }
 
-    public com.gym.instructor.Instructor updateInstructor(com.gym.instructor.Instructor newData) {
+    public Instructor updateInstructor(Instructor newData) {
         return instructorService.updateInstructor(newData);
     }
 
-    public com.gym.instructor.Instructor getInstructorById(Integer instructorId) {
+    public Instructor getInstructorById(Integer instructorId) {
         return instructorService.getInstructorById(instructorId);
     }
 

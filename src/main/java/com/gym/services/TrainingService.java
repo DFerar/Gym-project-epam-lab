@@ -1,5 +1,7 @@
-package com.gym.training;
+package com.gym.services;
 
+import com.gym.entities.Training;
+import com.gym.repositories.TrainingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

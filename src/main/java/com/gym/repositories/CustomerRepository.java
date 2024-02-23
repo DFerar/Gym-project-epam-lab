@@ -1,5 +1,6 @@
-package com.gym.customer;
+package com.gym.repositories;
 
+import com.gym.entities.Customer;
 import com.gym.storage.Storage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

@@ -1,6 +1,8 @@
-package com.gym.instructor;
+package com.gym.services;
 
 
+import com.gym.entities.Instructor;
+import com.gym.repositories.InstructorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
