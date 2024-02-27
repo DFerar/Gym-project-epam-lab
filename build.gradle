@@ -49,11 +49,11 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "com/gym/GymCRMApp.*",
-                    "com/gym/entities/Customer.*",
-                    "com/gym/entities/Instructor.*",
-                    "com/gym/entities/Training.*",
-                    "com/gym/entities/TrainingType.*",
-                    "com/gym/storage/**.*",
+                    "com/gym/entity/CustomerEntity.*",
+                    "com/gym/entity/InstructorEntity.*",
+                    "com/gym/entity/TrainingEntity.*",
+                    "com/gym/entity/TrainingType.*",
+                    "com/gym/storage/StorageInitializer.*",
                     "com/gym/AppConfig.*",
                     "com/gym/GymCRMFacade.*"
             ])

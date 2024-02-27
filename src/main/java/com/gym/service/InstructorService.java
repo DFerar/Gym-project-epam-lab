@@ -1,8 +1,8 @@
-package com.gym.services;
+package com.gym.service;
 
 
-import com.gym.entities.Instructor;
-import com.gym.repositories.InstructorRepository;
+import com.gym.entity.InstructorEntity;
+import com.gym.repository.InstructorRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,8 @@ import static com.gym.utils.Utils.*;
 public class InstructorService {
     private final InstructorRepository instructorRepository;
 
-    public Instructor createInstructor(Instructor instructor) {
-        Integer userId = getLastMapObjectId(instructorRepository.getInstructorStorage().keySet()) + 1;
+    public InstructorEntity createInstructor(InstructorEntity instructor) {
+        Integer userId = getLastMapObjectId(instructorRepository.getInstructorIds()) + 1;
         String password = generatePassword();
         instructor.setUserId(userId);
         instructor.setPassword(password);
@@ -28,9 +28,9 @@ public class InstructorService {
         return instructorRepository.createInstructor(instructor);
     }
 
-    public Instructor updateInstructor(Instructor newData) {
+    public InstructorEntity updateInstructor(InstructorEntity newData) {
         if (instructorRepository.getInstructorById(newData.getUserId()) != null) {
-            Instructor instructorToUpdate = getInstructorById(newData.getUserId());
+            InstructorEntity instructorToUpdate = getInstructorById(newData.getUserId());
             String newUsername = generateUniqueInstructorName(newData.getFirstName(), newData.getLastName(), newData.getUserId());
             instructorToUpdate.setUserName(newUsername);
             instructorToUpdate.setFirstName(newData.getFirstName());
@@ -55,8 +55,8 @@ public class InstructorService {
         }
     }
 
-    public Instructor getInstructorById(Integer instructorId) {
-        Instructor instructor = instructorRepository.getInstructorById(instructorId);
+    public InstructorEntity getInstructorById(Integer instructorId) {
+        InstructorEntity instructor = instructorRepository.getInstructorById(instructorId);
         if (instructor != null) {
             log.info("Getting instructor with ID: {}", instructorId);
             return instructor;

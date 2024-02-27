@@ -1,15 +1,15 @@
 package instructorTest;
 
-import com.gym.entities.Instructor;
-import com.gym.repositories.InstructorRepository;
-import com.gym.services.InstructorService;
+import com.gym.entity.InstructorEntity;
+import com.gym.repository.InstructorRepository;
+import com.gym.service.InstructorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import java.util.HashSet;
 import java.util.NoSuchElementException;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -32,19 +32,19 @@ public class InstructorServiceTest {
 
     @Test
     public void createInstructorTest() {
-        when(instructorRepository.getInstructorStorage()).thenReturn(new ConcurrentHashMap<>());
-        when(instructorRepository.createInstructor(any(Instructor.class))).thenReturn(
-                new Instructor(1, "Test", "Instructor",
+        when(instructorRepository.getInstructorIds()).thenReturn(new HashSet<>());
+        when(instructorRepository.createInstructor(any(InstructorEntity.class))).thenReturn(
+                new InstructorEntity(1, "Test", "Instructor",
                         "Test.Instructor", "123", true, "Fitness")
         );
 
-        Instructor inputInstructor = new Instructor();
+        InstructorEntity inputInstructor = new InstructorEntity();
         inputInstructor.setFirstName("Test");
         inputInstructor.setLastName("Instructor");
         inputInstructor.setPassword("123");
         inputInstructor.setIsActive(true);
         inputInstructor.setSpecialization("Fitness");
-        Instructor createdInstructor = instructorService.createInstructor(inputInstructor);
+        InstructorEntity createdInstructor = instructorService.createInstructor(inputInstructor);
 
         assertThat(createdInstructor.getUserId()).isEqualTo(1);
         assertThat(createdInstructor.getUserName()).isEqualTo("Test.Instructor");
@@ -53,11 +53,11 @@ public class InstructorServiceTest {
     @Test
     public void getInstructorByIdTest() {
         when(instructorRepository.getInstructorById(1)).thenReturn
-                (new Instructor(1, "Test", "Instructor",
+                (new InstructorEntity(1, "Test", "Instructor",
                         "Test.Customer", "123", true, "Fitness")
                 );
 
-        Instructor retrievedCustomer = instructorRepository.getInstructorById(1);
+        InstructorEntity retrievedCustomer = instructorRepository.getInstructorById(1);
 
         assertThat(retrievedCustomer.getUserId()).isEqualTo(1);
     }
@@ -65,7 +65,7 @@ public class InstructorServiceTest {
     @Test
     public void deleteInstructorTest() {
         when(instructorRepository.getInstructorById(1)).thenReturn(
-                new Instructor(1, "Test", "Instructor",
+                new InstructorEntity(1, "Test", "Instructor",
                         "Test.Customer", "123", true, "Fitness"));
 
         instructorService.deleteInstructor(1);
@@ -75,17 +75,17 @@ public class InstructorServiceTest {
 
     @Test
     public void updateInstructorTest() {
-        Instructor existingInstructor = new Instructor(1, "Test", "Instructor",
+        InstructorEntity existingInstructor = new InstructorEntity(1, "Test", "Instructor",
                 "Test.Customer", "123", true, "Fitness");
 
-        when(instructorRepository.getInstructorStorage()).thenReturn(new ConcurrentHashMap<>());
+        when(instructorRepository.getInstructorIds()).thenReturn(new HashSet<>());
         when(instructorRepository.getInstructorById(1)).thenReturn(existingInstructor);
-        when(instructorRepository.updateInstructor(any(Instructor.class)))
+        when(instructorRepository.updateInstructor(any(InstructorEntity.class)))
                 .thenAnswer(invocationOnMock -> invocationOnMock.getArgument(0));
 
-        Instructor newData = new Instructor(1, "Kek", "W",
+        InstructorEntity newData = new InstructorEntity(1, "Kek", "W",
                 "Kek.W", "123", true, "Fitness");
-        Instructor updatedInstructor = instructorService.updateInstructor(newData);
+        InstructorEntity updatedInstructor = instructorService.updateInstructor(newData);
 
         assertThat(updatedInstructor.getUserId()).isEqualTo(1);
         assertThat(updatedInstructor.getUserName()).isEqualTo("Kek.W");
@@ -96,7 +96,7 @@ public class InstructorServiceTest {
         when(instructorRepository.getInstructorById(1)).thenReturn(null);
 
         assertThrows(NoSuchElementException.class, () -> instructorService.updateInstructor(
-                new Instructor(1, "Test", "Instructor",
+                new InstructorEntity(1, "Test", "Instructor",
                         "Test.Customer", "123", true, "Fitness")));
     }
 }

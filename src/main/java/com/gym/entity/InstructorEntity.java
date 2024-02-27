@@ -1,4 +1,4 @@
-package com.gym.entities;
+package com.gym.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Instructor {
+public class InstructorEntity {
     private Integer userId;
     private String firstName;
     private String lastName;

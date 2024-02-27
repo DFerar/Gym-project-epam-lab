@@ -1,19 +1,19 @@
 package trainingTest;
 
-import com.gym.entities.Training;
-import com.gym.entities.TrainingType;
-import com.gym.repositories.TrainingRepository;
+import com.gym.entity.TrainingEntity;
+import com.gym.repository.TrainingRepository;
 import com.gym.storage.Storage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 public class TrainingRepositoryTest {
@@ -30,42 +30,32 @@ public class TrainingRepositoryTest {
 
     @Test
     public void createTrainingTest() {
-        Map<Integer, Training> trainingStorage = new ConcurrentHashMap<>();
-        Mockito.when(storage.getTrainingStorage()).thenReturn(trainingStorage);
+        TrainingEntity training = new TrainingEntity();
+        when(storage.addTraining(any(TrainingEntity.class))).thenReturn(training);
 
-        Training newTraining = new Training();
-        newTraining.setTrainingId(1);
-        newTraining.setTrainingDate("213123123");
-        newTraining.setTrainingDuration("2 hours");
-        newTraining.setTrainingName("kek");
-        newTraining.setTrainingType(TrainingType.CARDIO);
-        newTraining.setCustomerId(4);
-        newTraining.setInstructorId(1);
-        Training createdTraining = trainingRepository.createTraining(newTraining);
+        TrainingEntity createdTraining = trainingRepository.createTraining(training);
 
-        assertThat(createdTraining).isEqualTo(newTraining);
-        assertThat(trainingStorage.containsKey(1)).isTrue();
+        assertThat(createdTraining).isEqualTo(training);
     }
 
     @Test
     public void getTrainingByIdTest() {
-        Map<Integer, Training> trainingStorage = new ConcurrentHashMap<>();
-        trainingStorage.put(1, new Training());
-        Mockito.when(storage.getTrainingStorage()).thenReturn(trainingStorage);
+        int trainingId = 1;
+        TrainingEntity expectedTraining = new TrainingEntity();
+        when(storage.getTrainingById(trainingId)).thenReturn(expectedTraining);
 
-        Training retrievedTraining = trainingRepository.getTrainingById(1);
+        TrainingEntity actualTraining = trainingRepository.getTrainingById(trainingId);
 
-        assertThat(retrievedTraining).isEqualTo(trainingStorage.get(1));
+        assertThat(actualTraining).isEqualTo(expectedTraining);
     }
 
     @Test
     public void getTrainingStorageTest() {
-        Map<Integer, Training> trainingStorage = new ConcurrentHashMap<>();
-        trainingStorage.put(1, new Training());
-        Mockito.when(storage.getTrainingStorage()).thenReturn(trainingStorage);
+        Set<Integer> trainingIds = new HashSet<>();
+        when(storage.getTrainingIds()).thenReturn(trainingIds);
 
-        Map<Integer, Training> result = trainingRepository.getTrainingStorage();
+        Set<Integer> result = trainingRepository.getTrainingIds();
 
-        assertThat(result).isEqualTo(trainingStorage);
+        assertThat(result).isEqualTo(trainingIds);
     }
 }

@@ -1,7 +1,7 @@
-package com.gym.services;
+package com.gym.service;
 
-import com.gym.entities.Customer;
-import com.gym.repositories.CustomerRepository;
+import com.gym.entity.CustomerEntity;
+import com.gym.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ import static com.gym.utils.Utils.*;
 public class CustomerService {
     private final CustomerRepository customerRepository;
 
-    public Customer createCustomer(Customer customer) {
-        Integer userId = getLastMapObjectId(customerRepository.getCustomerMap().keySet()) + 1;
+    public CustomerEntity createCustomer(CustomerEntity customer) {
+        Integer userId = getLastMapObjectId(customerRepository.getCustomerIds()) + 1;
         customer.setPassword(generatePassword());
         customer.setUserId(userId);
         String userName = generateUniqueCustomerName(customer.getFirstName(), customer.getLastName(), userId);
@@ -27,8 +27,8 @@ public class CustomerService {
     }
 
 
-    public Customer getCustomerById(Integer customerId) {
-        Customer customer = customerRepository.getCustomerById(customerId);
+    public CustomerEntity getCustomerById(Integer customerId) {
+        CustomerEntity customer = customerRepository.getCustomerById(customerId);
         if (customer != null) {
             log.info("Getting customer by ID {}", customerId);
             return customer;
@@ -48,9 +48,9 @@ public class CustomerService {
         }
     }
 
-    public Customer updateCustomer(Customer newData) {
+    public CustomerEntity updateCustomer(CustomerEntity newData) {
         if (customerRepository.getCustomerById(newData.getUserId()) != null) {
-            Customer customerToUpdate = getCustomerById(newData.getUserId());
+            CustomerEntity customerToUpdate = getCustomerById(newData.getUserId());
             String newUserName = generateUniqueCustomerName(newData.getFirstName(), newData.getLastName(),
                     customerToUpdate.getUserId());
             customerToUpdate.setUserName(newUserName);

@@ -1,9 +1,9 @@
 package com.gym;
 
-import com.gym.entities.Customer;
-import com.gym.entities.Instructor;
-import com.gym.entities.Training;
-import com.gym.entities.TrainingType;
+import com.gym.entity.CustomerEntity;
+import com.gym.entity.InstructorEntity;
+import com.gym.entity.TrainingEntity;
+import com.gym.entity.TrainingType;
 import com.gym.storage.StorageInitializer;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -21,9 +21,9 @@ public class GymCRMApp {
             //getTraining
             gymCRMFacade.getTrainingById(4);
             //deleteCustomer
-            //gymCRMFacade.deleteCustomer(10);
+//            gymCRMFacade.deleteCustomer(15);
             //createCustomer
-            Customer newCustomer = new Customer();
+            CustomerEntity newCustomer = new CustomerEntity();
             newCustomer.setFirstName("Kek");
             newCustomer.setLastName("Lol");
             newCustomer.setAddress("lol_str");
@@ -33,7 +33,7 @@ public class GymCRMApp {
             gymCRMFacade.getCustomerById(6);
 
             //updateCustomer
-            Customer updatedCustomer = new Customer();
+            CustomerEntity updatedCustomer = new CustomerEntity();
             updatedCustomer.setUserId(1);
             updatedCustomer.setFirstName("Kek1");
             updatedCustomer.setLastName("Lol1");
@@ -42,17 +42,17 @@ public class GymCRMApp {
             updatedCustomer.setIsActive(false);
             gymCRMFacade.updateCustomer(updatedCustomer);
             //createInstructor
-            Instructor newInstructor = new Instructor();
+            InstructorEntity newInstructor = new InstructorEntity();
             newInstructor.setFirstName("trainer");
             newInstructor.setLastName("kek");
             newInstructor.setSpecialization("keklol");
             newInstructor.setIsActive(true);
             gymCRMFacade.createInstructor(newInstructor);
             //deleteInstructor
-            //gymCRMFacade.deleteInstructor(5);
+//            gymCRMFacade.deleteInstructor(15);
             //gymCRMFacade.getInstructorById(5);
             //updateTrainer
-            Instructor updateData = new Instructor();
+            InstructorEntity updateData = new InstructorEntity();
             updateData.setUserId(4);
             updateData.setFirstName("trainer4");
             updateData.setLastName("kek4");
@@ -60,7 +60,7 @@ public class GymCRMApp {
             updateData.setIsActive(false);
             gymCRMFacade.updateInstructor(updateData);
             //create Training
-            Training newTraining = new Training();
+            TrainingEntity newTraining = new TrainingEntity();
             newTraining.setTrainingDate("213123123");
             newTraining.setTrainingDuration("2 hours");
             newTraining.setTrainingName("kek");
@@ -68,6 +68,8 @@ public class GymCRMApp {
             newTraining.setCustomerId(4);
             newTraining.setInstructorId(1);
             gymCRMFacade.createTraining(newTraining);
+            //get Trainnig
+            gymCRMFacade.getTrainingById(2);
         }
     }
 }

@@ -1,7 +1,7 @@
-package com.gym.services;
+package com.gym.service;
 
-import com.gym.entities.Training;
-import com.gym.repositories.TrainingRepository;
+import com.gym.entity.TrainingEntity;
+import com.gym.repository.TrainingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,15 +16,15 @@ import static com.gym.utils.Utils.getLastMapObjectId;
 public class TrainingService {
     private final TrainingRepository trainingRepository;
 
-    public Training createTraining(Training training) {
-        Integer trainingId = getLastMapObjectId(trainingRepository.getTrainingStorage().keySet()) + 1;
+    public TrainingEntity createTraining(TrainingEntity training) {
+        Integer trainingId = getLastMapObjectId(trainingRepository.getTrainingIds()) + 1;
         training.setTrainingId(trainingId);
         log.info("Creating training");
         return trainingRepository.createTraining(training);
     }
 
-    public Training getTrainingById(Integer trainingId) {
-        Training training = trainingRepository.getTrainingById(trainingId);
+    public TrainingEntity getTrainingById(Integer trainingId) {
+        TrainingEntity training = trainingRepository.getTrainingById(trainingId);
         if (training != null) {
             log.info("Got training with ID: {}", trainingId);
             return training;
