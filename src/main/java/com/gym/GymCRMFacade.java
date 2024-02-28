@@ -1,10 +1,11 @@
 package com.gym;
 
-import com.gym.customer.Customer;
-import com.gym.customer.CustomerService;
-import com.gym.instructor.InstructorService;
-import com.gym.training.Training;
-import com.gym.training.TrainingService;
+import com.gym.entity.CustomerEntity;
+import com.gym.entity.InstructorEntity;
+import com.gym.entity.TrainingEntity;
+import com.gym.service.CustomerService;
+import com.gym.service.InstructorService;
+import com.gym.service.TrainingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ public class GymCRMFacade {
     private final TrainingService trainingService;
     private final InstructorService instructorService;
 
-    public Customer createCustomer(Customer customer) {
+    public CustomerEntity createCustomer(CustomerEntity customer) {
         return customerService.createCustomer(customer);
     }
 
@@ -23,15 +24,15 @@ public class GymCRMFacade {
         customerService.deleteCustomer(customerId);
     }
 
-    public Customer updateCustomer(Customer newData) {
+    public CustomerEntity updateCustomer(CustomerEntity newData) {
         return customerService.updateCustomer(newData);
     }
 
-    public Customer getCustomerById(Integer customerId) {
+    public CustomerEntity getCustomerById(Integer customerId) {
         return customerService.getCustomerById(customerId);
     }
 
-    public com.gym.instructor.Instructor createInstructor(com.gym.instructor.Instructor instructor) {
+    public InstructorEntity createInstructor(InstructorEntity instructor) {
         return instructorService.createInstructor(instructor);
     }
 
@@ -39,19 +40,19 @@ public class GymCRMFacade {
         instructorService.deleteInstructor(instructorId);
     }
 
-    public com.gym.instructor.Instructor updateInstructor(com.gym.instructor.Instructor newData) {
+    public InstructorEntity updateInstructor(InstructorEntity newData) {
         return instructorService.updateInstructor(newData);
     }
 
-    public com.gym.instructor.Instructor getInstructorById(Integer instructorId) {
+    public InstructorEntity getInstructorById(Integer instructorId) {
         return instructorService.getInstructorById(instructorId);
     }
 
-    public Training getTrainingById(Integer trainingId) {
+    public TrainingEntity getTrainingById(Integer trainingId) {
         return trainingService.getTrainingById(trainingId);
     }
 
-    public Training createTraining(Training training) {
+    public TrainingEntity createTraining(TrainingEntity training) {
         return trainingService.createTraining(training);
     }
 }

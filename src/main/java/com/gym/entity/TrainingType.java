@@ -1,4 +1,4 @@
-package com.gym.training;
+package com.gym.entity;
 
 public enum TrainingType {
     FITNESS, CARDIO, CYCLE, LIFTING
