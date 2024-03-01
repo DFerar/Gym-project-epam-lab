@@ -1,19 +1,41 @@
 package com.gym.entity;
 
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name = "customer", schema = "public", catalog = "gym")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class CustomerEntity {
-    private Integer userId;
-    private String firstName;
-    private String lastName;
-    private String dateOfBirth;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id", nullable = false)
+    private Integer id;
+    @Basic
+    @Column(name = "date_of_birth", nullable = true)
+    private Date dateOfBirth;
+    @Basic
+    @Column(name = "address", nullable = true, length = 255)
     private String address;
-    private String userName;
-    private String password;
-    private Boolean isActive;
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private GymUserEntity gymUserEntity;
+    @ManyToMany(mappedBy = "customers")
+    private Set<InstructorEntity> instructors = new HashSet<>();
 }

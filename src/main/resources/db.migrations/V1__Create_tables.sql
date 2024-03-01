@@ -13,3 +13,23 @@ CREATE TABLE IF NOT EXISTS Customer (
     address varchar(255),
     user_id INTEGER REFERENCES Gym_user(ID) UNIQUE
 );
+
+CREATE TABLE IF NOT EXISTS Training_type (
+    ID SERIAL PRIMARY KEY,
+    training_type_name varchar(225) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Instructor (
+    ID SERIAL PRIMARY KEY,
+    specialization varchar(225) REFERENCES Training_type(training_type_name)
+);
+
+CREATE TABLE IF NOT EXISTS Training (
+    ID SERIAL PRIMARY KEY,
+    customer_id INTEGER REFERENCES Customer(ID),
+    instructor_id INTEGER REFERENCES Instructor(ID),
+    training_name varchar(225) NOT NULL,
+    training_type_id INTEGER REFERENCES Training_type(ID),
+    training_date date NOT NULL,
+    training_duration integer NOT NULL
+)

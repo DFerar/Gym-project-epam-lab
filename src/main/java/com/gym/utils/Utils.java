@@ -1,10 +1,8 @@
 package com.gym.utils;
 
+import static java.util.stream.IntStream.range;
+
 import java.security.SecureRandom;
-import java.util.Set;
-
-
-import static java.util.stream.IntStream.*;
 
 
 public class Utils {
@@ -30,19 +28,10 @@ public class Utils {
         return firstName + "." + secondName;
     }
 
-    public static Integer getLastMapObjectId(Set<Integer> keySet) {
-        return keySet
-                .stream()
-                .max(Integer::compareTo)
-                .orElse(0);
-    }
-
     private static String getAllowedSymbols() {
         return UPPERCASE_LETTERS +
                 LOWERCASE_LETTERS +
                 DIGITS +
                 SYMBOLS;
     }
-
-
 }
