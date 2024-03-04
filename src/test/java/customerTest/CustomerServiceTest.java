@@ -3,32 +3,28 @@ package customerTest;
 import com.gym.entity.CustomerEntity;
 import com.gym.repository.CustomerRepository;
 import com.gym.service.CustomerService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.HashSet;
 import java.util.NoSuchElementException;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
 
-public class CustomerServiceTests {
+@ExtendWith(MockitoExtension.class)
+public class CustomerServiceTest {
     @Mock
     private CustomerRepository customerRepository;
 
     @InjectMocks
     private CustomerService customerService;
-
-    @BeforeEach
-    public void setUp() {
-        openMocks(this);
-    }
 
     @Test
     public void createCustomerTest() {

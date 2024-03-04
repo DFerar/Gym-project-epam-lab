@@ -28,6 +28,7 @@ public class Storage {
     @Getter(AccessLevel.NONE)
     private String filepath;
 
+    // TODO why SneakyThrows is not here?
     public void updateDatasource() throws IOException {
         Map<String, Object> storageData = getStorageData();
         File file = new File(filepath);
