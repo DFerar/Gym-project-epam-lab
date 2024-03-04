@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InstructorEntity {
-    private Integer userId;
+    private int userId;
     private String firstName;
     private String lastName;
     private String userName;

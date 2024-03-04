@@ -1,37 +1,35 @@
 package customerTest;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.gym.entity.CustomerEntity;
 import com.gym.repository.CustomerRepository;
 import com.gym.storage.Storage;
-import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.SneakyThrows;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
-
+@ExtendWith(MockitoExtension.class)
 public class CustomerRepositoryTest {
     @Mock
     private Storage storage;
 
     @InjectMocks
     private CustomerRepository customerRepository;
-
-    @BeforeEach
-    public void setUp() {
-        openMocks(this);
-    }
 
     @Test
     public void createCustomerTest() {
@@ -41,7 +39,7 @@ public class CustomerRepositoryTest {
         newCustomer.setFirstName("Test");
         newCustomer.setLastName("Customer");
         newCustomer.setAddress("TestAddress");
-        newCustomer.setDateOfBirth("15.01.1990");
+        newCustomer.setDateOfBirth(LocalDate.parse("1990-01-01"));
         newCustomer.setIsActive(true);
 
         Mockito.when(storage.addCustomer(any(CustomerEntity.class))).thenReturn(newCustomer);

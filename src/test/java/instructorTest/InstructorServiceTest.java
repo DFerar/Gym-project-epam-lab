@@ -1,34 +1,29 @@
 package instructorTest;
 
-import com.gym.entity.InstructorEntity;
-import com.gym.repository.InstructorRepository;
-import com.gym.service.InstructorService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
 
+import com.gym.entity.InstructorEntity;
+import com.gym.repository.InstructorRepository;
+import com.gym.service.InstructorService;
+import java.util.HashSet;
+import java.util.NoSuchElementException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class InstructorServiceTest {
     @Mock
     private InstructorRepository instructorRepository;
 
     @InjectMocks
     private InstructorService instructorService;
-
-    @BeforeEach
-    public void setUp() {
-        openMocks(this);
-    }
 
     @Test
     public void createInstructorTest() {
@@ -78,7 +73,6 @@ public class InstructorServiceTest {
         InstructorEntity existingInstructor = new InstructorEntity(1, "Test", "Instructor",
                 "Test.Customer", "123", true, "Fitness");
 
-        when(instructorRepository.getInstructorIds()).thenReturn(new HashSet<>());
         when(instructorRepository.getInstructorById(1)).thenReturn(existingInstructor);
         when(instructorRepository.updateInstructor(any(InstructorEntity.class)))
                 .thenAnswer(invocationOnMock -> invocationOnMock.getArgument(0));

@@ -1,35 +1,32 @@
 package instructorTest;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.gym.entity.InstructorEntity;
 import com.gym.repository.InstructorRepository;
 import com.gym.storage.Storage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
-
+@ExtendWith(MockitoExtension.class)
 public class InstructorRepositoryTest {
     @Mock
     private Storage storage;
 
     @InjectMocks
     private InstructorRepository instructorRepository;
-
-    @BeforeEach
-    public void setUp() {
-        openMocks(this);
-    }
 
     @Test
     public void createInstructorTest() {

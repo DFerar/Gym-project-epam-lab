@@ -1,21 +1,22 @@
 package trainingTest;
 
-import com.gym.entity.TrainingEntity;
-import com.gym.repository.TrainingRepository;
-import com.gym.service.TrainingService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
-import java.util.HashSet;
-
 import static com.gym.entity.TrainingType.CARDIO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
 
+import com.gym.entity.TrainingEntity;
+import com.gym.repository.TrainingRepository;
+import com.gym.service.TrainingService;
+import java.time.LocalDate;
+import java.util.HashSet;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class TrainingServiceTest {
     @Mock
     private TrainingRepository trainingRepository;
@@ -23,17 +24,12 @@ public class TrainingServiceTest {
     @InjectMocks
     private TrainingService trainingService;
 
-    @BeforeEach
-    public void setUp() {
-        openMocks(this);
-    }
-
     @Test
     public void createTrainingTest() {
         when(trainingRepository.getTrainingIds()).thenReturn(new HashSet<>());
         when(trainingRepository.createTraining(any(TrainingEntity.class))).thenReturn(
                 new TrainingEntity(1, 1, 1,
-                        "TestTraining", CARDIO, "123123", "2 hours")
+                        "TestTraining", CARDIO, LocalDate.parse("1990-01-01"), "2 hours")
         );
 
         TrainingEntity inputTraining = new TrainingEntity();
@@ -41,7 +37,7 @@ public class TrainingServiceTest {
         inputTraining.setInstructorId(1);
         inputTraining.setTrainingName("TestTraining");
         inputTraining.setTrainingType(CARDIO);
-        inputTraining.setTrainingDate("123123");
+        inputTraining.setTrainingDate(LocalDate.parse("1990-01-01"));
         inputTraining.setTrainingDuration("2 hours");
         TrainingEntity createdTraining = trainingService.createTraining(inputTraining);
 
@@ -52,7 +48,7 @@ public class TrainingServiceTest {
     @Test
     public void getTrainingByIdTest() {
         TrainingEntity training = new TrainingEntity(1, 1, 1,
-                "TestTraining", CARDIO, "123123", "2 hours");
+                "TestTraining", CARDIO, LocalDate.parse("1990-01-01"), "2 hours");
         when(trainingRepository.getTrainingById(training.getTrainingId())).thenReturn(training);
 
         TrainingEntity retrievedTraining = trainingService.getTrainingById(training.getTrainingId());

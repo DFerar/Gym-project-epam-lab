@@ -1,33 +1,29 @@
 package storageTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
 import com.gym.entity.TrainingType;
 import com.gym.storage.Storage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.MockitoAnnotations.openMocks;
-
+@ExtendWith(MockitoExtension.class)
 public class StorageTest {
     @InjectMocks
     private Storage storage;
 
-    @BeforeEach
-    public void setUp() {
-        openMocks(this);
-    }
-
     @Test
     public void addCustomerTest() {
         CustomerEntity customer = new CustomerEntity(
-                1, "Test", "Customer", "1.01.2001", "test_address",
+                1, "Test", "Customer", LocalDate.parse("1990-01-01"), "test_address",
                 "Test.Customer", "123", true
         );
 
@@ -39,7 +35,7 @@ public class StorageTest {
     @Test
     public void getCustomerByIdTest() {
         CustomerEntity expectedCustomer = new CustomerEntity(
-                1, "Test", "Customer", "1.01.2001", "test_address",
+                1, "Test", "Customer", LocalDate.parse("1990-01-01"), "test_address",
                 "Test.Customer", "123", true
         );
         storage.addCustomer(expectedCustomer);
@@ -52,7 +48,7 @@ public class StorageTest {
     @Test
     public void deleteCustomerTest() {
         CustomerEntity customer = new CustomerEntity(
-                1, "Test", "Customer", "1.01.2001", "test_address",
+                1, "Test", "Customer", LocalDate.parse("1990-01-01"), "test_address",
                 "Test.Customer", "123", true
         );
         storage.addCustomer(customer);
@@ -115,7 +111,7 @@ public class StorageTest {
     @Test
     public void addTrainingTest() {
         TrainingEntity training = new TrainingEntity(1, 1, 1, "Test_training",
-                TrainingType.CARDIO, "1.01.2024", "1 hour");
+                TrainingType.CARDIO, LocalDate.parse("1990-01-01"), "1 hour");
 
         TrainingEntity addedTraining = storage.addTraining(training);
 
@@ -125,7 +121,7 @@ public class StorageTest {
     @Test
     public void getTrainingByIdTest() {
         TrainingEntity expectedTraining = new TrainingEntity(1, 1, 1, "Test_training",
-                TrainingType.CARDIO, "1.01.2024", "1 hour");
+                TrainingType.CARDIO, LocalDate.parse("1990-01-01"), "1 hour");
         storage.addTraining(expectedTraining);
 
         TrainingEntity training = storage.getTrainingById(expectedTraining.getTrainingId());

@@ -1,5 +1,6 @@
 package com.gym.entity;
 
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TrainingEntity {
-    private Integer trainingId;
-    private Integer customerId;
-    private Integer instructorId;
+    private int trainingId;
+    private int customerId;
+    private int instructorId;
     private String trainingName;
     private TrainingType trainingType;
-    private String trainingDate;
+    private LocalDate trainingDate;
     private String trainingDuration;
 }

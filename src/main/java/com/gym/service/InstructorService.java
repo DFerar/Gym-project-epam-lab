@@ -1,15 +1,16 @@
 package com.gym.service;
 
 
+import static com.gym.utils.Utils.generatePassword;
+import static com.gym.utils.Utils.generateUsername;
+import static com.gym.utils.Utils.getLastMapObjectId;
+
 import com.gym.entity.InstructorEntity;
 import com.gym.repository.InstructorRepository;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
-
-import static com.gym.utils.Utils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class InstructorService {
     private final InstructorRepository instructorRepository;
 
     public InstructorEntity createInstructor(InstructorEntity instructor) {
-        Integer userId = getLastMapObjectId(instructorRepository.getInstructorIds()) + 1;
+        int userId = getLastMapObjectId(instructorRepository.getInstructorIds()) + 1;
         String password = generatePassword();
         instructor.setUserId(userId);
         instructor.setPassword(password);

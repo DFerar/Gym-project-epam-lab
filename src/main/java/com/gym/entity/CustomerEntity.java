@@ -1,5 +1,6 @@
 package com.gym.entity;
 
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,12 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerEntity {
-    // TODO why wrappers?
-    private Integer userId;
+    private int userId;
     private String firstName;
     private String lastName;
-    // TODO why string?
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     private String address;
     private String userName;
     private String password;

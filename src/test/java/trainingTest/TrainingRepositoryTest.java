@@ -1,32 +1,27 @@
 package trainingTest;
 
-import com.gym.entity.TrainingEntity;
-import com.gym.repository.TrainingRepository;
-import com.gym.storage.Storage;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-
-import java.util.HashSet;
-import java.util.Set;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.openMocks;
 
+import com.gym.entity.TrainingEntity;
+import com.gym.repository.TrainingRepository;
+import com.gym.storage.Storage;
+import java.util.HashSet;
+import java.util.Set;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
 public class TrainingRepositoryTest {
     @Mock
     private Storage storage;
 
     @InjectMocks
     private TrainingRepository trainingRepository;
-
-    @BeforeEach
-    public void setUp() {
-        openMocks(this);
-    }
 
     @Test
     public void createTrainingTest() {

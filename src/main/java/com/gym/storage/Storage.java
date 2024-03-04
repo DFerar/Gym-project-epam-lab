@@ -1,20 +1,20 @@
 package com.gym.storage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 @Getter
@@ -28,11 +28,12 @@ public class Storage {
     @Getter(AccessLevel.NONE)
     private String filepath;
 
-    // TODO why SneakyThrows is not here?
-    public void updateDatasource() throws IOException {
+    @SneakyThrows
+    public void updateDatasource() {
         Map<String, Object> storageData = getStorageData();
         File file = new File(filepath);
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
         mapper.writeValue(file, storageData);
     }
 

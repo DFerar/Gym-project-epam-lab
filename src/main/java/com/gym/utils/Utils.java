@@ -4,9 +4,6 @@ import java.security.SecureRandom;
 import java.util.Set;
 
 
-import static java.util.stream.IntStream.*;
-
-
 public class Utils {
     private static final String UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWYXZ";
     private static final String LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
@@ -17,8 +14,6 @@ public class Utils {
         String allowedCharacters = getAllowedSymbols();
         SecureRandom random = new SecureRandom();
         StringBuilder password = new StringBuilder();
-
-        // TODO
         for (int i = 0; i < 10; i++) {
             int randomIndex = random.nextInt(allowedCharacters.length());
             char randomChar = allowedCharacters.charAt(randomIndex);

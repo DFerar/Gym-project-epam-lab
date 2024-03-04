@@ -1,14 +1,15 @@
 package com.gym.service;
 
+import static com.gym.utils.Utils.generatePassword;
+import static com.gym.utils.Utils.generateUsername;
+import static com.gym.utils.Utils.getLastMapObjectId;
+
 import com.gym.entity.CustomerEntity;
 import com.gym.repository.CustomerRepository;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
-
-import static com.gym.utils.Utils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     public CustomerEntity createCustomer(CustomerEntity customer) {
-        Integer userId = getLastMapObjectId(customerRepository.getCustomerIds()) + 1;
+        int userId = getLastMapObjectId(customerRepository.getCustomerIds()) + 1;
         customer.setPassword(generatePassword());
         customer.setUserId(userId);
         String userName = generateUniqueCustomerName(customer.getFirstName(), customer.getLastName(), userId);

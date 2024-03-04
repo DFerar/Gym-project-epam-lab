@@ -5,6 +5,7 @@ import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
 import com.gym.entity.TrainingType;
 import com.gym.storage.StorageInitializer;
+import java.time.LocalDate;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class GymCRMApp {
@@ -15,22 +16,22 @@ public class GymCRMApp {
             //commands
 
             //getCustomer
-            gymCRMFacade.getCustomerById(2);
+            gymCRMFacade.getCustomerById(1);
             //getInstructor
             gymCRMFacade.getInstructorById(1);
             //getTraining
-            gymCRMFacade.getTrainingById(4);
+            gymCRMFacade.getTrainingById(1);
             //deleteCustomer
-//            gymCRMFacade.deleteCustomer(15);
+//            gymCRMFacade.deleteCustomer(3);
             //createCustomer
             CustomerEntity newCustomer = new CustomerEntity();
             newCustomer.setFirstName("Kek");
             newCustomer.setLastName("Lol");
             newCustomer.setAddress("lol_str");
-            newCustomer.setDateOfBirth("123213");
+            newCustomer.setDateOfBirth(LocalDate.parse("1990-01-01"));
             newCustomer.setIsActive(true);
             gymCRMFacade.createCustomer(newCustomer);
-            gymCRMFacade.getCustomerById(6);
+            gymCRMFacade.getCustomerById(2);
 
             //updateCustomer
             CustomerEntity updatedCustomer = new CustomerEntity();
@@ -38,7 +39,7 @@ public class GymCRMApp {
             updatedCustomer.setFirstName("Kek1");
             updatedCustomer.setLastName("Lol1");
             updatedCustomer.setAddress("lol_str1");
-            updatedCustomer.setDateOfBirth("1232131");
+            updatedCustomer.setDateOfBirth(LocalDate.parse("1990-01-01"));
             updatedCustomer.setIsActive(false);
             gymCRMFacade.updateCustomer(updatedCustomer);
             //createInstructor
@@ -50,7 +51,7 @@ public class GymCRMApp {
             gymCRMFacade.createInstructor(newInstructor);
             //deleteInstructor
 //            gymCRMFacade.deleteInstructor(15);
-            //gymCRMFacade.getInstructorById(5);
+            gymCRMFacade.getInstructorById(5);
             //updateTrainer
             InstructorEntity updateData = new InstructorEntity();
             updateData.setUserId(4);
@@ -61,7 +62,7 @@ public class GymCRMApp {
             gymCRMFacade.updateInstructor(updateData);
             //create Training
             TrainingEntity newTraining = new TrainingEntity();
-            newTraining.setTrainingDate("213123123");
+            newTraining.setTrainingDate(LocalDate.parse("1990-01-01"));
             newTraining.setTrainingDuration("2 hours");
             newTraining.setTrainingName("kek");
             newTraining.setTrainingType(TrainingType.CARDIO);
