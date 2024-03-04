@@ -1,7 +1,6 @@
 package com.gym.dto;
 
 
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,5 +14,4 @@ public class InstructorDto {
     private String lastName;
     private String userName;
     private Boolean isActive;
-    private Set<TrainingDto> trainings;
 }

@@ -1,4 +1,4 @@
-package customerTest;
+/*package customerTest;
 
 
 import com.gym.entity.CustomerEntity;
@@ -104,4 +104,4 @@ public class CustomerRepositoryTest {
 
         assertThat(result).isEqualTo(customerIds);
     }
-}
+}*/

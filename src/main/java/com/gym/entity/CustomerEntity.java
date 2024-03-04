@@ -1,13 +1,13 @@
 package com.gym.entity;
 
 import jakarta.persistence.Basic;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -34,8 +34,13 @@ public class CustomerEntity {
     @Basic
     @Column(name = "address", nullable = true, length = 255)
     private String address;
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "customer")
     private GymUserEntity gymUserEntity;
-    @ManyToMany(mappedBy = "customers")
+    @ManyToMany
+    @JoinTable(name = "customer_instructor",
+    joinColumns = @JoinColumn(name = "customer_id"),
+    inverseJoinColumns = @JoinColumn(name = "instructor_id"))
     private Set<InstructorEntity> instructors = new HashSet<>();
 }
+
+//How I can handle @ManyToMany while CustomerEntity instance creation(problems in service)

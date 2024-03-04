@@ -5,8 +5,10 @@ import static com.gym.utils.Utils.generateUsername;
 
 import com.gym.dto.CustomerDto;
 import com.gym.entity.CustomerEntity;
+import com.gym.entity.GymUserEntity;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.GymUserRepository;
+import jakarta.transaction.Transactional;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,25 +20,56 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
     private final CustomerRepository customerRepository;
     private final GymUserRepository gymUserRepository;
-    public CustomerEntity createCustomer(CustomerDto customer) {
-        customer.setPassword(generatePassword());
-        String userName = generateUniqueCustomerName(customer.getFirstName(), customer.getLastName(), userId);
-        customer.setUserName(userName);
+    private final GymUserService gymUserService;
+
+    @Transactional
+    public CustomerDto createCustomer(CustomerDto customer) {
+        GymUserEntity gymUserEntity = customerDtoToUserEntity(customer);
+        GymUserEntity savedUser = gymUserRepository.save(gymUserEntity);
+        CustomerEntity customerEntity = customerDtoToCustomerEntity(customer, savedUser);
+        CustomerEntity savedCustomer = customerRepository.save(customerEntity);
         log.info("Creating customer: {}", customer);
-        return customerRepository.createCustomer(customer);
+        return entityToDto(savedCustomer, savedUser);
+    }
+
+    private CustomerDto entityToDto(CustomerEntity savedCustomer, GymUserEntity savedUser) {
+        return new CustomerDto(savedCustomer.getId(), savedCustomer.getDateOfBirth(),
+            savedCustomer.getAddress(), savedUser.getId(), savedUser.getFirstName(), savedUser.getLastName(),
+            savedUser.getUserName(), savedUser.getIsActive());
+    }
+
+    private CustomerEntity customerDtoToCustomerEntity(CustomerDto customerDto, GymUserEntity savedUser) {
+        CustomerEntity customerEntity = new CustomerEntity();
+        customerEntity.setAddress(customerDto.getAddress());
+        customerEntity.setGymUserEntity(savedUser);
+        customerEntity.setDateOfBirth(customerDto.getDateOfBirth());
+        return customerEntity;
+    }
+
+    private GymUserEntity customerDtoToUserEntity(CustomerDto customer) {
+        GymUserEntity gymUserEntity = new GymUserEntity();
+        gymUserEntity.setFirstName(customer.getFirstName());
+        gymUserEntity.setLastName(customer.getLastName());
+        gymUserEntity.setPassword(generatePassword());
+        gymUserEntity.setUserName(gymUserService.generateUniqueUserName(customer.getFirstName(),
+            customer.getLastName()));
+        return gymUserEntity;
     }
 
 
-    public CustomerEntity getCustomerById(Integer customerId) {
-        CustomerEntity customer = customerRepository.getCustomerById(customerId);
-        if (customer != null) {
-            log.info("Getting customer by ID {}", customerId);
-            return customer;
-        } else {
-            log.warn("Customer not found with ID: {} ", customerId);
-            throw new NoSuchElementException("Customer not found");
-        }
+    public CustomerDto getCustomerById(Integer customerId) {
+        CustomerEntity customerEntity = customerRepository.findById(customerId)
+            .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+        GymUserEntity gymUserEntity = gymUserRepository.findById(customerEntity.getGymUserEntity().getId())
+            .orElseThrow(() -> new NoSuchElementException("User not found"));
+        return entityToDto(customerEntity, gymUserEntity);
     }
+
+    public CustomerEntity getCustomerByUserName(String userName) {
+
+    }
+
+
 
     public void deleteCustomer(Integer customerId) {
         if (customerRepository.getCustomerById(customerId) != null) {

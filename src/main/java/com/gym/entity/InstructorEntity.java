@@ -32,6 +32,8 @@ public class InstructorEntity {
     @OneToOne
     @JoinColumn(name = "user_id")
     private GymUserEntity gymUserEntity;
-    @ManyToMany(mappedBy = "instructors")
+    @ManyToMany(mappedBy = "customers")
     private Set<CustomerEntity> customers = new HashSet<>();
 }
+
+//Same stuff as customerEntity

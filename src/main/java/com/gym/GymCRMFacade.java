@@ -1,5 +1,6 @@
 package com.gym;
 
+import com.gym.dto.CustomerDto;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
@@ -16,7 +17,7 @@ public class GymCRMFacade {
     private final TrainingService trainingService;
     private final InstructorService instructorService;
 
-    public CustomerEntity createCustomer(CustomerEntity customer) {
+    public CustomerDto createCustomer(CustomerDto customer) {
         return customerService.createCustomer(customer);
     }
 
@@ -28,7 +29,7 @@ public class GymCRMFacade {
         return customerService.updateCustomer(newData);
     }
 
-    public CustomerEntity getCustomerById(Integer customerId) {
+    public CustomerDto getCustomerById(Integer customerId) {
         return customerService.getCustomerById(customerId);
     }
 

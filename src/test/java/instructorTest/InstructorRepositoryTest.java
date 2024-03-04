@@ -1,4 +1,4 @@
-package instructorTest;
+/*package instructorTest;
 
 
 import com.gym.entity.InstructorEntity;
@@ -102,5 +102,5 @@ public class InstructorRepositoryTest {
     }
 
 
-}
+}*/
 

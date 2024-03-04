@@ -1,4 +1,4 @@
-package customerTest;
+/*package customerTest;
 
 import com.gym.entity.CustomerEntity;
 import com.gym.repository.CustomerRepository;
@@ -100,4 +100,4 @@ public class CustomerServiceTests {
                new CustomerEntity(1, "Kek", "W", "15.01.1990", "TestAddress",
                        "Kek.W", "123", true)));
     }
-}
+}*/

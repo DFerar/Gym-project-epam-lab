@@ -1,21 +1,15 @@
 package com.gym;
 
-import com.gym.entity.CustomerEntity;
-import com.gym.entity.InstructorEntity;
-import com.gym.entity.TrainingEntity;
-import com.gym.entity.TrainingType;
-import com.gym.storage.StorageInitializer;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class GymCRMApp {
     public static void main(String[] args) {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class)) {
-            context.getBean(StorageInitializer.class);
             GymCRMFacade gymCRMFacade = context.getBean(GymCRMFacade.class);
             //commands
 
             //getCustomer
-            gymCRMFacade.getCustomerById(2);
+            /*gymCRMFacade.getCustomerById(2);
             //getInstructor
             gymCRMFacade.getInstructorById(1);
             //getTraining
@@ -73,3 +67,4 @@ public class GymCRMApp {
         }
     }
 }
+*/

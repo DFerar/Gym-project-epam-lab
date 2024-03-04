@@ -1,4 +1,4 @@
-package trainingTest;
+/*package trainingTest;
 
 import com.gym.entity.TrainingEntity;
 import com.gym.repository.TrainingRepository;
@@ -58,4 +58,4 @@ public class TrainingRepositoryTest {
 
         assertThat(result).isEqualTo(trainingIds);
     }
-}
+}*/

@@ -1,8 +1,7 @@
 package com.gym.dto;
 
 
-import java.util.Date;
-import java.util.Set;
+import java.sql.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -17,5 +16,4 @@ public class CustomerDto {
     private String lastName;
     private String userName;
     private Boolean isActive;
-    private Set<TrainingDto> trainings;
 }

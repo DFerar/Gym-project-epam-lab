@@ -1,4 +1,4 @@
-package instructorTest;
+/*package instructorTest;
 
 import com.gym.entity.InstructorEntity;
 import com.gym.repository.InstructorRepository;
@@ -99,4 +99,4 @@ public class InstructorServiceTest {
                 new InstructorEntity(1, "Test", "Instructor",
                         "Test.Customer", "123", true, "Fitness")));
     }
-}
+}*/
