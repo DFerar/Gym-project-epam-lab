@@ -11,4 +11,6 @@ public interface GymUserRepository extends JpaRepository<GymUserEntity, Integer>
 
     @Query("SELECT MAX(u.id) FROM GymUserEntity u")
     Integer findMaxUserId();
+
+    void deleteGymUserEntitiesByUserName(String userName);
 }

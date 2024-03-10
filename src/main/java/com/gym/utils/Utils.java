@@ -1,8 +1,8 @@
 package com.gym.utils;
 
-import static java.util.stream.IntStream.range;
-
 import java.security.SecureRandom;
+
+import static java.util.stream.IntStream.range;
 
 
 public class Utils {
@@ -22,10 +22,6 @@ public class Utils {
                     password.append(randomChar);
                 });
         return password.toString();
-    }
-
-    public static String generateUsername(String firstName, String secondName) {
-        return firstName + "." + secondName;
     }
 
     private static String getAllowedSymbols() {

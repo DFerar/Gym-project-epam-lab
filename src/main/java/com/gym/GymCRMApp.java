@@ -1,70 +1,70 @@
 package com.gym;
 
+import com.gym.dto.CustomerDto;
+import com.gym.dto.InstructorDto;
+import com.gym.dto.TrainingDto;
+import com.gym.utils.Utils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.sql.Date;
 
 public class GymCRMApp {
     public static void main(String[] args) {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class)) {
             GymCRMFacade gymCRMFacade = context.getBean(GymCRMFacade.class);
-            //commands
+//            login as admin
+            String loginUserName = "admin.admin";
+            String loginPassword = "admin";
+//            create commands
+            CustomerDto customerDto1 = new CustomerDto(null, Date.valueOf("1997-01-01"), "1st street",
+                    null, "Denis", "Ferari", null, true);
+            CustomerDto createdCustomer1 = gymCRMFacade.createCustomer(customerDto1);
+            System.out.println(createdCustomer1);
 
-            //getCustomer
-            /*gymCRMFacade.getCustomerById(2);
-            //getInstructor
-            gymCRMFacade.getInstructorById(1);
-            //getTraining
-            gymCRMFacade.getTrainingById(4);
-            //deleteCustomer
-//            gymCRMFacade.deleteCustomer(15);
-            //createCustomer
-            CustomerEntity newCustomer = new CustomerEntity();
-            newCustomer.setFirstName("Kek");
-            newCustomer.setLastName("Lol");
-            newCustomer.setAddress("lol_str");
-            newCustomer.setDateOfBirth("123213");
-            newCustomer.setIsActive(true);
-            gymCRMFacade.createCustomer(newCustomer);
-            gymCRMFacade.getCustomerById(6);
+            InstructorDto instructorDto1 = new InstructorDto(null, "CARDIO", null, "John",
+                    "Smith", null, false);
+            InstructorDto savedInstructor1 = gymCRMFacade.createInstructor(instructorDto1);
+            System.out.println(savedInstructor1);
 
-            //updateCustomer
-            CustomerEntity updatedCustomer = new CustomerEntity();
-            updatedCustomer.setUserId(1);
-            updatedCustomer.setFirstName("Kek1");
-            updatedCustomer.setLastName("Lol1");
-            updatedCustomer.setAddress("lol_str1");
-            updatedCustomer.setDateOfBirth("1232131");
-            updatedCustomer.setIsActive(false);
-            gymCRMFacade.updateCustomer(updatedCustomer);
-            //createInstructor
-            InstructorEntity newInstructor = new InstructorEntity();
-            newInstructor.setFirstName("trainer");
-            newInstructor.setLastName("kek");
-            newInstructor.setSpecialization("keklol");
-            newInstructor.setIsActive(true);
-            gymCRMFacade.createInstructor(newInstructor);
-            //deleteInstructor
-//            gymCRMFacade.deleteInstructor(15);
-            //gymCRMFacade.getInstructorById(5);
-            //updateTrainer
-            InstructorEntity updateData = new InstructorEntity();
-            updateData.setUserId(4);
-            updateData.setFirstName("trainer4");
-            updateData.setLastName("kek4");
-            updateData.setSpecialization("keklol4");
-            updateData.setIsActive(false);
-            gymCRMFacade.updateInstructor(updateData);
-            //create Training
-            TrainingEntity newTraining = new TrainingEntity();
-            newTraining.setTrainingDate("213123123");
-            newTraining.setTrainingDuration("2 hours");
-            newTraining.setTrainingName("kek");
-            newTraining.setTrainingType(TrainingType.CARDIO);
-            newTraining.setCustomerId(4);
-            newTraining.setInstructorId(1);
-            gymCRMFacade.createTraining(newTraining);
-            //get Trainnig
-            gymCRMFacade.getTrainingById(2);
+            TrainingDto trainingDto1 = new TrainingDto(null, 1, 1, "1st training",
+                    1,Date.valueOf("2024-04-01"), 1);
+            TrainingDto savedTraining1 = gymCRMFacade.createTraining(loginUserName,
+                    loginPassword, trainingDto1);
+            System.out.println(savedTraining1);
+//            update commands
+            CustomerDto newData = new CustomerDto(1, Date.valueOf("1997-01-02"), "1st new street",
+                    1, "Denis", "Ferar", null, true);
+            CustomerDto customerDto = gymCRMFacade.updateCustomer(loginUserName, loginPassword, newData);
+            System.out.println(customerDto);
+
+            InstructorDto newDataForInstructor = new InstructorDto(1, "KEK", 2, "John_new",
+                    "Smith", null, false);
+            InstructorDto instructorDto = gymCRMFacade.updateInstructor(loginUserName, loginPassword, newDataForInstructor);
+            System.out.println(instructorDto);
+            gymCRMFacade.changeInstructorActivity(loginUserName, loginPassword, 2, true);
+            gymCRMFacade.changeInstructorPassword(loginUserName, loginPassword, 2, Utils.generatePassword());
+            gymCRMFacade.changeCustomerPassword(loginUserName, loginPassword, 1, Utils.generatePassword());
+            gymCRMFacade.changeCustomerActivity(loginUserName, loginPassword, 1, false);
+//            get commands
+            CustomerDto returnedCustomer = gymCRMFacade.getCustomerByUserName(loginUserName, loginPassword, "Denis.Ferar");
+            System.out.println(returnedCustomer);
+            InstructorDto returnedInstructor = gymCRMFacade.getInstructorByUserName(loginUserName, loginPassword, "John_new.Smith");
+            System.out.println(returnedInstructor);
+            TrainingDto trainingDto2 = new TrainingDto(null, 1, 1, "1st training",
+                    1, Date.valueOf("2024-01-03"), 3);
+            TrainingDto savedTraining2 = gymCRMFacade.createTraining(loginUserName, loginPassword, trainingDto2);
+            System.out.println(savedTraining2);
+            var list = gymCRMFacade.getInstructorsNotAssignedToCustomerByCustomerUserName(
+                    loginUserName, loginPassword, "Denis.Ferar");
+            System.out.println(list);
+            System.out.println(list.size() == 3);
+            var list1 = gymCRMFacade.getInstructorTrainings(
+                    loginUserName, loginPassword, "John_new.Smith", null, null,
+                    "Denis.Ferar");
+            System.out.println(list1);
+            System.out.println(list1.size() == 1);
+//            delete commands
+            gymCRMFacade.deleteCustomerByUserName(loginUserName, loginPassword, "Denis.Ferar");
         }
     }
 }
-*/

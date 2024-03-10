@@ -1,1 +1,8 @@
-datasource.path: /home/denis/IdeaProjects/Spring-core-task/datasource.json
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gym
+    username: gym
+    password: gym
+    jpa:
+      hibernate:
+        ddl-auto: update

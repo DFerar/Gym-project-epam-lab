@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'jacoco'
     id 'org.flywaydb.flyway' version '10.8.1'
+    id 'checkstyle'
 }
 
 group = 'com.gym'
@@ -20,9 +21,10 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.4.14'
     //test
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+    testImplementation 'org.mockito:mockito-core:5.7.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
     testImplementation 'org.springframework:spring-test:6.1.3'
-    testImplementation 'org.mockito:mockito-core:4.11.0'
     testImplementation 'org.assertj:assertj-core:3.24.2'
     //lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
@@ -30,7 +32,7 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
     //database
-    implementation 'org.flywaydb:flyway-core:10.8.1'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.8.1'
     implementation 'org.hibernate.orm:hibernate-core:6.3.1.Final'
     implementation 'org.springframework.data:spring-data-jpa:3.2.0'
     implementation 'org.postgresql:postgresql:42.6.0'
@@ -53,21 +55,13 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "com/gym/GymCRMApp.*",
-                    "com/gym/entity/CustomerEntity.*",
-                    "com/gym/entity/InstructorEntity.*",
-                    "com/gym/entity/TrainingEntity.*",
-                    "com/gym/entity/TrainingType.*",
+                    "com/gym/entity/**.*",
                     "com/gym/storage/StorageInitializer.*",
                     "com/gym/AppConfig.*",
-                    "com/gym/GymCRMFacade.*"
+                    "com/gym/GymCRMFacade.*",
+                    "com/gym/repositories/**.*",
+                    "com/gym/dto/**.*"
             ])
         }))
     }
-}
-
-flyway {
-    url='jdbc:postgresql://localhost:5432/gym'
-    user='gym'
-    password='gym'
-    locations=['classpath:db/migrations']
 }

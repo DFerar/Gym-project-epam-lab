@@ -8,7 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class InstructorDto {
     private Integer id;
-    private Integer specialization;
+    private String specialization;
     private Integer userId;
     private String firstName;
     private String lastName;
