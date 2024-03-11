@@ -27,7 +27,7 @@ public class GymCRMApp {
             System.out.println(savedInstructor1);
 
             TrainingDto trainingDto1 = new TrainingDto(null, 1, 1, "1st training",
-                    1,Date.valueOf("2024-04-01"), 1);
+                    1, Date.valueOf("2024-04-01"), 1);
             TrainingDto savedTraining1 = gymCRMFacade.createTraining(loginUserName,
                     loginPassword, trainingDto1);
             System.out.println(savedTraining1);
@@ -64,7 +64,7 @@ public class GymCRMApp {
             System.out.println(list1);
             System.out.println(list1.size() == 1);
 //            delete commands
-            gymCRMFacade.deleteCustomerByUserName(loginUserName, loginPassword, "Denis.Ferar");
+            //gymCRMFacade.deleteCustomerByUserName(loginUserName, loginPassword, "Denis.Ferar");
         }
     }
 }

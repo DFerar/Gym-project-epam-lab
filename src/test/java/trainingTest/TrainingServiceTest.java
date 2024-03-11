@@ -11,6 +11,8 @@ import com.gym.repository.TrainingRepository;
 import com.gym.repository.TrainingTypeRepository;
 import com.gym.service.AuthenticationService;
 import com.gym.service.TrainingService;
+import com.gym.utils.Utils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,9 +44,10 @@ public class TrainingServiceTest {
     private TrainingService trainingService;
 
     @Test
-    public void createTrainingTest() {
-        String loginUserName = "user";
-        String loginPassword = "password";
+    public void shouldCreateTraining() {
+        //Given
+        String loginUserName = RandomStringUtils.randomAlphabetic(7);
+        String loginPassword = Utils.generatePassword();
         TrainingDto trainingDto = new TrainingDto(1, 1, 1, "Test.training", 1,
                 Date.valueOf("2024-01-01"), 1);
 
@@ -71,14 +74,15 @@ public class TrainingServiceTest {
         when(instructorRepository.findById(trainingDto.getInstructorId())).thenReturn(Optional.of(instructorEntity));
         when(trainingTypeRepository.findById(trainingDto.getTrainingTypeId())).thenReturn(Optional.of(trainingTypeEntity));
         when(trainingRepository.save(any(TrainingEntity.class))).thenReturn(savedTraining);
-
+        //When
         TrainingDto result = trainingService.createTraining(loginUserName, loginPassword, trainingDto);
-
+        //Assert
         assertThat(result).isEqualTo(trainingDto);
     }
 
     @Test
-    public void getCustomerListOfTrainingTest() {
+    public void shouldGetCustomerListOfTraining() {
+        //Given
         CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setId(1);
 
@@ -106,16 +110,17 @@ public class TrainingServiceTest {
 
         when(trainingRepository.findTrainingsByCustomerAndCriteria(
                 customerEntity.getId(), fromDate, toDate, instructorName, trainingTypeName)).thenReturn(trainingEntities);
-
+        //When
         List<TrainingDto> result = trainingService.getCustomerListOfTrainings(customerEntity, fromDate, toDate,
                 instructorName, trainingTypeName);
-
+        //Assert
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(1);
     }
 
     @Test
-    public void getInstructorListOfTrainings() {
+    public void shouldGetInstructorListOfTrainings() {
+        //Given
         CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setId(1);
 
@@ -142,10 +147,10 @@ public class TrainingServiceTest {
 
         when(trainingRepository.findTrainingsByInstructorAndCriteria(instructorEntity.getId(), fromDate, toDate, customerName))
                 .thenReturn(trainingEntities);
-
+        //When
         List<TrainingDto> result = trainingService.getInstructorListOfTrainings(instructorEntity, fromDate, toDate,
                 customerName);
-
+        //Assert
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(1);
     }

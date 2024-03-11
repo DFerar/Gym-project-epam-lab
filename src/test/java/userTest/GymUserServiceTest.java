@@ -4,6 +4,7 @@ import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
 import com.gym.service.GymUserService;
 import com.gym.utils.Utils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,10 +25,11 @@ public class GymUserServiceTest {
     private GymUserService gymUserService;
 
     @Test
-    public void updateUserTest() {
+    public void shouldUpdateUser() {
+        //Given
         Integer userId = 1;
-        String firstName = "John";
-        String lastName = "Doe";
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
         Boolean isActive = true;
         String password = Utils.generatePassword();
 
@@ -35,37 +37,39 @@ public class GymUserServiceTest {
                 "john.doe", password, false);
         when(gymUserRepository.findById(userId)).thenReturn(Optional.of(existingUser));
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(existingUser);
-
+        //When
         GymUserEntity result = gymUserService.updateUser(userId, firstName, lastName, isActive);
-
+        //Assert
         assertThat(result).isEqualTo(existingUser);
     }
 
     @Test
-    public void generateUniqueUserNameTest() {
-        String firstName = "John";
-        String lastName = "Doe";
+    public void shouldGenerateUniqueUserName() {
+        //Given
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
         String baseUserName = firstName + "." + lastName;
 
         when(gymUserRepository.existsByUserName(baseUserName)).thenReturn(false);
-
+        //When
         String result = gymUserService.generateUniqueUserName(firstName, lastName);
-
+        //Assert
         assertThat(result).isEqualTo(baseUserName);
     }
 
     @Test
-    public void generateUniqueUserNameWithExistingUserTest() {
-        String firstName = "John";
-        String lastName = "Doe";
+    public void shouldGenerateUniqueUserNameWithExistingUser() {
+        //Given
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
         String baseUserName = firstName + "." + lastName;
         String generatedUserName = baseUserName + "2";
 
         when(gymUserRepository.existsByUserName(baseUserName)).thenReturn(true);
         when(gymUserRepository.findMaxUserId()).thenReturn(1);
-
+        //When
         String result = gymUserService.generateUniqueUserName(firstName, lastName);
-
+        //Assert
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(generatedUserName);
     }

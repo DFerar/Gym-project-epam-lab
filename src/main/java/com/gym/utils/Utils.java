@@ -2,8 +2,6 @@ package com.gym.utils;
 
 import java.security.SecureRandom;
 
-import static java.util.stream.IntStream.range;
-
 
 public class Utils {
     private static final String UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWYXZ";
@@ -15,12 +13,11 @@ public class Utils {
         String allowedCharacters = getAllowedSymbols();
         SecureRandom random = new SecureRandom();
         StringBuilder password = new StringBuilder();
-        range(0, 10)
-                .forEach(i -> {
-                    int randomIndex = random.nextInt(allowedCharacters.length());
-                    char randomChar = allowedCharacters.charAt(randomIndex);
-                    password.append(randomChar);
-                });
+        for (int i = 0; i < 10; i++) {
+            int randomIndex = random.nextInt(allowedCharacters.length());
+            char randomChar = allowedCharacters.charAt(randomIndex);
+            password.append(randomChar);
+        }
         return password.toString();
     }
 

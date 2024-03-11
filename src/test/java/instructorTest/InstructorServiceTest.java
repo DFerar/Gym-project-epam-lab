@@ -13,6 +13,7 @@ import com.gym.service.GymUserService;
 import com.gym.service.InstructorService;
 import com.gym.service.TrainingService;
 import com.gym.utils.Utils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -52,7 +53,8 @@ class InstructorServiceTest {
     private InstructorService instructorService;
 
     @Test
-    public void createInstructorTest() {
+    public void shouldCreateInstructor() {
+        //Given
         String password = Utils.generatePassword();
         InstructorDto instructorDto = new InstructorDto(1, "CARDIO", 1, "Test",
                 "Instructor", "Test.Instructor", true);
@@ -68,20 +70,21 @@ class InstructorServiceTest {
         when(instructorRepository.save(any(InstructorEntity.class))).thenReturn(instructorEntity);
         when(gymUserService.generateUniqueUserName(any(String.class), any(String.class))).thenReturn("Test.Instructor");
         when(trainingTypeRepository.findByTrainingTypeName(any(String.class))).thenReturn(trainingTypeEntity);
-
+        //When
         InstructorDto result = instructorService.createInstructor(instructorDto);
-
+        //Assert
         assertThat(result).isEqualTo(instructorDto);
     }
 
     @Test
-    public void getInstructorByIdTest() {
-        String loginUserName = "user";
-        String loginPassword = "password";
+    public void shouldGetInstructorById() {
+        //Given
+        String loginUserName = RandomStringUtils.randomAlphabetic(7);
+        String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
         Integer instructorId = 1;
 
-        InstructorDto instructorDto = new InstructorDto(1, "CARDIO", 1, "Test",
+        InstructorDto instructorDto = new InstructorDto(instructorId, "CARDIO", 1, "Test",
                 "Instructor", "Test.Instructor", true);
 
         GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "Instructor",
@@ -93,18 +96,19 @@ class InstructorServiceTest {
 
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
         when(instructorRepository.findById(instructorId)).thenReturn(Optional.of(instructorEntity));
-
+        //When
         InstructorDto result = instructorService.getInstructorById(loginUserName, loginPassword, instructorId);
-
+        //Assert
         assertThat(result).isEqualTo(instructorDto);
     }
 
     @Test
-    public void getInstructorByUserNameTest() {
-        String loginUserName = "user";
-        String loginPassword = "password";
+    public void shouldGetInstructorByUserName() {
+        //Given
+        String loginUserName = RandomStringUtils.randomAlphabetic(7);
+        String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
-        String userName = "Test.Instructor";
+        String userName = RandomStringUtils.randomAlphabetic(7);
 
         InstructorDto instructorDto = new InstructorDto(1, "CARDIO", 1, "Test",
                 "Instructor", "Test.Instructor", true);
@@ -118,16 +122,17 @@ class InstructorServiceTest {
 
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
         when(instructorRepository.findInstructorEntityByGymUserEntity_UserName(userName)).thenReturn(instructorEntity);
-
+        //When
         InstructorDto result = instructorService.getInstructorByUsername(loginUserName, loginPassword, userName);
-
+        //Assert
         assertThat(result).isEqualTo(instructorDto);
     }
 
     @Test
-    public void updateInstructorTest() {
-        String loginUserName = "user";
-        String loginPassword = "password";
+    public void shouldUpdateInstructor() {
+        //Given
+        String loginUserName = RandomStringUtils.randomAlphabetic(7);
+        String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
 
 
@@ -146,60 +151,63 @@ class InstructorServiceTest {
         when(gymUserService.updateUser(anyInt(), anyString(), anyString(), anyBoolean())).thenReturn(updatedUser);
         when(instructorRepository.save(any(InstructorEntity.class))).thenReturn(instructorEntity);
         when(trainingTypeRepository.findByTrainingTypeName(any(String.class))).thenReturn(trainingTypeEntity);
-
+        //When
         InstructorDto result = instructorService.updateInstructor(loginUserName, loginPassword, newData);
-
+        //Assert
         assertThat(result).isEqualTo(newData);
     }
 
     @Test
-    public void changeInstructorPasswordTest() {
-        String loginUserName = "user";
-        String loginPassword = "password";
+    public void shouldChangeInstructorPassword() {
+        //Given
+        String loginUserName = RandomStringUtils.randomAlphabetic(7);
+        String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
         Integer userId = 1;
         String newPassword = Utils.generatePassword();
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "Instructor",
+        GymUserEntity gymUserEntity = new GymUserEntity(userId, "Test", "Instructor",
                 "Test.Instructor", password, true);
 
         when(gymUserRepository.findById(userId)).thenReturn(Optional.of(gymUserEntity));
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
-
+        //When
         instructorService.changeInstructorPassword(loginUserName, loginPassword, userId, newPassword);
-
+        //Assert
         verify(gymUserRepository, times(1)).save(gymUserEntity);
         assertThat(gymUserEntity.getPassword()).isEqualTo(newPassword);
     }
 
     @Test
-    public void changeInstructorActivityTest() {
-        String loginUserName = "user";
-        String loginPassword = "password";
+    public void shouldChangeInstructorActivity() {
+        //Given
+        String loginUserName = RandomStringUtils.randomAlphabetic(7);
+        String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
         Integer userId = 1;
         Boolean newActivity = false;
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "Instructor",
+        GymUserEntity gymUserEntity = new GymUserEntity(userId, "Test", "Instructor",
                 "Test.Instructor", password, true);
 
         when(gymUserRepository.findById(userId)).thenReturn(Optional.of(gymUserEntity));
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
-
+        //When
         instructorService.changeInstructorActivity(loginUserName, loginPassword, userId, newActivity);
-
+        //Assert
         verify(gymUserRepository, times(1)).save(gymUserEntity);
         assertThat(gymUserEntity.getIsActive()).isEqualTo(newActivity);
     }
 
     @Test
-    public void getInstructorTrainings() {
-        String loginUserName = "username";
-        String loginPassword = "password";
-        String instructorName = "Test.Instructor";
+    public void shouldGetInstructorTrainings() {
+        //Given
+        String loginUserName = RandomStringUtils.randomAlphabetic(7);
+        String loginPassword = Utils.generatePassword();
+        String instructorName = RandomStringUtils.randomAlphabetic(7);
         Date fromDate = Date.valueOf("2022-01-01");
         Date toDate = Date.valueOf("2022-12-31");
-        String customerName = "customer123";
+        String customerName = RandomStringUtils.randomAlphabetic(7);
 
         InstructorEntity instructorEntity = new InstructorEntity();
         instructorEntity.setId(1);
@@ -208,26 +216,27 @@ class InstructorServiceTest {
                 instructorEntity);
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
         when(trainingService.getInstructorListOfTrainings(any(), any(), any(), any())).thenReturn(new ArrayList<>());
-
+        //When
         List<TrainingDto> result = instructorService.getInstructorTrainings(
                 loginUserName, loginPassword, instructorName, fromDate, toDate, customerName);
-
+        //Assert
         assertThat(result).isNotNull();
     }
 
     @Test
-    public void getInstructorsNotAssignedToCustomerByCustomerUserNameTest() {
-        String loginUserName = "username";
-        String loginPassword = "password";
-        String customerUsername = "Test.Customer";
+    public void shouldGetInstructorsNotAssignedToCustomerByCustomerUserName() {
+        //Given
+        String loginUserName = RandomStringUtils.randomAlphabetic(7);
+        String loginPassword = Utils.generatePassword();
+        String customerUsername = RandomStringUtils.randomAlphabetic(7);
 
         when(instructorRepository.findUnassignedInstructorsByCustomerUsername(customerUsername)).thenReturn(
                 new ArrayList<>());
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
-
+        //When
         List<InstructorDto> result = instructorService.getInstructorsNotAssignedToCustomerByCustomerUserName(
                 loginUserName, loginPassword, customerUsername);
-
+        //Assert
         assertThat(result).isNotNull();
     }
 }
