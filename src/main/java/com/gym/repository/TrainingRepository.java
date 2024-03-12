@@ -1,30 +1,42 @@
 package com.gym.repository;
 
 import com.gym.entity.TrainingEntity;
-import com.gym.storage.Storage;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Set;
+import java.sql.Date;
+import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
-public class TrainingRepository {
-    private final Storage storage;
+public interface TrainingRepository extends JpaRepository<TrainingEntity, Integer> {
 
-    @SneakyThrows
-    public TrainingEntity createTraining(TrainingEntity training) {
-        TrainingEntity trainingFromBase = storage.addTraining(training);
-        storage.updateDatasource();
-        return trainingFromBase;
-    }
+    @Query("SELECT t FROM TrainingEntity t " +
+            "WHERE t.customer.id = :customerId " +
+            "AND (:fromDate IS NULL OR t.trainingDate >= :fromDate)" +
+            "AND (:toDate IS NULL OR t.trainingDate <= :toDate)" +
+            "AND (:instructorName IS NULL OR t.instructor.gymUserEntity.userName = :instructorName)" +
+            "AND (:trainingTypeName IS NULL OR t.trainingType.trainingTypeName = :trainingTypeName)")
+    List<TrainingEntity> findTrainingsByCustomerAndCriteria(
+            @Param("customerId") Integer customerId,
+            @Param("fromDate") Date fromDate,
+            @Param("toDate") Date toDate,
+            @Param("instructorName") String instructorName,
+            @Param("trainingTypeName") String trainingTypeName
+    );
 
-    public TrainingEntity getTrainingById(Integer trainingId) {
-        return storage.getTrainingById(trainingId);
-    }
+    @Query("SELECT t FROM TrainingEntity t " +
+            "WHERE t.instructor.id = :instructorId " +
+            "AND (:fromDate IS NULL OR t.trainingDate >= :fromDate) " +
+            "AND (:toDate IS NULL OR t.trainingDate <= :toDate) " +
+            "AND (:customerName IS NULL OR t.customer.gymUserEntity.userName = :customerName)")
+    List<TrainingEntity> findTrainingsByInstructorAndCriteria(
+            @Param("instructorId") Integer instructorId,
+            @Param("fromDate") Date fromDate,
+            @Param("toDate") Date toDate,
+            @Param("customerName") String customerName
+    );
 
-    public Set<Integer> getTrainingIds() {
-        return storage.getTrainingIds();
-    }
+    void deleteTrainingEntitiesByCustomer_GymUserEntity_UserName(String username);
 }

@@ -1,46 +1,25 @@
 package com.gym.repository;
 
 import com.gym.entity.InstructorEntity;
-import com.gym.storage.Storage;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Set;
+import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
-public class InstructorRepository {
-    private final Storage storage;
+public interface InstructorRepository extends JpaRepository<InstructorEntity, Integer> {
+    InstructorEntity findInstructorEntityByGymUserEntity_UserName(String userName);
 
-    @SneakyThrows
-    public InstructorEntity createInstructor(InstructorEntity instructor) {
-        InstructorEntity instructorFromBase = storage.addInstructor(instructor);
-        storage.updateDatasource();
-        return instructorFromBase;
-    }
+    @Query("SELECT t FROM InstructorEntity t " +
+            "WHERE NOT EXISTS " +
+            "(SELECT c FROM CustomerEntity c " +
+            "WHERE c.gymUserEntity.userName = :customerUsername " +
+            "AND t MEMBER OF c.instructors)")
+    List<InstructorEntity> findUnassignedInstructorsByCustomerUsername(
+            @Param("customerUsername") String customerUsername
+    );
 
-    public InstructorEntity getInstructorById(Integer instructorId) {
-        return storage.getInstructorById(instructorId);
-    }
-
-    @SneakyThrows
-    public InstructorEntity updateInstructor(InstructorEntity instructorToUpdate) {
-        storage.updateDatasource();
-        return instructorToUpdate;
-    }
-
-    @SneakyThrows
-    public void deleteInstructor(Integer instructorId) {
-        storage.deleteInstructor(instructorId);
-        storage.updateDatasource();
-    }
-
-    public Set<Integer> getInstructorIds() {
-        return storage.getInstructorIds();
-    }
-
-    public boolean ifUsernameExists(String userName) {
-        return storage.checkIfInstructorUserNameExists(userName);
-    }
+    boolean existsByGymUserEntity_UserNameAndGymUserEntity_Password(String userName, String password);
 }

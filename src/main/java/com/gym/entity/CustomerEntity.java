@@ -1,19 +1,38 @@
 package com.gym.entity;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "customer", schema = "public", catalog = "gym")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = "instructors")
 public class CustomerEntity {
-    private Integer userId;
-    private String firstName;
-    private String lastName;
-    private String dateOfBirth;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id", nullable = false)
+    private Integer id;
+    @Basic
+    @Column(name = "date_of_birth", nullable = true)
+    private Date dateOfBirth;
+    @Basic
+    @Column(name = "address", nullable = true, length = 255)
     private String address;
-    private String userName;
-    private String password;
-    private Boolean isActive;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private GymUserEntity gymUserEntity;
+    @ManyToMany
+    @JoinTable(name = "customer_instructor",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "instructor_id"))
+    private Set<InstructorEntity> instructors = new HashSet<>();
 }
