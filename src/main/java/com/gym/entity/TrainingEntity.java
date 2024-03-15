@@ -12,27 +12,25 @@ import java.sql.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SequenceGenerator(name = "training_SEQ",sequenceName = "training_seq",  allocationSize = 1)
 public class TrainingEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training_SEQ")
     @Id
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private CustomerEntity customer;
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private InstructorEntity instructor;
-    @Basic
-    @Column(name = "training_name", nullable = false, length = 225)
+    @Column(name = "training_name")
     private String trainingName;
     @OneToOne
     @JoinColumn(name = "training_type_id")
     private TrainingTypeEntity trainingType;
-    @Basic
-    @Column(name = "training_date", nullable = false)
+    @Column(name = "training_date")
     private Date trainingDate;
-    @Basic
-    @Column(name = "training_duration", nullable = false)
+    @Column(name = "training_duration")
     private Integer trainingDuration;
 }

@@ -12,10 +12,10 @@ public class AuthenticationService {
     private final InstructorRepository instructorRepository;
 
     public boolean matchCustomerCredentials(String username, String password) {
-        return customerRepository.existsByGymUserEntity_UserNameAndGymUserEntity_Password(username, password);
+        return customerRepository.existsByGymUserEntityUserNameAndGymUserEntityPassword(username, password);
     }
 
     public boolean matchInstructorCredentials(String username, String password) {
-        return instructorRepository.existsByGymUserEntity_UserNameAndGymUserEntity_Password(username, password);
+        return instructorRepository.existsByGymUserEntityUserNameAndGymUserEntityPassword(username, password);
     }
 }

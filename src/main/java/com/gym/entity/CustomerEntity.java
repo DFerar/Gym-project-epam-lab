@@ -16,16 +16,17 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "instructors")
+@SequenceGenerator(name = "customer_SEQ",sequenceName = "customer_seq", allocationSize = 1)
 public class CustomerEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_SEQ")
     @Id
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
     @Basic
-    @Column(name = "date_of_birth", nullable = true)
+    @Column(name = "date_of_birth")
     private Date dateOfBirth;
     @Basic
-    @Column(name = "address", nullable = true, length = 255)
+    @Column(name = "address")
     private String address;
     @OneToOne
     @JoinColumn(name = "user_id")

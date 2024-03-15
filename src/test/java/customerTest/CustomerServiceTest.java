@@ -50,18 +50,22 @@ public class CustomerServiceTest {
     public void shouldCreateCustomer() {
         //Given
         String password = Utils.generatePassword();
-        CustomerDto customerDto = new CustomerDto(1, Date.valueOf("1990-01-01"), "testAddress",
-                1, "Test", "User", "Test.User", true);
+        String address = RandomStringUtils.randomAlphabetic(7);
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
+        CustomerDto customerDto = new CustomerDto(1L, Date.valueOf("1990-01-01"), address,
+                1L, firstName, lastName, userName, true);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "User", "Test.User", password,
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password,
                 true);
 
-        CustomerEntity customerEntity = new CustomerEntity(1, Date.valueOf("1990-01-01"), "testAddress",
+        CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
                 gymUserEntity, null);
 
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(gymUserEntity);
         when(customerRepository.save(any(CustomerEntity.class))).thenReturn(customerEntity);
-        when(gymUserService.generateUniqueUserName(any(String.class), any(String.class))).thenReturn("Test.user");
+        when(gymUserService.generateUniqueUserName(any(String.class), any(String.class))).thenReturn(userName);
         //When
         CustomerDto result = customerService.createCustomer(customerDto);
         //Assert
@@ -75,14 +79,18 @@ public class CustomerServiceTest {
         String loginPassword = Utils.generatePassword();
         String userName = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
+        String address = RandomStringUtils.randomAlphabetic(7);
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userNameToDto = RandomStringUtils.randomAlphabetic(7);
 
-        CustomerDto customerDto = new CustomerDto(1, Date.valueOf("1990-01-01"), "testAddress",
-                1, "Test", "User", "Test.User", true);
+        CustomerDto customerDto = new CustomerDto(1L, Date.valueOf("1990-01-01"), address,
+                1L, firstName, lastName, userNameToDto, true);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "User", "Test.User", password,
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userNameToDto, password,
                 true);
 
-        CustomerEntity customerEntity = new CustomerEntity(1, Date.valueOf("1990-01-01"), "testAddress",
+        CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
                 gymUserEntity, null);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
@@ -99,15 +107,19 @@ public class CustomerServiceTest {
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
-        Integer customerId = 1;
+        Long customerId = 1L;
+        String address = RandomStringUtils.randomAlphabetic(7);
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
 
-        CustomerDto customerDto = new CustomerDto(customerId, Date.valueOf("1990-01-01"), "testAddress",
-                1, "Test", "User", "Test.User", true);
+        CustomerDto customerDto = new CustomerDto(customerId, Date.valueOf("1990-01-01"), address,
+                1L, firstName, lastName, userName, true);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "User", "Test.User", password,
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password,
                 true);
 
-        CustomerEntity customerEntity = new CustomerEntity(customerId, Date.valueOf("1990-01-01"), "testAddress",
+        CustomerEntity customerEntity = new CustomerEntity(customerId, Date.valueOf("1990-01-01"), address,
                 gymUserEntity, null);
 
         when(customerRepository.findById(customerId)).thenReturn(Optional.of(customerEntity));
@@ -124,10 +136,13 @@ public class CustomerServiceTest {
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
-        Integer userId = 1;
+        Long userId = 1L;
         String newPassword = Utils.generatePassword();
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(userId, "Test", "User", "Test.User", password,
+        GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName, userName, password,
                 true);
 
         when(gymUserRepository.findById(userId)).thenReturn(Optional.of(gymUserEntity));
@@ -145,10 +160,13 @@ public class CustomerServiceTest {
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
-        Integer userId = 1;
+        Long userId = 1L;
         Boolean newActivity = false;
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "User", "Test.User", password,
+        GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName, userName, password,
                 true);
 
         when(authenticationService.matchCustomerCredentials(loginUserName, loginPassword)).thenReturn(true);
@@ -166,20 +184,24 @@ public class CustomerServiceTest {
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
+        String address = RandomStringUtils.randomAlphabetic(7);
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
 
-        CustomerDto newData = new CustomerDto(1, Date.valueOf("1990-01-01"), "testAddress",
-                1, "Test", "User", "Test.User", true);
+        CustomerDto newData = new CustomerDto(1L, Date.valueOf("1990-01-01"), address,
+                1L, firstName, lastName, userName, true);
 
-        GymUserEntity updatedUser = new GymUserEntity(1, "Test", "User", "Test.User", password,
+        GymUserEntity updatedUser = new GymUserEntity(1L, firstName, lastName, userName, password,
                 true);
 
-        CustomerEntity customerEntity = new CustomerEntity(1, Date.valueOf("1990-01-01"), "testAddress",
+        CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
                 updatedUser, null);
 
 
         when(authenticationService.matchCustomerCredentials(loginUserName, loginPassword)).thenReturn(true);
         when(customerRepository.findById(newData.getId())).thenReturn(Optional.of(new CustomerEntity()));
-        when(gymUserService.updateUser(anyInt(), anyString(), anyString(), anyBoolean())).thenReturn(updatedUser);
+        when(gymUserService.updateUser(anyLong(), anyString(), anyString(), anyBoolean())).thenReturn(updatedUser);
         when(customerRepository.save(any(CustomerEntity.class))).thenReturn(customerEntity);
         //When
         CustomerDto result = customerService.updateCustomer(loginUserName, loginPassword, newData);
@@ -194,9 +216,13 @@ public class CustomerServiceTest {
         String loginPassword = Utils.generatePassword();
         String userName = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "User", "Test.User", password,
+        String address = RandomStringUtils.randomAlphabetic(7);
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userNameOfInstructor = RandomStringUtils.randomAlphabetic(7);
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userNameOfInstructor, password,
                 true);
-        CustomerEntity customerEntity = new CustomerEntity(1, Date.valueOf("1990-01-01"), "testAddress",
+        CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
                 gymUserEntity, null);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
@@ -206,7 +232,7 @@ public class CustomerServiceTest {
         //Assert
         verify(customerRepository, times(1)).delete(customerEntity);
         verify(gymUserRepository, times(1)).deleteGymUserEntitiesByUserName(userName);
-        verify(trainingRepository, times(1)).deleteTrainingEntitiesByCustomer_GymUserEntity_UserName(userName);
+        verify(trainingRepository, times(1)).deleteTrainingEntitiesByCustomerGymUserEntityUserName(userName);
     }
 
     @Test
@@ -221,7 +247,7 @@ public class CustomerServiceTest {
         String trainingTypeName = RandomStringUtils.randomAlphabetic(7);
 
         CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1);
+        customerEntity.setId(1L);
         customerEntity.setAddress("123 Main St");
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(customerName)).thenReturn(customerEntity);

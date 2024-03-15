@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-// TODO add more random in all tests
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
     @Mock
@@ -30,7 +29,7 @@ public class AuthServiceTest {
         String userName = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
 
-        when(customerRepository.existsByGymUserEntity_UserNameAndGymUserEntity_Password(userName, password))
+        when(customerRepository.existsByGymUserEntityUserNameAndGymUserEntityPassword(userName, password))
                 .thenReturn(true);
         //When
         boolean result = authenticationService.matchCustomerCredentials(userName, password);
@@ -44,7 +43,7 @@ public class AuthServiceTest {
         String userName = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
 
-        when(instructorRepository.existsByGymUserEntity_UserNameAndGymUserEntity_Password(userName, password))
+        when(instructorRepository.existsByGymUserEntityUserNameAndGymUserEntityPassword(userName, password))
                 .thenReturn(true);
         //When
         boolean result = authenticationService.matchInstructorCredentials(userName, password);

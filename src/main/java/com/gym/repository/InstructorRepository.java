@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface InstructorRepository extends JpaRepository<InstructorEntity, Integer> {
-    InstructorEntity findInstructorEntityByGymUserEntity_UserName(String userName);
+public interface InstructorRepository extends JpaRepository<InstructorEntity, Long> {
+    InstructorEntity findInstructorEntityByGymUserEntityUserName(String userName);
 
     @Query("SELECT t FROM InstructorEntity t " +
             "WHERE NOT EXISTS " +
@@ -22,5 +22,5 @@ public interface InstructorRepository extends JpaRepository<InstructorEntity, In
     );
 
     // TODO
-    boolean existsByGymUserEntity_UserNameAndGymUserEntity_Password(String userName, String password);
+    boolean existsByGymUserEntityUserNameAndGymUserEntityPassword(String userName, String password);
 }

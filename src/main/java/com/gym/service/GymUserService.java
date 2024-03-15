@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 public class GymUserService {
     private final GymUserRepository gymUserRepository;
 
-    public GymUserEntity updateUser(Integer userId, String firstName, String lastName, Boolean isActive) {
+    public GymUserEntity updateUser(Long userId, String firstName, String lastName, Boolean isActive) {
         GymUserEntity gymUserEntity = gymUserRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
@@ -31,15 +31,14 @@ public class GymUserService {
         String baseUserName = firstName + "." + lastName;
         Boolean userNameExist = gymUserRepository.existsByUserName(baseUserName);
         if (userNameExist) {
-            Integer nextUserId = getNextAvailableUserId();
-            return baseUserName + nextUserId;
+            long nextUserId = getNextAvailableUserId() + 1L;
+            return baseUserName + Long.toString(nextUserId);
         } else {
             return baseUserName;
         }
     }
 
-    private Integer getNextAvailableUserId() {
-        Integer maxUserId = gymUserRepository.findMaxUserId();
-        return (maxUserId != null) ? maxUserId + 1 : 1;
+    private long getNextAvailableUserId() {
+        return gymUserRepository.findMaxUserId();
     }
 }

@@ -27,14 +27,15 @@ public class GymUserServiceTest {
     @Test
     public void shouldUpdateUser() {
         //Given
-        Integer userId = 1;
+        Long userId = 1L;
         String firstName = RandomStringUtils.randomAlphabetic(7);
         String lastName = RandomStringUtils.randomAlphabetic(7);
         Boolean isActive = true;
         String password = Utils.generatePassword();
 
-        GymUserEntity existingUser = new GymUserEntity(userId, "John", "Doe",
-                "john.doe", password, false);
+        GymUserEntity existingUser = new GymUserEntity(userId, RandomStringUtils.randomAlphabetic(7),
+                RandomStringUtils.randomAlphabetic(7),
+                RandomStringUtils.randomAlphabetic(7), password, false);
         when(gymUserRepository.findById(userId)).thenReturn(Optional.of(existingUser));
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(existingUser);
         //When
@@ -66,7 +67,7 @@ public class GymUserServiceTest {
         String generatedUserName = baseUserName + "2";
 
         when(gymUserRepository.existsByUserName(baseUserName)).thenReturn(true);
-        when(gymUserRepository.findMaxUserId()).thenReturn(1);
+        when(gymUserRepository.findMaxUserId()).thenReturn(1L);
         //When
         String result = gymUserService.generateUniqueUserName(firstName, lastName);
         //Assert

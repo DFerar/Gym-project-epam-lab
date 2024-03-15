@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GymUserRepository extends JpaRepository<GymUserEntity, Integer> {
+public interface GymUserRepository extends JpaRepository<GymUserEntity, Long> {
     Boolean existsByUserName(String username);
 
-    @Query("SELECT MAX(u.id) FROM GymUserEntity u") // TODO improvement
-    Integer findMaxUserId();
+    @Query("SELECT coalesce(MAX(u.id), 1L) FROM GymUserEntity u")
+    Long findMaxUserId();
 
     void deleteGymUserEntitiesByUserName(String userName);
 }

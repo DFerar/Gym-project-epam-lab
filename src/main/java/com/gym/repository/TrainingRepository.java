@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.util.List;
 
 @Repository
-public interface TrainingRepository extends JpaRepository<TrainingEntity, Integer> {
+public interface TrainingRepository extends JpaRepository<TrainingEntity, Long> {
 
     @Query("SELECT t FROM TrainingEntity t " +
             "WHERE t.customer.id = :customerId " +
@@ -19,7 +19,7 @@ public interface TrainingRepository extends JpaRepository<TrainingEntity, Intege
             "AND (:instructorName IS NULL OR t.instructor.gymUserEntity.userName = :instructorName)" +
             "AND (:trainingTypeName IS NULL OR t.trainingType.trainingTypeName = :trainingTypeName)")
     List<TrainingEntity> findTrainingsByCustomerAndCriteria(
-            @Param("customerId") Integer customerId,
+            @Param("customerId") Long customerId,
             @Param("fromDate") Date fromDate,
             @Param("toDate") Date toDate,
             @Param("instructorName") String instructorName,
@@ -32,11 +32,11 @@ public interface TrainingRepository extends JpaRepository<TrainingEntity, Intege
             "AND (:toDate IS NULL OR t.trainingDate <= :toDate) " +
             "AND (:customerName IS NULL OR t.customer.gymUserEntity.userName = :customerName)")
     List<TrainingEntity> findTrainingsByInstructorAndCriteria(
-            @Param("instructorId") Integer instructorId,
+            @Param("instructorId") Long instructorId,
             @Param("fromDate") Date fromDate,
             @Param("toDate") Date toDate,
             @Param("customerName") String customerName
     );
 
-    void deleteTrainingEntitiesByCustomer_GymUserEntity_UserName(String username);
+    void deleteTrainingEntitiesByCustomerGymUserEntityUserName(String username);
 }
