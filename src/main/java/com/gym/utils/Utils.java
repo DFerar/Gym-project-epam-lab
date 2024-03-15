@@ -9,6 +9,7 @@ public class Utils {
     private static final String DIGITS = "0123456789";
     private static final String SYMBOLS = "!@#$%^&*()-=+?<>";
 
+    // TODO Tests?
     public static String generatePassword() {
         String allowedCharacters = getAllowedSymbols();
         SecureRandom random = new SecureRandom();

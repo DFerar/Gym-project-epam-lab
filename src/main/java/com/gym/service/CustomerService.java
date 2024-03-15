@@ -100,14 +100,13 @@ public class CustomerService {
     public void deleteCustomerByUserName(String loginUserName, String loginPassword, String userName) {
         checkCredentialsMatching(loginUserName, loginPassword);
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
-        if (customerEntity != null) {
-            trainingRepository.deleteTrainingEntitiesByCustomer_GymUserEntity_UserName(userName);
-            gymUserRepository.deleteGymUserEntitiesByUserName(userName);
-            customerRepository.delete(customerEntity);
-            log.info("Customer deleted: {}", userName);
-        } else {
+        if (customerEntity == null) {
             throw new NoSuchElementException("Customer not found");
         }
+        trainingRepository.deleteTrainingEntitiesByCustomer_GymUserEntity_UserName(userName);
+        gymUserRepository.deleteGymUserEntitiesByUserName(userName);
+        customerRepository.delete(customerEntity);
+        log.info("Customer deleted: {}", userName);
     }
 
     @Transactional

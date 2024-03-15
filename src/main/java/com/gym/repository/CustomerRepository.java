@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends JpaRepository<CustomerEntity, Integer> {
     CustomerEntity findCustomerEntityByGymUserEntityUserName(String userName);
 
+    // TODO
     boolean existsByGymUserEntity_UserNameAndGymUserEntity_Password(String username, String password);
 }
 

@@ -21,5 +21,6 @@ public interface InstructorRepository extends JpaRepository<InstructorEntity, In
             @Param("customerUsername") String customerUsername
     );
 
+    // TODO
     boolean existsByGymUserEntity_UserNameAndGymUserEntity_Password(String userName, String password);
 }

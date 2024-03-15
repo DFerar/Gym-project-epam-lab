@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+// TODO add more random in all tests
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
     @Mock

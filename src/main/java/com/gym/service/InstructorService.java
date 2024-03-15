@@ -38,7 +38,7 @@ public class InstructorService {
         TrainingTypeEntity trainingType =
                 trainingTypeRepository.findByTrainingTypeName(instructorDto.getSpecialization());
         if (trainingType == null) {
-            throw new NoSuchElementException("training type not found");
+            throw new NoSuchElementException("training type not found"); // TODO
         }
         InstructorEntity instructorEntity = instructorDtoToInstructorEntity(savedUser, trainingType);
         InstructorEntity savedInstructor = instructorRepository.save(instructorEntity);

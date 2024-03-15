@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface GymUserRepository extends JpaRepository<GymUserEntity, Integer> {
     Boolean existsByUserName(String username);
 
-    @Query("SELECT MAX(u.id) FROM GymUserEntity u")
+    @Query("SELECT MAX(u.id) FROM GymUserEntity u") // TODO improvement
     Integer findMaxUserId();
 
     void deleteGymUserEntitiesByUserName(String userName);
