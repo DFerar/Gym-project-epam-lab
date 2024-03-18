@@ -2,10 +2,11 @@ package com.gym.service;
 
 
 import com.gym.dto.InstructorDto;
-import com.gym.dto.TrainingDto;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
+import com.gym.entity.TrainingType;
 import com.gym.entity.TrainingTypeEntity;
+import com.gym.mapper.InstructorMapper;
 import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingTypeRepository;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -30,20 +30,19 @@ public class InstructorService {
     private final TrainingTypeRepository trainingTypeRepository;
     private final TrainingService trainingService;
     private final AuthenticationService authenticationService;
+    private final InstructorMapper instructorMapper;
 
     @Transactional
-    public InstructorDto createInstructor(InstructorDto instructorDto) {
-        GymUserEntity gymUserEntity = instructorDtoToUserEntity(instructorDto);
+    public InstructorEntity createInstructor(GymUserEntity gymUserEntity, TrainingType specialization) {
         GymUserEntity savedUser = gymUserRepository.save(gymUserEntity);
         TrainingTypeEntity trainingType =
-                trainingTypeRepository.findByTrainingTypeName(instructorDto.getSpecialization());
+                trainingTypeRepository.findByTrainingTypeName(specialization);
         if (trainingType == null) {
-            throw new NoSuchElementException("Training type not found");
+            throw new NoSuchElementException("training type not found");
         }
-        InstructorEntity instructorEntity = instructorDtoToInstructorEntity(savedUser, trainingType);
-        InstructorEntity savedInstructor = instructorRepository.save(instructorEntity);
-        log.info("Creating instructor: {}", instructorDto);
-        return entityToDto(savedInstructor, savedUser);
+        InstructorEntity instructorEntity = instructorMapper.mapUserEntityToInstructorEntity(trainingType, savedUser);
+        log.info("Creating instructor: {}", instructorEntity);
+        return instructorEntity;
     }
 
     public InstructorDto getInstructorById(String loginUserName, String loginPassword, Long instructorId) {
@@ -56,30 +55,30 @@ public class InstructorService {
     }
 
     @Transactional
-    public InstructorDto updateInstructor(String loginUserName, String loginPassword, InstructorDto newData) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        GymUserEntity updatedUser = gymUserService.updateUser(newData.getUserId(), newData.getFirstName(),
-                newData.getLastName(), newData.getIsActive());
+    public InstructorEntity updateInstructor(GymUserEntity userEntity, TrainingType specialization) {
+        GymUserEntity updatedUser = gymUserService.updateUser(userEntity);
 
-        TrainingTypeEntity trainingType = trainingTypeRepository.findByTrainingTypeName(newData.getSpecialization());
-        trainingType.setTrainingTypeName(newData.getSpecialization());
+        TrainingTypeEntity trainingType = trainingTypeRepository.findByTrainingTypeName(specialization);
+        trainingType.setTrainingTypeName(specialization);
 
-        InstructorEntity instructorEntity = instructorRepository.findById(newData.getId())
-                .orElseThrow(() -> new NoSuchElementException("Instructor not found"));
+        InstructorEntity instructorEntity = instructorRepository.findInstructorEntityByGymUserEntityUserName(
+                updatedUser.getUserName());
+        if (instructorEntity == null) {
+            throw new NoSuchElementException("Instructor not found");
+        }
         instructorEntity.setTrainingTypeEntity(trainingType);
         InstructorEntity updatedInstructor = instructorRepository.save(instructorEntity);
-        log.info("Instructor updated: {}", newData);
-        return entityToDto(updatedInstructor, updatedUser);
+        log.info("Instructor updated: {}", updatedInstructor);
+        return updatedInstructor;
     }
 
-    public InstructorDto getInstructorByUsername(String loginUserName, String loginPassword, String username) {
-        checkCredentialsMatching(loginUserName, loginPassword);
+    public InstructorEntity getInstructorByUsername(String username) {
         InstructorEntity instructorEntity = instructorRepository.findInstructorEntityByGymUserEntityUserName(username);
         if (instructorEntity == null) {
             throw new NoSuchElementException("Instructor not found");
         }
         log.info("Got instructor with username: {}", username);
-        return entityToDto(instructorEntity, instructorEntity.getGymUserEntity());
+        return instructorEntity;
 
     }
 
@@ -105,31 +104,9 @@ public class InstructorService {
         log.info("Activity changed on user:{}", userId);
     }
 
-    @Transactional
-    public List<TrainingDto> getInstructorTrainings(String loginUserName, String loginPassword, String instructorName,
-                                                    Date fromDate,
-                                                    Date toDate, String customerName) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        InstructorEntity instructorEntity =
-                instructorRepository.findInstructorEntityByGymUserEntityUserName(instructorName);
-        if (instructorEntity == null) {
-            throw new NoSuchElementException("Instructor not found");
-        }
-        log.info("Got instructors trainings:{}", instructorName);
-        return trainingService.getInstructorListOfTrainings(instructorEntity, fromDate, toDate,
-                customerName);
-
-    }
-
-    public List<InstructorDto> getInstructorsNotAssignedToCustomerByCustomerUserName(String loginUserName,
-                                                                                     String loginPassword,
-                                                                                     String customerUsername) {
-        checkCredentialsMatching(loginUserName, loginPassword);
+    public List<InstructorEntity> getInstructorsNotAssignedToCustomerByCustomerUserName(String customerUsername) {
         log.info("Got instructors not assigned to customer:{}", customerUsername);
-        return instructorRepository.findUnassignedInstructorsByCustomerUsername(customerUsername)
-                .stream()
-                .map(entity -> entityToDto(entity, entity.getGymUserEntity()))
-                .toList();
+        return instructorRepository.findUnassignedInstructorsByCustomerUsername(customerUsername);
     }
 
     private InstructorDto entityToDto(InstructorEntity savedInstructor, GymUserEntity savedUser) {

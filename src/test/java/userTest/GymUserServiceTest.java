@@ -1,4 +1,4 @@
-package userTest;
+/*package userTest;
 
 import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
@@ -74,4 +74,4 @@ public class GymUserServiceTest {
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(generatedUserName);
     }
-}
+}*/

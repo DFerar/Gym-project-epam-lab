@@ -15,15 +15,16 @@ import java.util.NoSuchElementException;
 public class GymUserService {
     private final GymUserRepository gymUserRepository;
 
-    public GymUserEntity updateUser(Long userId, String firstName, String lastName, Boolean isActive) {
-        GymUserEntity gymUserEntity = gymUserRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-
-        String newUserName = generateUniqueUserName(firstName, lastName);
-        gymUserEntity.setFirstName(firstName);
-        gymUserEntity.setLastName(lastName);
+    public GymUserEntity updateUser(GymUserEntity userEntity) {
+        GymUserEntity gymUserEntity = gymUserRepository.findByUserName(userEntity.getUserName());
+        if (gymUserEntity == null) {
+            throw new NoSuchElementException("User not found");
+        }
+        String newUserName = generateUniqueUserName(gymUserEntity.getFirstName(), gymUserEntity.getLastName());
+        gymUserEntity.setFirstName(gymUserEntity.getFirstName());
+        gymUserEntity.setLastName(gymUserEntity.getLastName());
         gymUserEntity.setUserName(newUserName);
-        gymUserEntity.setIsActive(isActive);
+        gymUserEntity.setIsActive(gymUserEntity.getIsActive());
         return gymUserRepository.save(gymUserEntity);
     }
 

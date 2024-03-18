@@ -22,10 +22,8 @@ public class CustomerEntity {
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
-    @Basic
     @Column(name = "address")
     private String address;
     @OneToOne

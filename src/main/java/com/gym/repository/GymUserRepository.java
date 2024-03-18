@@ -13,4 +13,6 @@ public interface GymUserRepository extends JpaRepository<GymUserEntity, Long> {
     Long findMaxUserId();
 
     void deleteGymUserEntitiesByUserName(String userName);
+
+    GymUserEntity findByUserName(String username);
 }
