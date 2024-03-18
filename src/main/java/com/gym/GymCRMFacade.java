@@ -37,12 +37,12 @@ public class GymCRMFacade {
         return customerService.getCustomerByUserName(loginUserName, loginPassword, userName);
     }
 
-    public void changeCustomerPassword(String loginUserName, String loginPassword, Integer customerId,
+    public void changeCustomerPassword(String loginUserName, String loginPassword, Long customerId,
                                        String newPassword) {
         customerService.changeCustomerPassword(loginUserName, loginPassword, customerId, newPassword);
     }
 
-    public void changeCustomerActivity(String loginUserName, String loginPassword, Integer userId,
+    public void changeCustomerActivity(String loginUserName, String loginPassword, Long userId,
                                        boolean newActivity) {
         customerService.changeCustomersActivity(loginUserName, loginPassword, userId, newActivity);
     }
@@ -55,7 +55,7 @@ public class GymCRMFacade {
         return customerService.updateCustomer(loginUserName, loginPassword, newData);
     }
 
-    public CustomerDto getCustomerById(String loginUserName, String loginPassword, Integer customerId) {
+    public CustomerDto getCustomerById(String loginUserName, String loginPassword, Long customerId) {
         return customerService.getCustomerById(loginUserName, loginPassword, customerId);
     }
 
@@ -75,12 +75,12 @@ public class GymCRMFacade {
         return instructorService.getInstructorByUsername(loginUserName, loginPassword, userName);
     }
 
-    public void changeInstructorPassword(String loginUserName, String loginPassword, Integer userId,
+    public void changeInstructorPassword(String loginUserName, String loginPassword, Long userId,
                                          String newPassword) {
         instructorService.changeInstructorPassword(loginUserName, loginPassword, userId, newPassword);
     }
 
-    public void changeInstructorActivity(String loginUserName, String loginPassword, Integer userId,
+    public void changeInstructorActivity(String loginUserName, String loginPassword, Long userId,
                                          boolean newActivity) {
         instructorService.changeInstructorActivity(loginUserName, loginPassword, userId, newActivity);
     }
@@ -104,7 +104,7 @@ public class GymCRMFacade {
         return instructorService.updateInstructor(loginUserName, loginPassword, newData);
     }
 
-    public InstructorDto getInstructorById(String loginUserName, String loginPassword, Integer instructorId) {
+    public InstructorDto getInstructorById(String loginUserName, String loginPassword, Long instructorId) {
         return instructorService.getInstructorById(loginUserName, loginPassword, instructorId);
     }
 

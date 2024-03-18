@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Gym_user
 (
-    ID         SERIAL PRIMARY KEY,
+    ID         BIGINT PRIMARY KEY,
     first_name varchar(255) NOT NULL,
     last_name  varchar(255) NOT NULL,
     user_name  varchar(255) NOT NULL UNIQUE,
@@ -10,42 +10,48 @@ CREATE TABLE IF NOT EXISTS Gym_user
 
 CREATE TABLE IF NOT EXISTS Customer
 (
-    ID            SERIAL PRIMARY KEY,
+    ID            BIGINT PRIMARY KEY,
     date_of_birth DATE,
     address       varchar(255),
-    user_id       INTEGER REFERENCES Gym_user (ID) UNIQUE
+    user_id       BIGINT REFERENCES Gym_user (ID) UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS Training_type
 (
-    ID                 SERIAL PRIMARY KEY,
+    ID                 BIGINT PRIMARY KEY,
     training_type_name varchar(225) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Instructor
 (
-    ID             SERIAL PRIMARY KEY,
-    specialization integer REFERENCES Training_type (ID),
-    user_id        integer REFERENCES Gym_user (ID)
+    ID             BIGINT PRIMARY KEY,
+    specialization BIGINT REFERENCES Training_type (ID),
+    user_id        BIGINT REFERENCES Gym_user (ID)
 );
 
 CREATE TABLE IF NOT EXISTS Training
 (
-    ID                SERIAL PRIMARY KEY,
-    customer_id       INTEGER REFERENCES Customer (ID),
-    instructor_id     INTEGER REFERENCES Instructor (ID),
+    ID                BIGINT PRIMARY KEY,
+    customer_id       BIGINT REFERENCES Customer (ID),
+    instructor_id     BIGINT REFERENCES Instructor (ID),
     training_name     varchar(225) NOT NULL,
-    training_type_id  INTEGER REFERENCES Training_type (ID),
+    training_type_id  BIGINT REFERENCES Training_type (ID),
     training_date     date         NOT NULL,
     training_duration integer      NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Customer_instructor
 (
-    customer_id   INTEGER,
-    instructor_id INTEGER,
+    customer_id   BIGINT,
+    instructor_id BIGINT,
     PRIMARY KEY (customer_id, instructor_id)
 );
+
+CREATE SEQUENCE IF NOT EXISTS customer_SEQ;
+CREATE SEQUENCE IF NOT EXISTS instructor_SEQ;
+CREATE SEQUENCE IF NOT EXISTS training_SEQ;
+CREATE SEQUENCE IF NOT EXISTS gym_user_SEQ;
+CREATE SEQUENCE IF NOT EXISTS training_type_SEQ;
 
 INSERT INTO training_type
 VALUES (1, 'CARDIO'),

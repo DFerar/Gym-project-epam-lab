@@ -9,10 +9,10 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 public class CustomerDto {
-    private Integer id;
+    private Long id;
     private Date dateOfBirth;
     private String address;
-    private Integer userId;
+    private Long userId;
     private String firstName;
     private String lastName;
     private String userName;

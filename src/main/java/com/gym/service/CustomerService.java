@@ -40,7 +40,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public CustomerDto getCustomerById(String loginUserName, String loginPassword, Integer customerId) {
+    public CustomerDto getCustomerById(String loginUserName, String loginPassword, Long customerId) {
         checkCredentialsMatching(loginUserName, loginPassword);
         CustomerEntity customerEntity = customerRepository.findById(customerId)
                 .orElseThrow(() -> new NoSuchElementException("Customer not found"));
@@ -53,16 +53,15 @@ public class CustomerService {
     public CustomerDto getCustomerByUserName(String loginUserName, String loginPassword, String userName) {
         checkCredentialsMatching(loginUserName, loginPassword);
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
-        if (customerEntity != null) {
-            log.info("Got customer with username: {}", userName);
-            return entityToDto(customerEntity, customerEntity.getGymUserEntity());
-        } else {
+        if (customerEntity == null) {
             throw new NoSuchElementException("Customer not found");
         }
+        log.info("Got customer with username: {}", userName);
+        return entityToDto(customerEntity, customerEntity.getGymUserEntity());
     }
 
     @Transactional
-    public void changeCustomerPassword(String loginUserName, String loginPassword, Integer userId, String password) {
+    public void changeCustomerPassword(String loginUserName, String loginPassword, Long userId, String password) {
         checkCredentialsMatching(loginUserName, loginPassword);
         GymUserEntity gymUserEntity = gymUserRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
@@ -72,7 +71,7 @@ public class CustomerService {
     }
 
     @Transactional
-    public void changeCustomersActivity(String loginUserName, String loginPassword, Integer userId,
+    public void changeCustomersActivity(String loginUserName, String loginPassword, Long userId,
                                         Boolean newActivity) {
         checkCredentialsMatching(loginUserName, loginPassword);
         GymUserEntity gymUserEntity = gymUserRepository.findById(userId)
@@ -100,14 +99,13 @@ public class CustomerService {
     public void deleteCustomerByUserName(String loginUserName, String loginPassword, String userName) {
         checkCredentialsMatching(loginUserName, loginPassword);
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
-        if (customerEntity != null) {
-            trainingRepository.deleteTrainingEntitiesByCustomer_GymUserEntity_UserName(userName);
-            gymUserRepository.deleteGymUserEntitiesByUserName(userName);
-            customerRepository.delete(customerEntity);
-            log.info("Customer deleted: {}", userName);
-        } else {
+        if (customerEntity == null) {
             throw new NoSuchElementException("Customer not found");
         }
+        trainingRepository.deleteTrainingEntitiesByCustomerGymUserEntityUserName(userName);
+        gymUserRepository.deleteGymUserEntitiesByUserName(userName);
+        customerRepository.delete(customerEntity);
+        log.info("Customer deleted: {}", userName);
     }
 
     @Transactional
@@ -117,13 +115,13 @@ public class CustomerService {
                                                   String trainingTypeName) {
         checkCredentialsMatching(loginUserName, loginPassword);
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(customerName);
-        if (customerEntity != null) {
-            log.info("Got list of trainings of customer: {}", customerName);
-            return trainingService.getCustomerListOfTrainings(customerEntity, fromDate, toDate, instructorName,
-                    trainingTypeName);
-        } else {
+        if (customerEntity == null) {
             throw new NoSuchElementException("Customer not found");
         }
+        log.info("Got list of trainings of customer: {}", customerName);
+        return trainingService.getCustomerListOfTrainings(customerEntity, fromDate, toDate, instructorName,
+                trainingTypeName);
+
     }
 
     private CustomerDto entityToDto(CustomerEntity savedCustomer, GymUserEntity savedUser) {

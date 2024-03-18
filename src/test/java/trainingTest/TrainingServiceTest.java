@@ -48,20 +48,20 @@ public class TrainingServiceTest {
         //Given
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = Utils.generatePassword();
-        TrainingDto trainingDto = new TrainingDto(1, 1, 1, "Test.training", 1,
+        TrainingDto trainingDto = new TrainingDto(1L, 1L, 1L, "Test.training", 1L,
                 Date.valueOf("2024-01-01"), 1);
 
         CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1);
+        customerEntity.setId(1L);
 
         InstructorEntity instructorEntity = new InstructorEntity();
-        instructorEntity.setId(1);
+        instructorEntity.setId(1L);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity();
-        trainingTypeEntity.setId(1);
+        trainingTypeEntity.setId(1L);
 
         TrainingEntity savedTraining = new TrainingEntity();
-        savedTraining.setId(1);
+        savedTraining.setId(1L);
         savedTraining.setCustomer(customerEntity);
         savedTraining.setInstructor(instructorEntity);
         savedTraining.setTrainingType(trainingTypeEntity);
@@ -84,27 +84,27 @@ public class TrainingServiceTest {
     public void shouldGetCustomerListOfTraining() {
         //Given
         CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1);
+        customerEntity.setId(1L);
 
         InstructorEntity instructorEntity = new InstructorEntity();
-        instructorEntity.setId(1);
+        instructorEntity.setId(1L);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity();
-        trainingTypeEntity.setId(1);
+        trainingTypeEntity.setId(1L);
 
         TrainingEntity trainingEntity = new TrainingEntity();
-        trainingEntity.setId(1);
+        trainingEntity.setId(1L);
         trainingEntity.setCustomer(customerEntity);
         trainingEntity.setInstructor(instructorEntity);
         trainingEntity.setTrainingType(trainingTypeEntity);
-        trainingEntity.setTrainingName("Test.training");
+        trainingEntity.setTrainingName(RandomStringUtils.randomAlphabetic(7));
         trainingEntity.setTrainingDate(Date.valueOf("2024-01-01"));
         trainingEntity.setTrainingDuration(1);
 
         Date fromDate = Date.valueOf("2022-01-01");
         Date toDate = Date.valueOf("2024-12-31");
-        String instructorName = "John Doe";
-        String trainingTypeName = "Yoga";
+        String instructorName = RandomStringUtils.randomAlphabetic(7);
+        String trainingTypeName = RandomStringUtils.randomAlphabetic(7);
 
         List<TrainingEntity> trainingEntities = List.of(trainingEntity);
 
@@ -122,26 +122,26 @@ public class TrainingServiceTest {
     public void shouldGetInstructorListOfTrainings() {
         //Given
         CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1);
+        customerEntity.setId(1L);
 
         InstructorEntity instructorEntity = new InstructorEntity();
-        instructorEntity.setId(1);
+        instructorEntity.setId(1L);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity();
-        trainingTypeEntity.setId(1);
+        trainingTypeEntity.setId(1L);
 
         TrainingEntity trainingEntity = new TrainingEntity();
-        trainingEntity.setId(1);
+        trainingEntity.setId(1L);
         trainingEntity.setCustomer(customerEntity);
         trainingEntity.setInstructor(instructorEntity);
         trainingEntity.setTrainingType(trainingTypeEntity);
-        trainingEntity.setTrainingName("Test.training");
+        trainingEntity.setTrainingName(RandomStringUtils.randomAlphabetic(7));
         trainingEntity.setTrainingDate(Date.valueOf("2024-01-01"));
         trainingEntity.setTrainingDuration(1);
 
         Date fromDate = Date.valueOf("2022-01-01");
         Date toDate = Date.valueOf("2024-12-31");
-        String customerName = "Test.Customer";
+        String customerName = RandomStringUtils.randomAlphabetic(7);
 
         List<TrainingEntity> trainingEntities = List.of(trainingEntity);
 

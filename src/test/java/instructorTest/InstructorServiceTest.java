@@ -4,6 +4,7 @@ import com.gym.dto.InstructorDto;
 import com.gym.dto.TrainingDto;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
+import com.gym.entity.TrainingType;
 import com.gym.entity.TrainingTypeEntity;
 import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.gym.entity.TrainingType.CARDIO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -56,20 +58,23 @@ class InstructorServiceTest {
     public void shouldCreateInstructor() {
         //Given
         String password = Utils.generatePassword();
-        InstructorDto instructorDto = new InstructorDto(1, "CARDIO", 1, "Test",
-                "Instructor", "Test.Instructor", true);
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
+        InstructorDto instructorDto = new InstructorDto(1L, CARDIO, 1L, firstName,
+                lastName, userName, true);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "Instructor",
-                "Test.Instructor", password, true);
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName,
+                userName, password, true);
 
-        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1, "CARDIO");
+        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
-        InstructorEntity instructorEntity = new InstructorEntity(1, trainingTypeEntity, gymUserEntity, null);
+        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, gymUserEntity, null);
 
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(gymUserEntity);
         when(instructorRepository.save(any(InstructorEntity.class))).thenReturn(instructorEntity);
         when(gymUserService.generateUniqueUserName(any(String.class), any(String.class))).thenReturn("Test.Instructor");
-        when(trainingTypeRepository.findByTrainingTypeName(any(String.class))).thenReturn(trainingTypeEntity);
+        when(trainingTypeRepository.findByTrainingTypeName(any(TrainingType.class))).thenReturn(trainingTypeEntity);
         //When
         InstructorDto result = instructorService.createInstructor(instructorDto);
         //Assert
@@ -82,17 +87,20 @@ class InstructorServiceTest {
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
-        Integer instructorId = 1;
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
+        Long instructorId = 1L;
 
-        InstructorDto instructorDto = new InstructorDto(instructorId, "CARDIO", 1, "Test",
-                "Instructor", "Test.Instructor", true);
+        InstructorDto instructorDto = new InstructorDto(instructorId, CARDIO, 1L, firstName,
+                lastName, userName, true);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "Instructor",
-                "Test.Instructor", password, true);
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName,
+                userName, password, true);
 
-        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1, "CARDIO");
+        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
-        InstructorEntity instructorEntity = new InstructorEntity(1, trainingTypeEntity, gymUserEntity, null);
+        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, gymUserEntity, null);
 
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
         when(instructorRepository.findById(instructorId)).thenReturn(Optional.of(instructorEntity));
@@ -109,19 +117,22 @@ class InstructorServiceTest {
         String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
         String userName = RandomStringUtils.randomAlphabetic(7);
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userNameOfInstructor = RandomStringUtils.randomAlphabetic(7);
 
-        InstructorDto instructorDto = new InstructorDto(1, "CARDIO", 1, "Test",
-                "Instructor", "Test.Instructor", true);
+        InstructorDto instructorDto = new InstructorDto(1L, CARDIO, 1L, firstName,
+                lastName, userNameOfInstructor, true);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1, "Test", "Instructor",
-                "Test.Instructor", password, true);
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName,
+                userNameOfInstructor, password, true);
 
-        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1, "CARDIO");
+        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
-        InstructorEntity instructorEntity = new InstructorEntity(1, trainingTypeEntity, gymUserEntity, null);
+        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, gymUserEntity, null);
 
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
-        when(instructorRepository.findInstructorEntityByGymUserEntity_UserName(userName)).thenReturn(instructorEntity);
+        when(instructorRepository.findInstructorEntityByGymUserEntityUserName(userName)).thenReturn(instructorEntity);
         //When
         InstructorDto result = instructorService.getInstructorByUsername(loginUserName, loginPassword, userName);
         //Assert
@@ -134,23 +145,26 @@ class InstructorServiceTest {
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
 
 
-        InstructorDto newData = new InstructorDto(1, "CARDIO", 1, "Test",
-                "Instructor", "Test.Instructor", true);
+        InstructorDto newData = new InstructorDto(1L, CARDIO, 1L, firstName,
+                lastName, userName, true);
 
-        GymUserEntity updatedUser = new GymUserEntity(1, "Test", "Instructor",
-                "Test.Instructor", password, true);
+        GymUserEntity updatedUser = new GymUserEntity(1L, firstName, lastName,
+                userName, password, true);
 
-        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1, "CARDIO");
+        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
-        InstructorEntity instructorEntity = new InstructorEntity(1, trainingTypeEntity, updatedUser, null);
+        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, updatedUser, null);
 
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
         when(instructorRepository.findById(newData.getId())).thenReturn(Optional.of(new InstructorEntity()));
-        when(gymUserService.updateUser(anyInt(), anyString(), anyString(), anyBoolean())).thenReturn(updatedUser);
+        when(gymUserService.updateUser(anyLong(), anyString(), anyString(), anyBoolean())).thenReturn(updatedUser);
         when(instructorRepository.save(any(InstructorEntity.class))).thenReturn(instructorEntity);
-        when(trainingTypeRepository.findByTrainingTypeName(any(String.class))).thenReturn(trainingTypeEntity);
+        when(trainingTypeRepository.findByTrainingTypeName(any(TrainingType.class))).thenReturn(trainingTypeEntity);
         //When
         InstructorDto result = instructorService.updateInstructor(loginUserName, loginPassword, newData);
         //Assert
@@ -163,11 +177,14 @@ class InstructorServiceTest {
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
-        Integer userId = 1;
+        Long userId = 1L;
         String newPassword = Utils.generatePassword();
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(userId, "Test", "Instructor",
-                "Test.Instructor", password, true);
+        GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName,
+                userName, password, true);
 
         when(gymUserRepository.findById(userId)).thenReturn(Optional.of(gymUserEntity));
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
@@ -184,11 +201,14 @@ class InstructorServiceTest {
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
-        Integer userId = 1;
+        Long userId = 1L;
         Boolean newActivity = false;
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(userId, "Test", "Instructor",
-                "Test.Instructor", password, true);
+        GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName,
+                userName, password, true);
 
         when(gymUserRepository.findById(userId)).thenReturn(Optional.of(gymUserEntity));
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
@@ -210,9 +230,9 @@ class InstructorServiceTest {
         String customerName = RandomStringUtils.randomAlphabetic(7);
 
         InstructorEntity instructorEntity = new InstructorEntity();
-        instructorEntity.setId(1);
+        instructorEntity.setId(1L);
 
-        when(instructorRepository.findInstructorEntityByGymUserEntity_UserName(instructorName)).thenReturn(
+        when(instructorRepository.findInstructorEntityByGymUserEntityUserName(instructorName)).thenReturn(
                 instructorEntity);
         when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
         when(trainingService.getInstructorListOfTrainings(any(), any(), any(), any())).thenReturn(new ArrayList<>());

@@ -1,12 +1,6 @@
 package com.gym.entity;
 
-import jakarta.persistence.Basic;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,12 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@SequenceGenerator(name = "training_type_SEQ", sequenceName = "training_type_seq", allocationSize = 1)
 public class TrainingTypeEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training_type_SEQ")
     @Id
-    @Column(name = "id", nullable = false)
-    private Integer id;
-    @Basic
-    @Column(name = "training_type_name", nullable = false, length = 225)
-    private String trainingTypeName;
+    @Column(name = "id")
+    private Long id;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "training_type_name")
+    private TrainingType trainingTypeName;
 }

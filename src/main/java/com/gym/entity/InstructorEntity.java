@@ -15,11 +15,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "customers")
+@SequenceGenerator(name = "instructor_SEQ", sequenceName = "instructor_seq", allocationSize = 1)
 public class InstructorEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "instructor_SEQ")
     @Id
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "id")
+    private Long id;
     @OneToOne
     @JoinColumn(name = "specialization")
     private TrainingTypeEntity trainingTypeEntity;
