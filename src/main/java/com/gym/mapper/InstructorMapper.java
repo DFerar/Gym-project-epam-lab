@@ -6,6 +6,7 @@ import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingTypeEntity;
 import com.gym.requestDto.instructorRequest.CreateInstructorRequestDto;
 import com.gym.requestDto.instructorRequest.UpdateInstructorProfileRequestDto;
+import com.gym.responseDto.customerResponse.InstructorForCustomerResponseDto;
 import com.gym.responseDto.instructorResponse.*;
 import com.gym.service.GymUserService;
 import lombok.RequiredArgsConstructor;
@@ -46,11 +47,11 @@ public class InstructorMapper {
     }
 
     public GetInstructorProfileResponseDto mapInstructorEntityToGetInstructorResponseDto(InstructorEntity instructorEntity) {
-       return new GetInstructorProfileResponseDto(instructorEntity.getGymUserEntity().getFirstName(),
-               instructorEntity.getGymUserEntity().getLastName(),
-               instructorEntity.getTrainingTypeEntity().getTrainingTypeName(),
-               instructorEntity.getGymUserEntity().getIsActive(),
-               mapCustomerEntitiesToCustomerDtos(instructorEntity.getCustomers()));
+        return new GetInstructorProfileResponseDto(instructorEntity.getGymUserEntity().getFirstName(),
+                instructorEntity.getGymUserEntity().getLastName(),
+                instructorEntity.getTrainingTypeEntity().getTrainingTypeName(),
+                instructorEntity.getGymUserEntity().getIsActive(),
+                mapCustomerEntitiesToCustomerDtos(instructorEntity.getCustomers()));
     }
 
     private List<CustomerForInstructorResponseDto> mapCustomerEntitiesToCustomerDtos(Set<CustomerEntity> customers) {
@@ -84,6 +85,17 @@ public class InstructorMapper {
     public List<GetNotAssignedOnCustomerInstructorsResponseDto> mapInstructorEntitiesToInstructorDtos(List<InstructorEntity> instructorEntities) {
         return instructorEntities.stream()
                 .map(instructorEntity -> new GetNotAssignedOnCustomerInstructorsResponseDto(
+                        instructorEntity.getGymUserEntity().getUserName(),
+                        instructorEntity.getGymUserEntity().getFirstName(),
+                        instructorEntity.getGymUserEntity().getLastName(),
+                        instructorEntity.getTrainingTypeEntity().getTrainingTypeName()
+                ))
+                .toList();
+    }
+
+    public List<InstructorForCustomerResponseDto> mapInstructorEntitiesToInstructorResponseDto(Set<InstructorEntity> instructorEntities) {
+        return instructorEntities.stream()
+                .map(instructorEntity -> new InstructorForCustomerResponseDto(
                         instructorEntity.getGymUserEntity().getUserName(),
                         instructorEntity.getGymUserEntity().getFirstName(),
                         instructorEntity.getGymUserEntity().getLastName(),

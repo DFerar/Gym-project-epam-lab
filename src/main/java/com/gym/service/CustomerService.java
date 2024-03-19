@@ -3,17 +3,20 @@ package com.gym.service;
 import com.gym.dto.CustomerDto;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
+import com.gym.entity.InstructorEntity;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.GymUserRepository;
+import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
-
-import static com.gym.utils.Utils.generatePassword;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class CustomerService {
     private final GymUserRepository gymUserRepository;
     private final GymUserService gymUserService;
     private final TrainingRepository trainingRepository;
-    private final TrainingService trainingService;
+    private final InstructorRepository instructorRepository;
     private final AuthenticationService authenticationService;
 
     @Transactional
@@ -66,14 +69,14 @@ public class CustomerService {
     }
 
     @Transactional
-    public void changeCustomersActivity(String loginUserName, String loginPassword, Long userId,
-                                        Boolean newActivity) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        GymUserEntity gymUserEntity = gymUserRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+    public void changeCustomersActivity(String username, Boolean newActivity) {
+        GymUserEntity gymUserEntity = gymUserRepository.findByUserName(username);
+        if (gymUserEntity == null) {
+            throw new NoSuchElementException("User not found");
+        }
         gymUserEntity.setIsActive(newActivity);
         gymUserRepository.save(gymUserEntity);
-        log.info("Activity changed on customer: {}", userId);
+        log.info("Activity changed on customer: {}", gymUserEntity);
     }
 
     @Transactional
@@ -105,34 +108,12 @@ public class CustomerService {
         log.info("Customer deleted: {}", userName);
     }
 
-    private CustomerDto entityToDto(CustomerEntity savedCustomer, GymUserEntity savedUser) {
-        return new CustomerDto(savedCustomer.getId(), savedCustomer.getDateOfBirth(),
-                savedCustomer.getAddress(), savedUser.getId(), savedUser.getFirstName(), savedUser.getLastName(),
-                savedUser.getUserName(), savedUser.getIsActive());
-    }
-
-    private CustomerEntity customerDtoToCustomerEntity(CustomerDto customerDto, GymUserEntity savedUser) {
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setAddress(customerDto.getAddress());
-        customerEntity.setGymUserEntity(savedUser);
-        customerEntity.setDateOfBirth(customerDto.getDateOfBirth());
-        return customerEntity;
-    }
-
-    private GymUserEntity customerDtoToUserEntity(CustomerDto customer) {
-        GymUserEntity gymUserEntity = new GymUserEntity();
-        gymUserEntity.setFirstName(customer.getFirstName());
-        gymUserEntity.setLastName(customer.getLastName());
-        gymUserEntity.setPassword(generatePassword());
-        gymUserEntity.setUserName(gymUserService.generateUniqueUserName(customer.getFirstName(),
-                customer.getLastName()));
-        gymUserEntity.setIsActive(customer.getIsActive());
-        return gymUserEntity;
-    }
-
-    private void checkCredentialsMatching(String userName, String password) {
-        if (!authenticationService.matchCustomerCredentials(userName, password)) {
-            throw new SecurityException("authentication failed");
-        }
+    public Set<InstructorEntity> changeCustomerInstructors(String userName, List<String> usernames) {
+        CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
+        Set<InstructorEntity> instructorEntities = usernames.stream()
+                .map(instructorRepository::findInstructorEntityByGymUserEntityUserName)
+                .collect(Collectors.toSet());
+        customerEntity.setInstructors(instructorEntities);
+        return instructorEntities;
     }
 }

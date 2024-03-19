@@ -9,7 +9,10 @@ import com.gym.responseDto.trainingResponse.CustomerTrainingsResponseDto;
 import com.gym.responseDto.trainingResponse.InstructorTrainingsResponseDto;
 import com.gym.service.AuthenticationService;
 import com.gym.service.TrainingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,31 +27,36 @@ public class TrainingController {
     private final TrainingMapper trainingMapper;
 
     @GetMapping("/customer")
-    public List<CustomerTrainingsResponseDto> getCustomerTrainings(@RequestBody GetCustomerTrainingListRequestDto requestDto,
-                                                                   @RequestParam String loginUsername,
-                                                                   @RequestParam String loginPassword) {
+    public ResponseEntity<List<CustomerTrainingsResponseDto>> getCustomerTrainings(
+            @Valid @RequestBody GetCustomerTrainingListRequestDto requestDto,
+            @RequestParam String loginUsername,
+            @RequestParam String loginPassword) {
         if (!authenticationService.matchCustomerCredentials(loginUsername, loginPassword)) {
             throw new NoSuchElementException("Customer not found");
         }
         List<TrainingEntity> trainingEntities = trainingService.getCustomerListOfTrainings(requestDto.getUserName(),
-                requestDto.getFromDate(), requestDto.getToDate(), requestDto.getInstructorName(), requestDto.getTrainingType());
-        return trainingMapper.mapCustomerTrainingEntitiesToTrainingDtos(trainingEntities);
+                requestDto.getFromDate(), requestDto.getToDate(), requestDto.getInstructorName(),
+                requestDto.getTrainingType());
+        return new ResponseEntity<>(trainingMapper.mapCustomerTrainingEntitiesToTrainingDtos(trainingEntities),
+                HttpStatus.OK);
     }
 
     @GetMapping("/instructor")
-    public List<InstructorTrainingsResponseDto> getInstructorTrainings(@RequestBody GetInstructorTrainingsRequestDto requestDto,
-                                                                       @RequestParam String loginUsername,
-                                                                       @RequestParam String loginPassword) {
+    public ResponseEntity<List<InstructorTrainingsResponseDto>> getInstructorTrainings(
+            @Valid @RequestBody GetInstructorTrainingsRequestDto requestDto,
+            @RequestParam String loginUsername,
+            @RequestParam String loginPassword) {
         if (!authenticationService.matchInstructorCredentials(loginUsername, loginPassword)) {
             throw new NoSuchElementException("Instructor not found");
         }
         List<TrainingEntity> trainingEntities = trainingService.getInstructorListOfTrainings(requestDto.getUserName(),
                 requestDto.getFromDate(), requestDto.getToDate(), requestDto.getCustomerName());
-        return trainingMapper.mapInstructorTrainingEntitiesToTrainingDtos(trainingEntities);
+        return new ResponseEntity<>(trainingMapper.mapInstructorTrainingEntitiesToTrainingDtos(trainingEntities),
+                HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public void createTraining(@RequestBody CreateTrainingRequestDto trainingDto,
+    public ResponseEntity<String> createTraining(@Valid @RequestBody CreateTrainingRequestDto trainingDto,
                                @RequestParam String loginUsername,
                                @RequestParam String loginPassword) {
         if (!authenticationService.matchCredentials(loginUsername, loginPassword)) {
@@ -56,5 +64,6 @@ public class TrainingController {
         }
         TrainingEntity trainingEntity = trainingMapper.mapCreateTrainingRequestDtoToTrainingEntity(trainingDto);
         trainingService.createTraining(trainingEntity);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -4,6 +4,7 @@ import com.gym.entity.*;
 import com.gym.requestDto.trainingRequest.CreateTrainingRequestDto;
 import com.gym.responseDto.trainingResponse.CustomerTrainingsResponseDto;
 import com.gym.responseDto.trainingResponse.InstructorTrainingsResponseDto;
+import com.gym.responseDto.trainingResponse.TrainingTypeResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -59,5 +60,14 @@ public class TrainingMapper {
         trainingEntity.setTrainingDuration(trainingRequestDto.getTrainingDuration());
         trainingEntity.setTrainingName(trainingEntity.getTrainingName());
         return trainingEntity;
+    }
+
+    public List<TrainingTypeResponseDto> mapTrainingTypeEntitiesToTrainingTypeResponseDto(List<TrainingTypeEntity> trainingTypeEntities) {
+        return trainingTypeEntities.stream()
+                .map(trainingType -> new TrainingTypeResponseDto(
+                        trainingType.getId(),
+                        trainingType.getTrainingTypeName()
+                ))
+                .toList();
     }
 }

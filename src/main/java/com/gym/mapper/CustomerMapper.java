@@ -51,7 +51,7 @@ public class CustomerMapper {
                 customerEntity.getGymUserEntity().getFirstName(), customerEntity.getGymUserEntity().getLastName(),
                 customerEntity.getDateOfBirth(), customerEntity.getAddress(), customerEntity.getGymUserEntity().getIsActive(),
                 mapInstructorEntitiesToInstructorDtos(customerEntity.getInstructors())
-                );
+        );
     }
 
     public GymUserEntity mapUpdateCustomerRequestDtoToUserEntity(UpdateCustomerProfileRequestDto newData) {
