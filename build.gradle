@@ -42,6 +42,9 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.6.0'
     //utils
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    //tomcat
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:9.0.87'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.87'
 }
 
 test {

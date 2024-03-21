@@ -1,6 +1,5 @@
 package com.gym.service;
 
-import com.gym.dto.CustomerDto;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
@@ -27,7 +26,6 @@ public class CustomerService {
     private final GymUserService gymUserService;
     private final TrainingRepository trainingRepository;
     private final InstructorRepository instructorRepository;
-    private final AuthenticationService authenticationService;
 
     @Transactional
     public CustomerEntity createCustomer(CustomerEntity customerEntity, GymUserEntity gymUserEntity) {
@@ -39,16 +37,6 @@ public class CustomerService {
     }
 
     @Transactional
-    public CustomerDto getCustomerById(String loginUserName, String loginPassword, Long customerId) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        CustomerEntity customerEntity = customerRepository.findById(customerId)
-                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
-        GymUserEntity gymUserEntity = customerEntity.getGymUserEntity();
-        log.info("Got customer by id: {}", customerId);
-        return entityToDto(customerEntity, gymUserEntity);
-    }
-
-    @Transactional
     public CustomerEntity getCustomerByUserName(String userName) {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
         if (customerEntity == null) {
@@ -56,16 +44,6 @@ public class CustomerService {
         }
         log.info("Got customer with username: {}", userName);
         return customerEntity;
-    }
-
-    @Transactional
-    public void changeCustomerPassword(String loginUserName, String loginPassword, Long userId, String password) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        GymUserEntity gymUserEntity = gymUserRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-        gymUserEntity.setPassword(password);
-        gymUserRepository.save(gymUserEntity);
-        log.info("Password changed on user: {}", userId);
     }
 
     @Transactional
@@ -114,6 +92,7 @@ public class CustomerService {
                 .map(instructorRepository::findInstructorEntityByGymUserEntityUserName)
                 .collect(Collectors.toSet());
         customerEntity.setInstructors(instructorEntities);
+        customerRepository.save(customerEntity);
         return instructorEntities;
     }
 }

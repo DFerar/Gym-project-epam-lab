@@ -1,6 +1,5 @@
 package com.gym.service;
 
-import com.gym.dto.TrainingDto;
 import com.gym.entity.*;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.InstructorRepository;
@@ -25,10 +24,9 @@ public class TrainingService {
     private final CustomerRepository customerRepository;
     private final InstructorRepository instructorRepository;
     private final TrainingTypeRepository trainingTypeRepository;
-    private final AuthenticationService authenticationService;
 
     @Transactional
-    public TrainingEntity createTraining(TrainingEntity trainingEntity) {
+    public void createTraining(TrainingEntity trainingEntity) {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(
                 trainingEntity.getCustomer().getGymUserEntity().getUserName());
         if (customerEntity == null) {
@@ -54,7 +52,6 @@ public class TrainingService {
         updateInstructors(customerEntity, instructorEntity);
         log.info("Instructors of customers were updated: {}", customerEntity.getId());
         log.info("Created training:{}", savedTraining);
-        return savedTraining;
     }
 
     public List<TrainingEntity> getCustomerListOfTrainings(String customerUserName, Date fromDate, Date toDate,
@@ -71,24 +68,11 @@ public class TrainingService {
         );
     }
 
-    private TrainingDto entityToDto(TrainingEntity savedTraining) {
-        return new TrainingDto(savedTraining.getId(), savedTraining.getCustomer().getId(),
-                savedTraining.getInstructor().getId(), savedTraining.getTrainingName(),
-                savedTraining.getTrainingType().getId(),
-                savedTraining.getTrainingDate(), savedTraining.getTrainingDuration());
-    }
-
     private void updateInstructors(CustomerEntity customerEntity, InstructorEntity instructorEntity) {
         Set<InstructorEntity> instructorEntities = customerEntity.getInstructors();
         instructorEntities.add(instructorEntity);
         customerEntity.setInstructors(instructorEntities);
         customerRepository.save(customerEntity);
-    }
-
-    private void checkInstructorCredentials(String userName, String password) {
-        if (!authenticationService.matchInstructorCredentials(userName, password)) {
-            throw new SecurityException("authentication failed");
-        }
     }
 }
 

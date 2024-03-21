@@ -25,8 +25,6 @@ public class InstructorService {
     private final GymUserRepository gymUserRepository;
     private final GymUserService gymUserService;
     private final TrainingTypeRepository trainingTypeRepository;
-    private final TrainingService trainingService;
-    private final AuthenticationService authenticationService;
     private final InstructorMapper instructorMapper;
 
     @Transactional

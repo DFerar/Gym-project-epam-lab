@@ -1,4 +1,4 @@
-/*package userTest;
+package userTest;
 
 import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
@@ -10,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,6 +26,7 @@ public class GymUserServiceTest {
     public void shouldUpdateUser() {
         //Given
         Long userId = 1L;
+
         String firstName = RandomStringUtils.randomAlphabetic(7);
         String lastName = RandomStringUtils.randomAlphabetic(7);
         Boolean isActive = true;
@@ -36,12 +35,15 @@ public class GymUserServiceTest {
         GymUserEntity existingUser = new GymUserEntity(userId, RandomStringUtils.randomAlphabetic(7),
                 RandomStringUtils.randomAlphabetic(7),
                 RandomStringUtils.randomAlphabetic(7), password, false);
-        when(gymUserRepository.findById(userId)).thenReturn(Optional.of(existingUser));
-        when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(existingUser);
+
+        GymUserEntity newGymUserEntity = new GymUserEntity(userId, firstName, lastName, existingUser.getUserName(),
+                password, isActive);
+        when(gymUserRepository.findByUserName(existingUser.getUserName())).thenReturn(existingUser);
+        when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(newGymUserEntity);
         //When
-        GymUserEntity result = gymUserService.updateUser(userId, firstName, lastName, isActive);
+        GymUserEntity result = gymUserService.updateUser(newGymUserEntity);
         //Assert
-        assertThat(result).isEqualTo(existingUser);
+        assertThat(result).isEqualTo(newGymUserEntity);
     }
 
     @Test
@@ -74,4 +76,4 @@ public class GymUserServiceTest {
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(generatedUserName);
     }
-}*/
+}

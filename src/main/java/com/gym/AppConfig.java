@@ -24,6 +24,7 @@ import java.util.Properties;
 @EnableJpaRepositories
 @EnableTransactionManagement
 public class AppConfig {
+
     @Bean(initMethod = "migrate")
     public Flyway flyway(DataSource dataSource) {
         return Flyway.configure()

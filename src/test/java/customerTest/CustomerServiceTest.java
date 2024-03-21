@@ -1,17 +1,15 @@
 package customerTest;
 
 
-import com.gym.dto.CustomerDto;
-import com.gym.dto.TrainingDto;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
+import com.gym.entity.InstructorEntity;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.GymUserRepository;
+import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
-import com.gym.service.AuthenticationService;
 import com.gym.service.CustomerService;
 import com.gym.service.GymUserService;
-import com.gym.service.TrainingService;
 import com.gym.utils.Utils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -21,9 +19,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,13 +34,11 @@ public class CustomerServiceTest {
     @Mock
     private GymUserRepository gymUserRepository;
     @Mock
-    private GymUserService gymUserService;
-    @Mock
-    private AuthenticationService authenticationService;
+    private InstructorRepository instructorRepository;
     @Mock
     private TrainingRepository trainingRepository;
     @Mock
-    private TrainingService trainingService;
+    private GymUserService gymUserService;
     @InjectMocks
     private CustomerService customerService;
 
@@ -63,7 +59,6 @@ public class CustomerServiceTest {
 
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(gymUserEntity);
         when(customerRepository.save(any(CustomerEntity.class))).thenReturn(customerEntity);
-        when(gymUserService.generateUniqueUserName(any(String.class), any(String.class))).thenReturn(userName);
         //When
         CustomerEntity result = customerService.createCustomer(customerEntity, gymUserEntity);
         //Assert
@@ -73,8 +68,6 @@ public class CustomerServiceTest {
     @Test
     public void shouldGetCustomerByUserName() {
         //Given
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = Utils.generatePassword();
         String userName = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
         String address = RandomStringUtils.randomAlphabetic(7);
@@ -89,7 +82,6 @@ public class CustomerServiceTest {
                 gymUserEntity, null);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
-        when(authenticationService.matchCustomerCredentials(loginUserName, loginPassword)).thenReturn(true);
         //When
         CustomerEntity result = customerService.getCustomerByUserName(userName);
         //Assert
@@ -97,63 +89,8 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void shouldGetCustomerById() {
-        //Given
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = Utils.generatePassword();
-        String password = Utils.generatePassword();
-        Long customerId = 1L;
-        String address = RandomStringUtils.randomAlphabetic(7);
-        String firstName = RandomStringUtils.randomAlphabetic(7);
-        String lastName = RandomStringUtils.randomAlphabetic(7);
-        String userName = RandomStringUtils.randomAlphabetic(7);
-
-        CustomerDto customerDto = new CustomerDto(customerId, Date.valueOf("1990-01-01"), address,
-                1L, firstName, lastName, userName, true);
-
-        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password,
-                true);
-
-        CustomerEntity customerEntity = new CustomerEntity(customerId, Date.valueOf("1990-01-01"), address,
-                gymUserEntity, null);
-
-        when(customerRepository.findById(customerId)).thenReturn(Optional.of(customerEntity));
-        when(authenticationService.matchCustomerCredentials(loginUserName, loginPassword)).thenReturn(true);
-        //When
-        CustomerDto result = customerService.getCustomerById(loginUserName, loginPassword, customerId);
-        //Assert
-        assertThat(result).isEqualTo(customerDto);
-    }
-
-    @Test
-    public void shouldChangeCustomerPassword() {
-        //Given
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = Utils.generatePassword();
-        String password = Utils.generatePassword();
-        Long userId = 1L;
-        String newPassword = Utils.generatePassword();
-        String firstName = RandomStringUtils.randomAlphabetic(7);
-        String lastName = RandomStringUtils.randomAlphabetic(7);
-        String userName = RandomStringUtils.randomAlphabetic(7);
-
-        GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName, userName, password,
-                true);
-
-        when(gymUserRepository.findById(userId)).thenReturn(Optional.of(gymUserEntity));
-        when(authenticationService.matchCustomerCredentials(loginUserName, loginPassword)).thenReturn(true);
-        //When
-        customerService.changeCustomerPassword(loginUserName, loginPassword, userId, newPassword);
-        //Assert
-        verify(gymUserRepository, times(1)).save(gymUserEntity);
-        assertThat(gymUserEntity.getPassword()).isEqualTo(newPassword);
-    }
-
-    @Test
     public void shouldChangeCustomerActivity() {
         //Given
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = Utils.generatePassword();
         String password = Utils.generatePassword();
         Long userId = 1L;
         Boolean newActivity = false;
@@ -164,8 +101,7 @@ public class CustomerServiceTest {
         GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName, userName, password,
                 true);
 
-        when(authenticationService.matchCustomerCredentials(loginUserName, loginPassword)).thenReturn(true);
-        when(gymUserRepository.findById(userId)).thenReturn(Optional.of(gymUserEntity));
+        when(gymUserRepository.findByUserName(userName)).thenReturn(gymUserEntity);
         //When
         customerService.changeCustomersActivity(userName, newActivity);
         //Assert
@@ -176,36 +112,33 @@ public class CustomerServiceTest {
     @Test
     public void shouldUpdateCustomer() {
         //Given
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
         String address = RandomStringUtils.randomAlphabetic(7);
         String firstName = RandomStringUtils.randomAlphabetic(7);
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String userName = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity updatedUser = new GymUserEntity(1L, firstName, lastName, userName, password,
+        GymUserEntity userEntityFromNewData = new GymUserEntity(1L, firstName, lastName, userName, password,
                 true);
 
-        CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
-                updatedUser, null);
+        CustomerEntity customerEntityFromData = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
+                userEntityFromNewData, null);
 
+        GymUserEntity updatedUser = new GymUserEntity();
+        CustomerEntity existingCustomer = new CustomerEntity();
+        existingCustomer.setGymUserEntity(updatedUser);
 
-        when(authenticationService.matchCustomerCredentials(loginUserName, loginPassword)).thenReturn(true);
-        when(customerRepository.findById(newData.getId())).thenReturn(Optional.of(new CustomerEntity()));
-        when(gymUserService.updateUser(any())).thenReturn(updatedUser);
-        when(customerRepository.save(any(CustomerEntity.class))).thenReturn(customerEntity);
+        when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(existingCustomer);
+        when(customerRepository.save(any(CustomerEntity.class))).thenReturn(existingCustomer);
         //When
-        CustomerEntity result = customerService.updateCustomer(updatedUser, customerEntity);
+        CustomerEntity updatedCustomer = customerService.updateCustomer(userEntityFromNewData, customerEntityFromData);
         //Assert
-        assertThat(result).isEqualTo(newData);
+        assertThat(updatedCustomer).isEqualTo(existingCustomer);
     }
 
     @Test
     public void shouldDeleteCustomerByUserName() {
         //Given
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = Utils.generatePassword();
         String userName = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
         String address = RandomStringUtils.randomAlphabetic(7);
@@ -218,7 +151,6 @@ public class CustomerServiceTest {
                 gymUserEntity, null);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
-        when(authenticationService.matchCustomerCredentials(loginUserName, loginPassword)).thenReturn(true);
         //When
         customerService.deleteCustomerByUserName(userName);
         //Assert
@@ -228,27 +160,47 @@ public class CustomerServiceTest {
     }
 
     @Test
-    public void shouldGetCustomerTrainings() {
+    public void shouldChangeCustomerInstructors() {
         //Given
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = Utils.generatePassword();
-        String customerName = RandomStringUtils.randomAlphabetic(7);
-        Date fromDate = Date.valueOf("2022-01-01");
-        Date toDate = Date.valueOf("2024-12-31");
-        String instructorName = RandomStringUtils.randomAlphabetic(7);
-        String trainingTypeName = RandomStringUtils.randomAlphabetic(7);
+        String userName = RandomStringUtils.randomAlphabetic(7);
+        String password = Utils.generatePassword();
+        String address = RandomStringUtils.randomAlphabetic(7);
+        String firstName = RandomStringUtils.randomAlphabetic(7);
+        String lastName = RandomStringUtils.randomAlphabetic(7);
+        List<String> usernames = List.of(RandomStringUtils.randomAlphabetic(7),
+                RandomStringUtils.randomAlphabetic(7));
 
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1L);
-        customerEntity.setAddress("123 Main St");
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password,
+                true);
+        CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
+                gymUserEntity, null);
 
-        when(customerRepository.findCustomerEntityByGymUserEntityUserName(customerName)).thenReturn(customerEntity);
-        when(authenticationService.matchCustomerCredentials(loginUserName, loginPassword)).thenReturn(true);
-        when(trainingService.getCustomerListOfTrainings(any(), any(), any(), any(), any())).thenReturn(new ArrayList<>());
+        when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
+        when(customerRepository.save(any(CustomerEntity.class))).thenReturn(customerEntity);
+
+        Set<InstructorEntity> instructorEntities = usernames.stream()
+                .map(username -> {
+                    InstructorEntity instructorEntity = new InstructorEntity();
+                    GymUserEntity gymUser = new GymUserEntity();
+                    gymUser.setUserName(username);
+                    instructorEntity.setGymUserEntity(gymUser);
+                    return instructorEntity;
+                })
+                .collect(Collectors.toSet());
+
+        when(instructorRepository.findInstructorEntityByGymUserEntityUserName(any(String.class)))
+                .thenAnswer(invocation -> {
+                    String username = invocation.getArgument(0);
+                    InstructorEntity instructorEntity = new InstructorEntity();
+                    GymUserEntity gymUser = new GymUserEntity();
+                    gymUser.setUserName(username);
+                    instructorEntity.setGymUserEntity(gymUser);
+                    return instructorEntity;
+                });
         //When
-        List<TrainingDto> result = customerService.getCustomerTrainings(
-                loginUserName, loginPassword, customerName, fromDate, toDate, instructorName, trainingTypeName);
-        //Assert
-        assertThat(result).isNotNull();
+        Set<InstructorEntity> result = customerService.changeCustomerInstructors(userName, usernames);
+        //Assertions
+        assertThat(result.size()).isEqualTo(instructorEntities.size());
+        assertThat(result).isEqualTo(instructorEntities);
     }
 }

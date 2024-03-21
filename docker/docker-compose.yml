@@ -11,6 +11,13 @@ services:
       - "5432:5432"
     volumes:
       - postgres-stud-db-data:/var/lib/postgresql/data
+  tomcat:
+    image: tomcat:9.0
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./webapps/Spring-core-task-1.0-SNAPSHOT.war:/usr/local/tomcat/webapps/Spring-core-task-1.0-SNAPSHOT.war
 
 volumes:
   postgres-stud-db-data:
+
