@@ -1,0 +1,218 @@
+###
+//create customer
+POST http://localhost:8080/customer/create
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "Customer",
+  "dateOfBirth": "1997-01-01",
+  "address": "test address"
+}
+
+###
+//create instructor
+POST http://localhost:8080/instructor/create
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "Instructor",
+  "specialization": "CARDIO"
+}
+
+###
+//create training with created customer and created instructor
+POST http://localhost:8080/training/create?loginUsername=admin.admin&loginPassword=admin
+Content-Type: application/json
+
+{
+  "customerUserName": "Test.Customer",
+  "instructorUserName": "Test.Instructor",
+  "trainingName": "test training",
+  "trainingDate": "2024-01-01",
+  "trainingDuration": 1
+}
+
+###
+//user login
+GET http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "userName": "admin.admin",
+  "password": "admin"
+}
+
+###
+PUT http://localhost:8080/auth/update
+//update password, you need to change password, because it is randon(look for it in database
+Content-Type: application/json
+
+{
+  "userName": "Test.Customer",
+  "oldPassword": "M5%@h*XS*0",
+  "newPassword": "1234567889"
+}
+
+###
+//get customer by username
+GET http://localhost:8080/customer/Test.Customer?loginUserName=admin.admin&loginPassword=admin
+
+<> f.txt
+<> 2024-03-24T150514.500.html
+<> 2024-03-24T150501.400.html
+
+###
+//get instructor by username
+GET http://localhost:8080/instructor/Test.Instructor?loginUserName=admin.admin&loginPassword=admin
+
+<> f-2.txt
+
+###
+//create another customer
+POST http://localhost:8080/customer/create
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "Customer2",
+  "dateOfBirth": "1998-01-01",
+  "address": "test address 2"
+}
+
+<> 2024-03-24T151446.201.json
+
+###
+PUT http://localhost:8080/customer/update?loginUserName=admin.admin&loginPassword=admin
+Content-Type: application/json
+
+{
+  "userName": "Test.Customer2",
+  "firstName": "Test",
+  "lastName": "Customer_2",
+  "dateOfBirth": "1999-01-01",
+  "address": "new test address",
+  "isActive": false
+}
+
+<> 2024-03-24T151935.200.json
+<> 2024-03-24T151608.200.json
+
+###
+POST http://localhost:8080/instructor/create
+//create another instructor
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "Instructor2",
+  "specialization": "CYCLE"
+}
+
+<> 2024-03-24T152337.201.json
+
+###
+//update instructor
+PUT http://localhost:8080/instructor/update?loginUserName=admin.admin&loginPassword=admin
+Content-Type: application/json
+
+{
+  "userName": "Test.Instructor2",
+  "firstName": "Test",
+  "lastName": "Instructor_2",
+  "specialization": "CYCLE",
+  "isActive": false
+}
+
+<> 2024-03-24T152447.200.json
+
+###
+//activate customer
+PATCH http://localhost:8080/customer/activate/Test.Customer2?isActive=true&loginUserName=admin.admin&loginPassword=admin
+Content-Type: application/x-www-form-urlencoded
+
+<> 2024-03-24T152714.500.html
+<> 2024-03-24T152657.500.html
+
+###
+//activate instructor
+PATCH http://localhost:8080/instructor/activate/Test.Instructor2?isActive=true&loginUserName=admin.admin&loginPassword=admin
+Content-Type: application/x-www-form-urlencoded
+
+###
+//update customer's instructors
+PUT http://localhost:8080/customer/instructorList?loginUserName=admin.admin&loginPassword=admin
+Content-Type: application/json
+
+{
+  "customerUserName": "Test.Customer",
+  "instructorUserNames": ["Test.Instructor2"]
+}
+
+<> 2024-03-24T153048.200.json
+
+###
+//get not assigned on customer instructors
+GET http://localhost:8080/instructor/unassigned-trainers/Test.Customer2?loginUserName=admin.admin&loginPassword=admin
+
+<> f-5.txt
+<> f-4.txt
+<> f-3.txt
+
+###
+//get customer's trainings
+GET http://localhost:8080/training/customer?loginUsername=admin.admin&loginPassword=admin
+Content-Type: application/json
+
+{
+  "userName": "Test.Customer",
+  "fromDate": "",
+  "toDate": "",
+  "instructorName": "Test.Instructor",
+  "trainingType": "CARDIO"
+}
+
+<> 2024-03-24T160904.200.json
+<> 2024-03-24T160014.500.html
+<> 2024-03-24T155730.200.json
+<> 2024-03-24T155443.200.json
+<> 2024-03-24T154405.500.html
+<> 2024-03-24T154316.500.html
+<> 2024-03-24T154311.500.html
+<> 2024-03-24T154303.400.html
+<> 2024-03-24T154024.500.html
+<> 2024-03-24T153845.500.html
+<> 2024-03-24T153738.500.html
+<> 2024-03-24T153709.500.html
+<> 2024-03-24T153648.500.html
+<> 2024-03-24T153638.400.html
+
+###
+//get instructor's trainings
+GET http://localhost:8080/training/instructor?loginUsername=admin.admin&loginPassword=admin
+Content-Type: application/json
+
+{
+  "userName": "Test.Instructor",
+  "fromDate": "",
+  "toDate": "",
+  "customerName": "Test.Customer"
+}
+
+<> 2024-03-24T160921.200.json
+<> 2024-03-24T160911.200.json
+<> 2024-03-24T155723.200.json
+<> 2024-03-24T155521.200.json
+<> 2024-03-24T154917.500.html
+<> 2024-03-24T154857.500.html
+<> 2024-03-24T154850.500.html
+<> 2024-03-24T154822.500.html
+
+###
+//get all training types
+GET http://localhost:8080/training-type/all?loginUserName=admin.admin&loginPassword=admin
+
+<> 2024-03-24T161512.200.json
+<> 2024-03-24T161502.400.html
+<> 2024-03-24T161452.400.html

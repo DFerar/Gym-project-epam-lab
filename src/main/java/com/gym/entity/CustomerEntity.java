@@ -29,7 +29,7 @@ public class CustomerEntity {
     @OneToOne
     @JoinColumn(name = "user_id")
     private GymUserEntity gymUserEntity;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "customer_instructor",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "instructor_id"))

@@ -3,6 +3,7 @@ package com.gym.service;
 
 import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,16 +16,15 @@ import java.util.NoSuchElementException;
 public class GymUserService {
     private final GymUserRepository gymUserRepository;
 
+    @Transactional
     public GymUserEntity updateUser(GymUserEntity userEntity) {
         GymUserEntity gymUserEntity = gymUserRepository.findByUserName(userEntity.getUserName());
         if (gymUserEntity == null) {
             throw new NoSuchElementException("User not found");
         }
-        String newUserName = generateUniqueUserName(gymUserEntity.getFirstName(), gymUserEntity.getLastName());
-        gymUserEntity.setFirstName(gymUserEntity.getFirstName());
-        gymUserEntity.setLastName(gymUserEntity.getLastName());
-        gymUserEntity.setUserName(newUserName);
-        gymUserEntity.setIsActive(gymUserEntity.getIsActive());
+        gymUserEntity.setFirstName(userEntity.getFirstName());
+        gymUserEntity.setLastName(userEntity.getLastName());
+        gymUserEntity.setIsActive(userEntity.getIsActive());
         return gymUserRepository.save(gymUserEntity);
     }
 

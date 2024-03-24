@@ -40,3 +40,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### WAR file ###
+.docker/webapps/ROOT.war

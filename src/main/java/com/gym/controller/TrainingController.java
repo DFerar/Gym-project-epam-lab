@@ -35,7 +35,9 @@ public class TrainingController {
             throw new NoSuchElementException("Customer not found");
         }
         List<TrainingEntity> trainingEntities = trainingService.getCustomerListOfTrainings(requestDto.getUserName(),
-                requestDto.getFromDate(), requestDto.getToDate(), requestDto.getInstructorName(),
+                trainingMapper.mapStringDateToObject(requestDto.getFromDate()),
+                trainingMapper.mapStringDateToObject(requestDto.getToDate()),
+                requestDto.getInstructorName(),
                 requestDto.getTrainingType());
         return new ResponseEntity<>(trainingMapper.mapCustomerTrainingEntitiesToTrainingDtos(trainingEntities),
                 HttpStatus.OK);
@@ -49,8 +51,11 @@ public class TrainingController {
         if (!authenticationService.matchInstructorCredentials(loginUsername, loginPassword)) {
             throw new NoSuchElementException("Instructor not found");
         }
-        List<TrainingEntity> trainingEntities = trainingService.getInstructorListOfTrainings(requestDto.getUserName(),
-                requestDto.getFromDate(), requestDto.getToDate(), requestDto.getCustomerName());
+        List<TrainingEntity> trainingEntities = trainingService.getInstructorListOfTrainings(
+                requestDto.getUserName(),
+                trainingMapper.mapStringDateToObject(requestDto.getFromDate()),
+                trainingMapper.mapStringDateToObject(requestDto.getToDate()),
+                requestDto.getCustomerName());
         return new ResponseEntity<>(trainingMapper.mapInstructorTrainingEntitiesToTrainingDtos(trainingEntities),
                 HttpStatus.OK);
     }

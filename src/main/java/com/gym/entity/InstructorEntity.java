@@ -27,6 +27,6 @@ public class InstructorEntity {
     @OneToOne
     @JoinColumn(name = "user_id")
     private GymUserEntity gymUserEntity;
-    @ManyToMany(mappedBy = "instructors")
+    @ManyToMany(mappedBy = "instructors", fetch = FetchType.EAGER)
     private Set<CustomerEntity> customers = new HashSet<>();
 }

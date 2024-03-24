@@ -42,6 +42,7 @@ public class TrainingServiceTest {
         //Given
         String userNameForCustomer = RandomStringUtils.randomAlphabetic(7);
         String userNameForInstructor = RandomStringUtils.randomAlphabetic(7);
+
         TrainingEntity trainingEntity = new TrainingEntity();
         CustomerEntity customerEntity = new CustomerEntity();
         InstructorEntity instructorEntity = new InstructorEntity();
@@ -52,11 +53,11 @@ public class TrainingServiceTest {
         gymUserEntityForInstructor.setUserName(userNameForInstructor);
         customerEntity.setGymUserEntity(gymUserEntityForCustomer);
         instructorEntity.setGymUserEntity(gymUserEntityForInstructor);
+        instructorEntity.setTrainingTypeEntity(trainingTypeEntity);
 
 
         trainingEntity.setCustomer(customerEntity);
         trainingEntity.setInstructor(instructorEntity);
-        trainingEntity.setTrainingType(trainingTypeEntity);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(anyString()))
                 .thenReturn(customerEntity);

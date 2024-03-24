@@ -3,11 +3,11 @@ package com.gym.requestDto.customerRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.sql.Date;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UpdateCustomerProfileRequestDto {
     @NotNull
     private String userName;
@@ -15,7 +15,7 @@ public class UpdateCustomerProfileRequestDto {
     private String firstName;
     @NotNull
     private String lastName;
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private String address;
     @NotNull
     private Boolean isActive;

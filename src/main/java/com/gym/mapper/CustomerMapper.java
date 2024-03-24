@@ -13,6 +13,7 @@ import com.gym.service.GymUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -37,7 +38,7 @@ public class CustomerMapper {
     public CustomerEntity mapCreateCustomerRequestDtoToCustomerEntity(CreateCustomerRequestDto customerDto) {
         CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setAddress(customerDto.getAddress());
-        customerEntity.setDateOfBirth(customerDto.getDateOfBirth());
+        customerEntity.setDateOfBirth(Date.valueOf(customerDto.getDateOfBirth()));
         return customerEntity;
     }
 
@@ -49,7 +50,7 @@ public class CustomerMapper {
     public GetCustomerProfileResponseDto mapCustomerEntityToGetCustomerResponseDto(CustomerEntity customerEntity) {
         return new GetCustomerProfileResponseDto(
                 customerEntity.getGymUserEntity().getFirstName(), customerEntity.getGymUserEntity().getLastName(),
-                customerEntity.getDateOfBirth(), customerEntity.getAddress(), customerEntity.getGymUserEntity().getIsActive(),
+                customerEntity.getDateOfBirth().toString(), customerEntity.getAddress(), customerEntity.getGymUserEntity().getIsActive(),
                 mapInstructorEntitiesToInstructorDtos(customerEntity.getInstructors())
         );
     }
@@ -64,8 +65,10 @@ public class CustomerMapper {
     }
 
     public CustomerEntity mapUpdateCustomerRequestDtoToCustomerEntity(UpdateCustomerProfileRequestDto newData) {
+        GymUserEntity gymUserEntity = new GymUserEntity();
+        gymUserEntity.setUserName(newData.getUserName());
         CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setDateOfBirth(newData.getDateOfBirth());
+        customerEntity.setDateOfBirth(Date.valueOf(newData.getDateOfBirth()));
         customerEntity.setAddress(newData.getAddress());
         return customerEntity;
     }
@@ -85,7 +88,7 @@ public class CustomerMapper {
                 updatedCustomer.getGymUserEntity().getUserName(),
                 updatedCustomer.getGymUserEntity().getFirstName(),
                 updatedCustomer.getGymUserEntity().getLastName(),
-                updatedCustomer.getDateOfBirth(),
+                updatedCustomer.getDateOfBirth().toString(),
                 updatedCustomer.getAddress(),
                 updatedCustomer.getGymUserEntity().getIsActive(),
                 mapInstructorEntitiesToInstructorDtos(updatedCustomer.getInstructors())

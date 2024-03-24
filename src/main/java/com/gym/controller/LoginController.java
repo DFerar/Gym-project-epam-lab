@@ -26,10 +26,10 @@ public class LoginController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> changeLogin(@RequestParam String loginUserName,
-                                              @RequestParam String loginPassword,
-                                              @Valid @RequestBody ChangeLoginRequestDto changeLoginRequestDto) {
-        authenticationService.changeUsersPassword(loginUserName, loginPassword, changeLoginRequestDto.getNewPassword());
+    public ResponseEntity<String> changeLogin(@Valid @RequestBody ChangeLoginRequestDto changeLoginRequestDto) {
+        authenticationService.changeUsersPassword(
+                changeLoginRequestDto.getUserName(), changeLoginRequestDto.getOldPassword(),
+                changeLoginRequestDto.getNewPassword());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

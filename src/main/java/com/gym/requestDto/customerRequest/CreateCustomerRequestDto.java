@@ -3,16 +3,16 @@ package com.gym.requestDto.customerRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.sql.Date;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreateCustomerRequestDto {
     @NotNull
     private String firstName;
     @NotNull
     private String lastName;
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private String address;
 }

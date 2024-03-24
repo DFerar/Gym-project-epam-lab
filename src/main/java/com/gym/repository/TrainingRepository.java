@@ -15,8 +15,8 @@ public interface TrainingRepository extends JpaRepository<TrainingEntity, Long> 
 
     @Query("SELECT t FROM TrainingEntity t " +
             "WHERE t.customer.gymUserEntity.userName = :customerUserName " +
-            "AND (:fromDate IS NULL OR t.trainingDate >= :fromDate)" +
-            "AND (:toDate IS NULL OR t.trainingDate <= :toDate)" +
+            "AND (cast(:fromDate as date) IS NULL OR t.trainingDate >= :fromDate)" +
+            "AND (cast(:toDate as date) IS NULL OR t.trainingDate <= :toDate)" +
             "AND (:instructorName IS NULL OR t.instructor.gymUserEntity.userName = :instructorName)" +
             "AND (:trainingTypeName IS NULL OR t.trainingType.trainingTypeName = :trainingTypeName)")
     List<TrainingEntity> findTrainingsByCustomerAndCriteria(
@@ -29,8 +29,8 @@ public interface TrainingRepository extends JpaRepository<TrainingEntity, Long> 
 
     @Query("SELECT t FROM TrainingEntity t " +
             "WHERE t.instructor.gymUserEntity.userName = :instructorUserName " +
-            "AND (:fromDate IS NULL OR t.trainingDate >= :fromDate) " +
-            "AND (:toDate IS NULL OR t.trainingDate <= :toDate) " +
+            "AND (cast(:fromDate as date) IS NULL OR t.trainingDate >= :fromDate) " +
+            "AND (cast(:toDate as date) IS NULL OR t.trainingDate <= :toDate) " +
             "AND (:customerName IS NULL OR t.customer.gymUserEntity.userName = :customerName)")
     List<TrainingEntity> findTrainingsByInstructorAndCriteria(
             @Param("instructorUserName") String instructorUserName,

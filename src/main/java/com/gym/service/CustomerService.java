@@ -62,7 +62,7 @@ public class CustomerService {
         GymUserEntity updatedUser = gymUserService.updateUser(userEntityFromData);
 
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(
-                userEntityFromData.getUserName());
+                updatedUser.getUserName());
         if (customerEntity == null) {
             throw new NoSuchElementException("Customer not found");
         }
@@ -85,14 +85,16 @@ public class CustomerService {
         customerRepository.delete(customerEntity);
         log.info("Customer deleted: {}", userName);
     }
-
+    @Transactional
     public Set<InstructorEntity> changeCustomerInstructors(String userName, List<String> usernames) {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
         Set<InstructorEntity> instructorEntities = usernames.stream()
                 .map(instructorRepository::findInstructorEntityByGymUserEntityUserName)
                 .collect(Collectors.toSet());
-        customerEntity.setInstructors(instructorEntities);
+        Set<InstructorEntity> existingInstructorEntities = customerEntity.getInstructors();
+        existingInstructorEntities.addAll(instructorEntities);
+        customerEntity.setInstructors(existingInstructorEntities);
         customerRepository.save(customerEntity);
-        return instructorEntities;
+        return customerEntity.getInstructors();
     }
 }

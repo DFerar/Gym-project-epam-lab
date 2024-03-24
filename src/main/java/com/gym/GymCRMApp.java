@@ -1,4 +1,4 @@
-package com.gym;
+/*package com.gym;
 
 import org.apache.catalina.LifecycleException;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -10,4 +10,4 @@ public class GymCRMApp {
         context.register(AppConfig.class);
         context.register(WebConfig.class);
     }
-}
+}*/

@@ -8,6 +8,7 @@ import com.gym.responseDto.trainingResponse.TrainingTypeResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.sql.Date;
 import java.util.List;
 
 @Component
@@ -18,7 +19,7 @@ public class TrainingMapper {
         return trainingEntities.stream()
                 .map(trainingEntity -> new CustomerTrainingsResponseDto(
                         trainingEntity.getTrainingName(),
-                        trainingEntity.getTrainingDate(),
+                        trainingEntity.getTrainingDate().toString(),
                         trainingEntity.getTrainingType().getTrainingTypeName(),
                         trainingEntity.getTrainingDuration(),
                         trainingEntity.getInstructor().getGymUserEntity().getUserName()))
@@ -29,7 +30,7 @@ public class TrainingMapper {
         return trainingEntities.stream()
                 .map(trainingEntity -> new InstructorTrainingsResponseDto(
                         trainingEntity.getTrainingName(),
-                        trainingEntity.getTrainingDate(),
+                        trainingEntity.getTrainingDate().toString(),
                         trainingEntity.getTrainingType().getTrainingTypeName(),
                         trainingEntity.getTrainingDuration(),
                         trainingEntity.getCustomer().getGymUserEntity().getUserName()))
@@ -49,16 +50,12 @@ public class TrainingMapper {
         InstructorEntity instructorEntity = new InstructorEntity();
         instructorEntity.setGymUserEntity(gymUserInstructorEntity);
 
-        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity();
-        trainingTypeEntity.setTrainingTypeName(trainingRequestDto.getTrainingName());
-
         TrainingEntity trainingEntity = new TrainingEntity();
         trainingEntity.setCustomer(customerEntity);
         trainingEntity.setInstructor(instructorEntity);
-        trainingEntity.setTrainingType(trainingTypeEntity);
-        trainingEntity.setTrainingDate(trainingRequestDto.getTrainingDate());
+        trainingEntity.setTrainingDate(Date.valueOf(trainingRequestDto.getTrainingDate()));
         trainingEntity.setTrainingDuration(trainingRequestDto.getTrainingDuration());
-        trainingEntity.setTrainingName(trainingEntity.getTrainingName());
+        trainingEntity.setTrainingName(trainingRequestDto.getTrainingName());
         return trainingEntity;
     }
 
@@ -69,5 +66,13 @@ public class TrainingMapper {
                         trainingType.getTrainingTypeName()
                 ))
                 .toList();
+    }
+
+    public Date mapStringDateToObject(String date) {
+        if (date.isEmpty()) {
+            return null;
+        } else {
+            return Date.valueOf(date);
+        }
     }
 }

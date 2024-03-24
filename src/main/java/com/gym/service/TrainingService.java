@@ -42,7 +42,7 @@ public class TrainingService {
         trainingEntity.setInstructor(instructorEntity);
 
         TrainingTypeEntity trainingTypeEntity = trainingTypeRepository.findByTrainingTypeName(
-                trainingEntity.getTrainingType().getTrainingTypeName());
+                instructorEntity.getTrainingTypeEntity().getTrainingTypeName());
         if (trainingTypeEntity == null) {
             throw new NoSuchElementException("Customer not found");
         }

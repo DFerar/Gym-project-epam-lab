@@ -36,6 +36,7 @@ public class InstructorService {
             throw new NoSuchElementException("training type not found");
         }
         InstructorEntity instructorEntity = instructorMapper.mapUserEntityToInstructorEntity(trainingType, savedUser);
+        instructorRepository.save(instructorEntity);
         log.info("Creating instructor: {}", instructorEntity);
         return instructorEntity;
     }
@@ -53,6 +54,7 @@ public class InstructorService {
             throw new NoSuchElementException("Instructor not found");
         }
         instructorEntity.setTrainingTypeEntity(trainingType);
+        instructorEntity.getGymUserEntity().setIsActive(userEntity.getIsActive());
         InstructorEntity updatedInstructor = instructorRepository.save(instructorEntity);
         log.info("Instructor updated: {}", updatedInstructor);
         return updatedInstructor;

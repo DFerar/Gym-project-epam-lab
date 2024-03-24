@@ -1,23 +1,22 @@
 package com.gym.requestDto.trainingRequest;
 
-import com.gym.entity.TrainingType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.sql.Date;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreateTrainingRequestDto {
     @NotNull
     private String customerUserName;
     @NotNull
     private String instructorUserName;
     @NotNull
-    private TrainingType trainingName;
+    private String trainingName;
     @NotNull
-    private Date trainingDate;
+    private String trainingDate;
     @NotNull
     private Integer trainingDuration;
 }
