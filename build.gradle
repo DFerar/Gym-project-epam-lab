@@ -46,6 +46,8 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.6.0'
     //utils
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    /*implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.2.0'*/
 }
 
 test {
@@ -65,12 +67,19 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     "com/gym/GymCRMApp.*",
+                    "com/gym/MainWebAppInitializer.*",
+                    "com/gym/WebConfig.*",
                     "com/gym/entity/**.*",
-                    "com/gym/storage/StorageInitializer.*",
                     "com/gym/AppConfig.*",
-                    "com/gym/GymCRMFacade.*",
                     "com/gym/repositories/**.*",
-                    "com/gym/dto/**.*"
+                    "com/gym/dto/**.*",
+                    "com/gym/requestDto/customerRequest/**.*",
+                    "com/gym/requestDto/instructorRequest/**.*",
+                    "com/gym/requestDto/loginRequest/**.*",
+                    "com/gym/requestDto/trainingRequest/**.*",
+                    "com/gym/responseDto/customerResponse/**.*",
+                    "com/gym/responseDto/instructorResponse/**.*",
+                    "com/gym/responseDto/trainingResponse/**.*"
             ])
         }))
     }

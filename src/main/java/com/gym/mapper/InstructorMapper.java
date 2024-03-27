@@ -22,8 +22,8 @@ import static com.gym.utils.Utils.generatePassword;
 public class InstructorMapper {
     private final GymUserService gymUserService;
 
-    public GymUserEntity mapCreateInstructorInstructorRequestDtoToUserEntity(CreateInstructorRequestDto
-                                                                                     instructorDto) {
+    public GymUserEntity mapCreateInstructorRequestDtoToUserEntity(CreateInstructorRequestDto
+                                                                           instructorDto) {
         GymUserEntity gymUserEntity = new GymUserEntity();
         gymUserEntity.setFirstName(instructorDto.getFirstName());
         gymUserEntity.setLastName(instructorDto.getLastName());
@@ -73,7 +73,8 @@ public class InstructorMapper {
         return gymUserEntity;
     }
 
-    public UpdateInstructorProfileResponseDto mapInstructorEntityToUpdateInstructorResponseDto(InstructorEntity updatedInstructor) {
+    public UpdateInstructorProfileResponseDto mapInstructorEntityToUpdateInstructorResponseDto(
+            InstructorEntity updatedInstructor) {
         return new UpdateInstructorProfileResponseDto(updatedInstructor.getGymUserEntity().getUserName(),
                 updatedInstructor.getGymUserEntity().getFirstName(),
                 updatedInstructor.getGymUserEntity().getLastName(),
@@ -82,7 +83,8 @@ public class InstructorMapper {
                 mapCustomerEntitiesToCustomerDtos(updatedInstructor.getCustomers()));
     }
 
-    public List<GetNotAssignedOnCustomerInstructorsResponseDto> mapInstructorEntitiesToInstructorDtos(List<InstructorEntity> instructorEntities) {
+    public List<GetNotAssignedOnCustomerInstructorsResponseDto> mapInstructorEntitiesToInstructorDtos(
+            List<InstructorEntity> instructorEntities) {
         return instructorEntities.stream()
                 .map(instructorEntity -> new GetNotAssignedOnCustomerInstructorsResponseDto(
                         instructorEntity.getGymUserEntity().getUserName(),
@@ -93,7 +95,8 @@ public class InstructorMapper {
                 .toList();
     }
 
-    public List<InstructorForCustomerResponseDto> mapInstructorEntitiesToInstructorResponseDto(Set<InstructorEntity> instructorEntities) {
+    public List<InstructorForCustomerResponseDto> mapInstructorEntitiesToInstructorResponseDto(
+            Set<InstructorEntity> instructorEntities) {
         return instructorEntities.stream()
                 .map(instructorEntity -> new InstructorForCustomerResponseDto(
                         instructorEntity.getGymUserEntity().getUserName(),

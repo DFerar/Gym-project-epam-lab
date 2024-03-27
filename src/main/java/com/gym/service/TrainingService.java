@@ -1,6 +1,9 @@
 package com.gym.service;
 
 import com.gym.entity.*;
+import com.gym.exceptionHandler.CustomerNotFoundException;
+import com.gym.exceptionHandler.InstructorNotFoundException;
+import com.gym.exceptionHandler.TrainingTypeNotFoundException;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
@@ -12,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 
@@ -30,21 +32,21 @@ public class TrainingService {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(
                 trainingEntity.getCustomer().getGymUserEntity().getUserName());
         if (customerEntity == null) {
-            throw new NoSuchElementException("Customer not found");
+            throw new CustomerNotFoundException("Customer not found");
         }
         trainingEntity.setCustomer(customerEntity);
 
         InstructorEntity instructorEntity = instructorRepository.findInstructorEntityByGymUserEntityUserName(
                 trainingEntity.getInstructor().getGymUserEntity().getUserName());
         if (instructorEntity == null) {
-            throw new NoSuchElementException("Customer not found");
+            throw new InstructorNotFoundException("Instructor not found");
         }
         trainingEntity.setInstructor(instructorEntity);
 
         TrainingTypeEntity trainingTypeEntity = trainingTypeRepository.findByTrainingTypeName(
                 instructorEntity.getTrainingTypeEntity().getTrainingTypeName());
         if (trainingTypeEntity == null) {
-            throw new NoSuchElementException("Customer not found");
+            throw new TrainingTypeNotFoundException("Training Type not found");
         }
         trainingEntity.setTrainingType(trainingTypeEntity);
 

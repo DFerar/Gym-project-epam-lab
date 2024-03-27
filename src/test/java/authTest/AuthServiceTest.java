@@ -1,6 +1,7 @@
 package authTest;
 
 import com.gym.entity.GymUserEntity;
+import com.gym.exceptionHandler.LoginException;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,31 +30,29 @@ public class AuthServiceTest {
     private AuthenticationService authenticationService;
 
     @Test
-    public void shouldMatchCustomerCredentials() {
+    public void shouldThrowExceptionMatchCustomerCredentials() {
         //Given
         String userName = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
 
         when(customerRepository.existsByGymUserEntityUserNameAndGymUserEntityPassword(userName, password))
-                .thenReturn(true);
-        //When
-        boolean result = authenticationService.matchCustomerCredentials(userName, password);
-        //Asserts
-        assertThat(result).isTrue();
+                .thenReturn(false);
+        //When & Assert
+        assertThatThrownBy(() -> authenticationService.matchCustomerCredentials(userName, password)).isInstanceOf(
+                LoginException.class);
     }
 
     @Test
-    public void shouldMatchInstructorCredentials() {
+    public void shouldTrowExceptionMatchInstructorCredentials() {
         //Given
         String userName = RandomStringUtils.randomAlphabetic(7);
         String password = Utils.generatePassword();
 
         when(instructorRepository.existsByGymUserEntityUserNameAndGymUserEntityPassword(userName, password))
-                .thenReturn(true);
-        //When
-        boolean result = authenticationService.matchInstructorCredentials(userName, password);
-        //Assert
-        assertThat(result).isTrue();
+                .thenReturn(false);
+        //When & Assert
+        assertThatThrownBy(() -> authenticationService.matchInstructorCredentials(userName, password)).isInstanceOf(
+                LoginException.class);
     }
 
     @Test
@@ -65,6 +65,7 @@ public class AuthServiceTest {
         gymUserEntity.setUserName(username);
         gymUserEntity.setPassword(oldPassword);
 
+        when(gymUserRepository.existsByUserNameAndPassword(username, oldPassword)).thenReturn(true);
         when(gymUserRepository.findByUserName(username)).thenReturn(gymUserEntity);
 
         //When
@@ -76,19 +77,14 @@ public class AuthServiceTest {
     }
 
     @Test
-    public void shouldMatchUserCredentials() {
+    public void shouldThrowExceptionMatchUserCredentials() {
         //Given
         String username = RandomStringUtils.randomAlphabetic(7);
         String password = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity gymUserEntity = new GymUserEntity();
-        gymUserEntity.setUserName(username);
-        gymUserEntity.setPassword(password);
-
-        when(gymUserRepository.findByUserName(username)).thenReturn(gymUserEntity);
-        //When
-        Boolean result = authenticationService.matchCredentials(username, password);
-        //Assert
-        assertThat(result).isTrue();
+        when(gymUserRepository.existsByUserNameAndPassword(username, password)).thenReturn(false);
+        //When & Assert
+        assertThatThrownBy(() -> authenticationService.matchCredentials(username, password)).isInstanceOf(
+                SecurityException.class);
     }
 }

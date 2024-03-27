@@ -5,6 +5,9 @@ import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingType;
 import com.gym.entity.TrainingTypeEntity;
+import com.gym.exceptionHandler.InstructorNotFoundException;
+import com.gym.exceptionHandler.TrainingTypeNotFoundException;
+import com.gym.exceptionHandler.UserNotFoundException;
 import com.gym.mapper.InstructorMapper;
 import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
@@ -15,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class InstructorService {
         TrainingTypeEntity trainingType =
                 trainingTypeRepository.findByTrainingTypeName(specialization);
         if (trainingType == null) {
-            throw new NoSuchElementException("training type not found");
+            throw new TrainingTypeNotFoundException("Training type not found");
         }
         InstructorEntity instructorEntity = instructorMapper.mapUserEntityToInstructorEntity(trainingType, savedUser);
         instructorRepository.save(instructorEntity);
@@ -51,7 +53,7 @@ public class InstructorService {
         InstructorEntity instructorEntity = instructorRepository.findInstructorEntityByGymUserEntityUserName(
                 updatedUser.getUserName());
         if (instructorEntity == null) {
-            throw new NoSuchElementException("Instructor not found");
+            throw new InstructorNotFoundException("Instructor not found");
         }
         instructorEntity.setTrainingTypeEntity(trainingType);
         instructorEntity.getGymUserEntity().setIsActive(userEntity.getIsActive());
@@ -63,7 +65,7 @@ public class InstructorService {
     public InstructorEntity getInstructorByUsername(String username) {
         InstructorEntity instructorEntity = instructorRepository.findInstructorEntityByGymUserEntityUserName(username);
         if (instructorEntity == null) {
-            throw new NoSuchElementException("Instructor not found");
+            throw new InstructorNotFoundException("Instructor not found");
         }
         log.info("Got instructor with username: {}", username);
         return instructorEntity;
@@ -73,7 +75,7 @@ public class InstructorService {
     public void changeInstructorActivity(String username, Boolean newActivity) {
         GymUserEntity gymUserEntity = gymUserRepository.findByUserName(username);
         if (gymUserEntity == null) {
-            throw new NoSuchElementException("User not found");
+            throw new UserNotFoundException("User not found");
         }
         gymUserEntity.setIsActive(newActivity);
         gymUserRepository.save(gymUserEntity);

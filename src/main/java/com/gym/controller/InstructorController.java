@@ -23,15 +23,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/instructor")
 @RequiredArgsConstructor
+//@Tag(name = "InstructorController", description = "API for Instructor operations")
 public class InstructorController {
     private final InstructorService instructorService;
     private final InstructorMapper instructorMapper;
     private final AuthenticationService authenticationService;
 
     @PostMapping("/create")
+    //@Operation(summary = "Create an instructor", description = "Creates a new instructor and returns their data")
     public ResponseEntity<CreateInstructorResponseDto> createInstructor(
-            @Valid @RequestBody CreateInstructorRequestDto instructorDto) {
-        GymUserEntity userEntity = instructorMapper.mapCreateInstructorInstructorRequestDtoToUserEntity(instructorDto);
+            @Valid @RequestBody/*(description = "New instructor data", required = true,
+                    content = @Content(schema = @Schema(implementation = CreateInstructorRequestDto.class)))*/
+            CreateInstructorRequestDto instructorDto) {
+        GymUserEntity userEntity = instructorMapper.mapCreateInstructorRequestDtoToUserEntity(instructorDto);
         InstructorEntity savedInstructor = instructorService.createInstructor(userEntity,
                 instructorDto.getSpecialization());
         return new ResponseEntity<>(instructorMapper.mapToResponseDto(savedInstructor.getGymUserEntity()),
@@ -39,25 +43,26 @@ public class InstructorController {
     }
 
     @GetMapping("/{username}")
+    //@Operation(summary = "Get instructor data", description = "Returns the data of an instructor by their username")
     public ResponseEntity<GetInstructorProfileResponseDto> getInstructor(@PathVariable String username,
                                                                          @RequestParam String loginUserName,
                                                                          @RequestParam String loginPassword) {
-        if (!authenticationService.matchInstructorCredentials(loginUserName, loginPassword)) {
-            throw new SecurityException("Unauthorized");
-        }
+        authenticationService.matchInstructorCredentials(loginUserName, loginPassword);
         InstructorEntity instructorEntity = instructorService.getInstructorByUsername(username);
         return new ResponseEntity<>(instructorMapper.mapInstructorEntityToGetInstructorResponseDto(instructorEntity),
                 HttpStatus.OK);
     }
 
     @PutMapping("/update")
+    /*@Operation(summary = "Update instructor data", description =
+            "Updates an instructor's data and returns the updated data")*/
     public ResponseEntity<UpdateInstructorProfileResponseDto> updateInstructor(
-            @Valid @RequestBody UpdateInstructorProfileRequestDto newData,
+            @Valid @RequestBody/*(description = "New instructor data", required = true,
+                    content = @Content(schema = @Schema(implementation = UpdateInstructorProfileRequestDto.class)))*/
+            UpdateInstructorProfileRequestDto newData,
             @RequestParam String loginUserName,
             @RequestParam String loginPassword) {
-        if (!authenticationService.matchInstructorCredentials(loginUserName, loginPassword)) {
-            throw new SecurityException("Unauthorized");
-        }
+        authenticationService.matchInstructorCredentials(loginUserName, loginPassword);
         GymUserEntity gymUserEntityFromNewData = instructorMapper.mapUpdateInstructorRequestDtoToUserEntity(newData);
         InstructorEntity updatedInstructor = instructorService.updateInstructor(gymUserEntityFromNewData,
                 newData.getSpecialization());
@@ -66,13 +71,13 @@ public class InstructorController {
     }
 
     @GetMapping("/unassigned-trainers/{username}")
+    /*@Operation(summary = "Get unassigned instructors", description =
+            "Returns a list of instructors not assigned to a specific customer")*/
     public ResponseEntity<List<GetNotAssignedOnCustomerInstructorsResponseDto>> getNotAssignedInstructors(
             @PathVariable String username,
             @RequestParam String loginUserName,
             @RequestParam String loginPassword) {
-        if (!authenticationService.matchInstructorCredentials(loginUserName, loginPassword)) {
-            throw new SecurityException("Unauthorized");
-        }
+        authenticationService.matchInstructorCredentials(loginUserName, loginPassword);
         List<InstructorEntity> instructorEntities =
                 instructorService.getInstructorsNotAssignedToCustomerByCustomerUserName(username);
         return new ResponseEntity<>(instructorMapper.mapInstructorEntitiesToInstructorDtos(instructorEntities),
@@ -80,13 +85,12 @@ public class InstructorController {
     }
 
     @PatchMapping("/activate/{username}")
+    //@Operation(summary = "Activate an instructor", description = "Changes the activation status of an instructor")
     public ResponseEntity<String> instructorActivation(@PathVariable String username,
                                      @RequestParam Boolean isActive,
                                      @RequestParam String loginUserName,
                                      @RequestParam String loginPassword) {
-        if (!authenticationService.matchInstructorCredentials(loginUserName, loginPassword)) {
-            throw new SecurityException("Unauthorized");
-        }
+        authenticationService.matchInstructorCredentials(loginUserName, loginPassword);
         instructorService.changeInstructorActivity(username, isActive);
         return new ResponseEntity<>(HttpStatus.OK);
     }

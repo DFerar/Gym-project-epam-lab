@@ -18,17 +18,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/training-type")
 @RequiredArgsConstructor
+//@Tag(name = "TrainingTypeController", description = "API for Training Type operations")
 public class TrainingTypeController {
     private final TrainingTypeService trainingTypeService;
     private final AuthenticationService authenticationService;
     private final TrainingMapper trainingMapper;
 
     @GetMapping("/all")
+    //@Operation(summary = "Get all training types", description = "Returns a list of all training types")
     public ResponseEntity<List<TrainingTypeResponseDto>> getAllTrainingTypes(@RequestParam String loginUserName,
                                                                              @RequestParam String loginPassword) {
-        if (!authenticationService.matchCredentials(loginUserName, loginPassword)) {
-            throw new SecurityException("Unauthorized");
-        }
+        authenticationService.matchCredentials(loginUserName, loginPassword);
         List<TrainingTypeEntity> trainingTypeEntities = trainingTypeService.getAllTrainingTypes();
         return new ResponseEntity<>(trainingMapper.mapTrainingTypeEntitiesToTrainingTypeResponseDto(trainingTypeEntities),
                 HttpStatus.OK);

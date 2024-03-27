@@ -16,24 +16,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/training")
 @RequiredArgsConstructor
+//@Tag(name = "TrainingController", description = "API for Training operations")
 public class TrainingController {
     private final TrainingService trainingService;
     private final AuthenticationService authenticationService;
     private final TrainingMapper trainingMapper;
 
     @GetMapping("/customer")
+    //@Operation(summary = "Get customer trainings", description = "Returns a list of trainings for a specific customer")
     public ResponseEntity<List<CustomerTrainingsResponseDto>> getCustomerTrainings(
-            @Valid @RequestBody GetCustomerTrainingListRequestDto requestDto,
+            @Valid @RequestBody/*(description = "Customer training list request data", required = true,
+                    content = @Content(schema = @Schema(implementation = GetCustomerTrainingListRequestDto.class)))*/
+                    GetCustomerTrainingListRequestDto requestDto,
             @RequestParam String loginUsername,
             @RequestParam String loginPassword) {
-        if (!authenticationService.matchCustomerCredentials(loginUsername, loginPassword)) {
-            throw new NoSuchElementException("Customer not found");
-        }
+        authenticationService.matchCustomerCredentials(loginUsername, loginPassword);
         List<TrainingEntity> trainingEntities = trainingService.getCustomerListOfTrainings(requestDto.getUserName(),
                 trainingMapper.mapStringDateToObject(requestDto.getFromDate()),
                 trainingMapper.mapStringDateToObject(requestDto.getToDate()),
@@ -44,13 +45,15 @@ public class TrainingController {
     }
 
     @GetMapping("/instructor")
+    /*@Operation(summary = "Get instructor trainings",
+            description = "Returns a list of trainings for a specific instructor")*/
     public ResponseEntity<List<InstructorTrainingsResponseDto>> getInstructorTrainings(
-            @Valid @RequestBody GetInstructorTrainingsRequestDto requestDto,
+            @Valid @RequestBody/*(description = "Instructor trainings request data", required = true,
+                    content = @Content(schema = @Schema(implementation = GetInstructorTrainingsRequestDto.class)))*/
+            GetInstructorTrainingsRequestDto requestDto,
             @RequestParam String loginUsername,
             @RequestParam String loginPassword) {
-        if (!authenticationService.matchInstructorCredentials(loginUsername, loginPassword)) {
-            throw new NoSuchElementException("Instructor not found");
-        }
+        authenticationService.matchInstructorCredentials(loginUsername, loginPassword);
         List<TrainingEntity> trainingEntities = trainingService.getInstructorListOfTrainings(
                 requestDto.getUserName(),
                 trainingMapper.mapStringDateToObject(requestDto.getFromDate()),
@@ -61,12 +64,13 @@ public class TrainingController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createTraining(@Valid @RequestBody CreateTrainingRequestDto trainingDto,
-                               @RequestParam String loginUsername,
-                               @RequestParam String loginPassword) {
-        if (!authenticationService.matchCredentials(loginUsername, loginPassword)) {
-            throw new NoSuchElementException("User not found");
-        }
+    //@Operation(summary = "Create a training", description = "Creates a new training and returns CREATED status")
+    public ResponseEntity<String> createTraining(@Valid @RequestBody/*(description = "New training data", required = true,
+            content = @Content(schema = @Schema(implementation = CreateTrainingRequestDto.class)))*/
+                                                 CreateTrainingRequestDto trainingDto,
+                                                 @RequestParam String loginUsername,
+                                                 @RequestParam String loginPassword) {
+        authenticationService.matchCredentials(loginUsername, loginPassword);
         TrainingEntity trainingEntity = trainingMapper.mapCreateTrainingRequestDtoToTrainingEntity(trainingDto);
         trainingService.createTraining(trainingEntity);
         return new ResponseEntity<>(HttpStatus.CREATED);

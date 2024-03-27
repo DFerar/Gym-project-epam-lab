@@ -3,6 +3,8 @@ package com.gym.service;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
+import com.gym.exceptionHandler.CustomerNotFoundException;
+import com.gym.exceptionHandler.UserNotFoundException;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
@@ -13,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class CustomerService {
     public CustomerEntity getCustomerByUserName(String userName) {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
         if (customerEntity == null) {
-            throw new NoSuchElementException("Customer not found");
+            throw new CustomerNotFoundException("Customer not found");
         }
         log.info("Got customer with username: {}", userName);
         return customerEntity;
@@ -50,7 +51,7 @@ public class CustomerService {
     public void changeCustomersActivity(String username, Boolean newActivity) {
         GymUserEntity gymUserEntity = gymUserRepository.findByUserName(username);
         if (gymUserEntity == null) {
-            throw new NoSuchElementException("User not found");
+            throw new UserNotFoundException("User not found");
         }
         gymUserEntity.setIsActive(newActivity);
         gymUserRepository.save(gymUserEntity);
@@ -64,7 +65,7 @@ public class CustomerService {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(
                 updatedUser.getUserName());
         if (customerEntity == null) {
-            throw new NoSuchElementException("Customer not found");
+            throw new CustomerNotFoundException("Customer not found");
         }
         customerEntity.setAddress(customerEntityFromData.getAddress());
         customerEntity.setDateOfBirth(customerEntityFromData.getDateOfBirth());
@@ -78,7 +79,7 @@ public class CustomerService {
     public void deleteCustomerByUserName(String userName) {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
         if (customerEntity == null) {
-            throw new NoSuchElementException("Customer not found");
+            throw new CustomerNotFoundException("Customer not found");
         }
         trainingRepository.deleteTrainingEntitiesByCustomerGymUserEntityUserName(userName);
         gymUserRepository.deleteGymUserEntitiesByUserName(userName);
@@ -88,6 +89,9 @@ public class CustomerService {
     @Transactional
     public Set<InstructorEntity> changeCustomerInstructors(String userName, List<String> usernames) {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
+        if (customerEntity == null) {
+            throw new CustomerNotFoundException("Customer not found");
+        }
         Set<InstructorEntity> instructorEntities = usernames.stream()
                 .map(instructorRepository::findInstructorEntityByGymUserEntityUserName)
                 .collect(Collectors.toSet());

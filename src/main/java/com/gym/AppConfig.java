@@ -1,5 +1,7 @@
 package com.gym;
 
+import com.gym.logging.LoggingInterceptor;
+import com.gym.logging.MdcInterceptor;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
@@ -24,6 +26,15 @@ import java.util.Properties;
 @EnableJpaRepositories
 @EnableTransactionManagement
 public class AppConfig {
+    @Bean
+    public LoggingInterceptor loggingInterceptor() {
+        return new LoggingInterceptor();
+    }
+
+    @Bean
+    public MdcInterceptor mdcInterceptor() {
+        return new MdcInterceptor();
+    }
 
     @Bean(initMethod = "migrate")
     public Flyway flyway(DataSource dataSource) {

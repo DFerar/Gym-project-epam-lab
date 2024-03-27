@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 public interface GymUserRepository extends JpaRepository<GymUserEntity, Long> {
     Boolean existsByUserName(String username);
 
+    Boolean existsByUserNameAndPassword(String userName, String password);
+
     @Query("SELECT coalesce(MAX(u.id), 1L) FROM GymUserEntity u")
     Long findMaxUserId();
 
