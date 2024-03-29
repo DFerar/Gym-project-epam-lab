@@ -1,5 +1,9 @@
 package userTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
 import com.gym.service.GymUserService;
@@ -10,10 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class GymUserServiceTest {
@@ -33,11 +33,11 @@ public class GymUserServiceTest {
         String password = Utils.generatePassword();
 
         GymUserEntity existingUser = new GymUserEntity(userId, RandomStringUtils.randomAlphabetic(7),
-                RandomStringUtils.randomAlphabetic(7),
-                RandomStringUtils.randomAlphabetic(7), password, false);
+            RandomStringUtils.randomAlphabetic(7),
+            RandomStringUtils.randomAlphabetic(7), password, false);
 
         GymUserEntity newGymUserEntity = new GymUserEntity(userId, firstName, lastName, existingUser.getUserName(),
-                password, isActive);
+            password, isActive);
         when(gymUserRepository.findByUserName(existingUser.getUserName())).thenReturn(existingUser);
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(newGymUserEntity);
         //When

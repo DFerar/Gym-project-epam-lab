@@ -14,19 +14,29 @@ import com.gym.responseDto.customerResponse.InstructorForCustomerResponseDto;
 import com.gym.responseDto.customerResponse.UpdateCustomerProfileResponseDto;
 import com.gym.service.AuthenticationService;
 import com.gym.service.CustomerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Set;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/customer")
 @RequiredArgsConstructor
-//@Tag(name = "CustomerController", description = "API for Customer operations")
+@Tag(name = "CustomerController", description = "API for Customer operations")
 public class CustomerController {
     private final CustomerService customerService;
     private final CustomerMapper customerMapper;
@@ -34,47 +44,44 @@ public class CustomerController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/create")
-    //@Operation(summary = "Create a customer", description = "Creates a new customer and returns their data")
+    @Operation(summary = "Create a customer", description = "Creates a new customer and returns their data")
     public ResponseEntity<CreateCustomerResponseDto> createCustomer(
-            @Valid @RequestBody/*(description = "New customer data", required = true,
-                    content = @Content(schema = @Schema(implementation = CreateCustomerRequestDto.class)))*/
-            CreateCustomerRequestDto customerDto) {
+        @Valid @RequestBody CreateCustomerRequestDto customerDto) {
         GymUserEntity userEntity = customerMapper.mapCreateCustomerRequestDtoToUserEntity(customerDto);
         CustomerEntity customerEntity = customerMapper.mapCreateCustomerRequestDtoToCustomerEntity(customerDto);
         CustomerEntity savedCustomer = customerService.createCustomer(customerEntity, userEntity);
         return new ResponseEntity<>(customerMapper.mapCustomerEntityToCreateResponseDto(savedCustomer
-                .getGymUserEntity()), HttpStatus.CREATED);
+            .getGymUserEntity()), HttpStatus.CREATED);
     }
 
     @GetMapping("/{username}")
-    //@Operation(summary = "Get customer data", description = "Returns the data of a customer by their username")
+    @Operation(summary = "Get customer data", description = "Returns the data of a customer by their username")
     public ResponseEntity<GetCustomerProfileResponseDto> getCustomerByUsername(@PathVariable String username,
                                                                                @RequestParam String loginUserName,
                                                                                @RequestParam String loginPassword) {
         authenticationService.matchCustomerCredentials(loginUserName, loginPassword);
         CustomerEntity customerEntity = customerService.getCustomerByUserName(username);
         return new ResponseEntity<>(customerMapper.mapCustomerEntityToGetCustomerResponseDto(customerEntity),
-                HttpStatus.OK);
+            HttpStatus.OK);
     }
 
     @PutMapping("/update")
-    //@Operation(summary = "Update customer data", description = "Updates a customer's data and returns the updated data")
+    @Operation(summary = "Update customer data", description = "Updates a customer's data and returns the updated data")
     public ResponseEntity<UpdateCustomerProfileResponseDto> updateCustomer(
-            @Valid @RequestBody/*(description = "New customer data", required = true,
-                    content = @Content(schema = @Schema(implementation = UpdateCustomerProfileRequestDto.class)))*/
-            UpdateCustomerProfileRequestDto newData,
-            @RequestParam String loginUserName,
-            @RequestParam String loginPassword) {
+        @Valid @RequestBody UpdateCustomerProfileRequestDto newData,
+        @RequestParam String loginUserName,
+        @RequestParam String loginPassword) {
         authenticationService.matchCustomerCredentials(loginUserName, loginPassword);
         GymUserEntity userEntityFromNewData = customerMapper.mapUpdateCustomerRequestDtoToUserEntity(newData);
         CustomerEntity customerEntityFromNewData = customerMapper.mapUpdateCustomerRequestDtoToCustomerEntity(newData);
-        CustomerEntity updatedCustomer = customerService.updateCustomer(userEntityFromNewData, customerEntityFromNewData);
+        CustomerEntity updatedCustomer =
+            customerService.updateCustomer(userEntityFromNewData, customerEntityFromNewData);
         return new ResponseEntity<>(customerMapper.mapCustomerEntityToUpdateCustomerResponseDto(updatedCustomer),
-                HttpStatus.OK);
+            HttpStatus.OK);
     }
 
     @DeleteMapping("/{username}")
-    //@Operation(summary = "Delete a customer", description = "Deletes a customer by their username")
+    @Operation(summary = "Delete a customer", description = "Deletes a customer by their username")
     public ResponseEntity<String> deleteCustomer(@PathVariable String username,
                                                  @RequestParam String loginUserName,
                                                  @RequestParam String loginPassword) {
@@ -84,7 +91,7 @@ public class CustomerController {
     }
 
     @PatchMapping("/activate/{username}")
-    //@Operation(summary = "Activate a customer", description = "Changes the activation status of a customer")
+    @Operation(summary = "Activate a customer", description = "Changes the activation status of a customer")
     public ResponseEntity<String> customerActivation(@PathVariable String username,
                                                      @RequestParam Boolean isActive,
                                                      @RequestParam String loginUserName,
@@ -95,17 +102,15 @@ public class CustomerController {
     }
 
     @PutMapping("/instructorList")
-    //@Operation(summary = "Update customer instructors", description = "Updates the list of instructors for a customer")
+    @Operation(summary = "Update customer instructors", description = "Updates the list of instructors for a customer")
     public ResponseEntity<List<InstructorForCustomerResponseDto>> updateCustomerInstructors(
-            @Valid @RequestBody/*(description = "New instructor data", required = true,
-                    content = @Content(schema = @Schema(implementation = UpdateCustomerInstructorsRequestDto.class)))*/
-            UpdateCustomerInstructorsRequestDto requestDto,
-            @RequestParam String loginUserName,
-            @RequestParam String loginPassword) {
+        @Valid @RequestBody UpdateCustomerInstructorsRequestDto requestDto,
+        @RequestParam String loginUserName,
+        @RequestParam String loginPassword) {
         authenticationService.matchCustomerCredentials(loginUserName, loginPassword);
         Set<InstructorEntity> instructorEntities = customerService.changeCustomerInstructors(
-                requestDto.getCustomerUserName(), requestDto.getInstructorUserNames());
+            requestDto.getCustomerUserName(), requestDto.getInstructorUserNames());
         return new ResponseEntity<>(instructorMapper.mapInstructorEntitiesToInstructorResponseDto(instructorEntities),
-                HttpStatus.OK);
+            HttpStatus.OK);
     }
 }

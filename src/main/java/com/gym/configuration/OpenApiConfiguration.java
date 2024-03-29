@@ -1,6 +1,7 @@
-/*package com.gym;
+package com.gym.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import java.io.IOException;
 import org.springdoc.core.configuration.SpringDocDataRestConfiguration;
 import org.springdoc.core.configuration.SpringDocHateoasConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -11,18 +12,16 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.TypeFilter;
 
-import java.io.IOException;
-
 @Configuration
 @ComponentScan(
-        basePackages = {"org.springdoc"},
-        excludeFilters = {@ComponentScan.Filter(
-                type = FilterType.CUSTOM,
-                classes = {
-                        OpenApiConfiguration.SpringDocDataRestFilter.class,
-                        OpenApiConfiguration.SpringDocHateoasFilter.class
-                }
-        )}
+    basePackages = {"org.springdoc"},
+    excludeFilters = {@ComponentScan.Filter(
+        type = FilterType.CUSTOM,
+        classes = {
+            OpenApiConfiguration.SpringDocDataRestFilter.class,
+            OpenApiConfiguration.SpringDocHateoasFilter.class
+        }
+    )}
 )
 public class OpenApiConfiguration {
 
@@ -50,12 +49,13 @@ public class OpenApiConfiguration {
         protected abstract Class<?> getFilteredClass();
 
         @Override
-        public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory) throws IOException {
+        public boolean match(MetadataReader metadataReader, MetadataReaderFactory metadataReaderFactory)
+            throws IOException {
             String className = metadataReader.getClassMetadata().getClassName();
             String enclosingClassName = metadataReader.getClassMetadata().getEnclosingClassName();
             return
-                    className.equals(getFilteredClass().getCanonicalName())
-                            || (enclosingClassName!=null && enclosingClassName.equals(getFilteredClass().getCanonicalName()));
+                className.equals(getFilteredClass().getCanonicalName())
+                    || (enclosingClassName != null && enclosingClassName.equals(getFilteredClass().getCanonicalName()));
         }
     }
-}*/
+}

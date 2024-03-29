@@ -1,5 +1,12 @@
 package instructorTest;
 
+import static com.gym.entity.TrainingType.CARDIO;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingType;
@@ -11,19 +18,14 @@ import com.gym.repository.TrainingTypeRepository;
 import com.gym.service.GymUserService;
 import com.gym.service.InstructorService;
 import com.gym.utils.Utils;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.gym.entity.TrainingType.CARDIO;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -53,17 +55,19 @@ class InstructorServiceTest {
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String userName = RandomStringUtils.randomAlphabetic(7);
         GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName,
-                userName, password, true);
+            userName, password, true);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
-        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, gymUserEntity, null);
+        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, gymUserEntity,
+            null);
 
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(gymUserEntity);
         when(instructorMapper.mapUserEntityToInstructorEntity(any(), any())).thenReturn(instructorEntity);
         when(trainingTypeRepository.findByTrainingTypeName(any(TrainingType.class))).thenReturn(trainingTypeEntity);
         //When
-        InstructorEntity result = instructorService.createInstructor(gymUserEntity, trainingTypeEntity.getTrainingTypeName());
+        InstructorEntity result = instructorService.createInstructor(gymUserEntity,
+            trainingTypeEntity.getTrainingTypeName());
         //Assert
         assertThat(result).isEqualTo(instructorEntity);
     }
@@ -79,11 +83,12 @@ class InstructorServiceTest {
 
 
         GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName,
-                userNameOfInstructor, password, true);
+            userNameOfInstructor, password, true);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
-        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, gymUserEntity, null);
+        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, gymUserEntity,
+            null);
 
         when(instructorRepository.findInstructorEntityByGymUserEntityUserName(userName)).thenReturn(instructorEntity);
         //When
@@ -101,19 +106,21 @@ class InstructorServiceTest {
         String userName = RandomStringUtils.randomAlphabetic(7);
 
         GymUserEntity updatedUser = new GymUserEntity(1L, firstName, lastName,
-                userName, password, true);
+            userName, password, true);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
-        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, updatedUser, null);
+        InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, updatedUser,
+            null);
 
         when(instructorRepository.findInstructorEntityByGymUserEntityUserName(any()))
-                .thenReturn(instructorEntity);
+            .thenReturn(instructorEntity);
         when(gymUserService.updateUser(any())).thenReturn(updatedUser);
         when(instructorRepository.save(any(InstructorEntity.class))).thenReturn(instructorEntity);
         when(trainingTypeRepository.findByTrainingTypeName(any(TrainingType.class))).thenReturn(trainingTypeEntity);
         //When
-        InstructorEntity result = instructorService.updateInstructor(updatedUser, trainingTypeEntity.getTrainingTypeName());
+        InstructorEntity result = instructorService.updateInstructor(updatedUser,
+            trainingTypeEntity.getTrainingTypeName());
         //Assert
         assertThat(result).isEqualTo(instructorEntity);
     }
@@ -129,7 +136,7 @@ class InstructorServiceTest {
         String userName = RandomStringUtils.randomAlphabetic(7);
 
         GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName,
-                userName, password, true);
+            userName, password, true);
 
         when(gymUserRepository.findByUserName(userName)).thenReturn(gymUserEntity);
         //When
@@ -138,16 +145,17 @@ class InstructorServiceTest {
         verify(gymUserRepository, times(1)).save(gymUserEntity);
         assertThat(gymUserEntity.getIsActive()).isEqualTo(newActivity);
     }
+
     @Test
     public void shouldGetInstructorsNotAssignedToCustomerByCustomerUserName() {
         //Given
         String customerUsername = RandomStringUtils.randomAlphabetic(7);
 
         when(instructorRepository.findUnassignedInstructorsByCustomerUsername(customerUsername)).thenReturn(
-                new ArrayList<>());
+            new ArrayList<>());
         //When
         List<InstructorEntity> result = instructorService.getInstructorsNotAssignedToCustomerByCustomerUserName(
-                 customerUsername);
+            customerUsername);
         //Assert
         assertThat(result).isNotNull();
     }

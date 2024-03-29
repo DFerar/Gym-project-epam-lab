@@ -1,6 +1,12 @@
 package customerTest;
 
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
@@ -11,21 +17,16 @@ import com.gym.repository.TrainingRepository;
 import com.gym.service.CustomerService;
 import com.gym.service.GymUserService;
 import com.gym.utils.Utils;
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceTest {
@@ -52,10 +53,10 @@ public class CustomerServiceTest {
         String userName = RandomStringUtils.randomAlphabetic(7);
 
         GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password,
-                true);
+            true);
 
         CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
-                gymUserEntity, null);
+            gymUserEntity, null);
 
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(gymUserEntity);
         when(customerRepository.save(any(CustomerEntity.class))).thenReturn(customerEntity);
@@ -76,10 +77,10 @@ public class CustomerServiceTest {
         String userNameToDto = RandomStringUtils.randomAlphabetic(7);
 
         GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userNameToDto, password,
-                true);
+            true);
 
         CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
-                gymUserEntity, null);
+            gymUserEntity, null);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
         //When
@@ -99,7 +100,7 @@ public class CustomerServiceTest {
         String userName = RandomStringUtils.randomAlphabetic(7);
 
         GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName, userName, password,
-                true);
+            true);
 
         when(gymUserRepository.findByUserName(userName)).thenReturn(gymUserEntity);
         //When
@@ -119,10 +120,10 @@ public class CustomerServiceTest {
         String userName = RandomStringUtils.randomAlphabetic(7);
 
         GymUserEntity userEntityFromNewData = new GymUserEntity(1L, firstName, lastName, userName, password,
-                true);
+            true);
 
         CustomerEntity customerEntityFromData = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
-                userEntityFromNewData, null);
+            userEntityFromNewData, null);
 
         GymUserEntity updatedUser = new GymUserEntity();
         CustomerEntity existingCustomer = new CustomerEntity();
@@ -148,9 +149,9 @@ public class CustomerServiceTest {
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String userNameOfInstructor = RandomStringUtils.randomAlphabetic(7);
         GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userNameOfInstructor, password,
-                true);
+            true);
         CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
-                gymUserEntity, null);
+            gymUserEntity, null);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
         //When
@@ -158,7 +159,8 @@ public class CustomerServiceTest {
         //Assert
         verify(customerRepository, times(1)).delete(customerEntity);
         verify(gymUserRepository, times(1)).deleteGymUserEntitiesByUserName(userName);
-        verify(trainingRepository, times(1)).deleteTrainingEntitiesByCustomerGymUserEntityUserName(userName);
+        verify(trainingRepository, times(1))
+            .deleteTrainingEntitiesByCustomerGymUserEntityUserName(userName);
     }
 
     @Test
@@ -183,8 +185,10 @@ public class CustomerServiceTest {
         instructor2.setGymUserEntity(gymUserEntity2);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
-        when(instructorRepository.findInstructorEntityByGymUserEntityUserName(instructorUsername1)).thenReturn(instructor1);
-        when(instructorRepository.findInstructorEntityByGymUserEntityUserName(instructorUsername2)).thenReturn(instructor2);
+        when(instructorRepository.findInstructorEntityByGymUserEntityUserName(instructorUsername1))
+            .thenReturn(instructor1);
+        when(instructorRepository.findInstructorEntityByGymUserEntityUserName(instructorUsername2))
+            .thenReturn(instructor2);
 
         // Method call
         Set<InstructorEntity> result = customerService.changeCustomerInstructors(userName, usernames);

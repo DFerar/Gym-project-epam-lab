@@ -1,5 +1,10 @@
 package trainingTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
 import com.gym.controller.TrainingController;
 import com.gym.mapper.TrainingMapper;
 import com.gym.requestDto.customerRequest.GetCustomerTrainingListRequestDto;
@@ -9,6 +14,8 @@ import com.gym.responseDto.trainingResponse.CustomerTrainingsResponseDto;
 import com.gym.responseDto.trainingResponse.InstructorTrainingsResponseDto;
 import com.gym.service.AuthenticationService;
 import com.gym.service.TrainingService;
+import java.util.Collections;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,14 +24,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Collections;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class TrainingControllerTest {
@@ -50,7 +49,8 @@ public class TrainingControllerTest {
         when(trainingMapper.mapCustomerTrainingEntitiesToTrainingDtos(anyList())).thenReturn(Collections.emptyList());
 
         // When
-        ResponseEntity<List<CustomerTrainingsResponseDto>> response = trainingController.getCustomerTrainings(requestDto,
+        ResponseEntity<List<CustomerTrainingsResponseDto>> response =
+            trainingController.getCustomerTrainings(requestDto,
                 username, password);
 
         // Then
@@ -66,15 +66,15 @@ public class TrainingControllerTest {
         GetInstructorTrainingsRequestDto requestDto = new GetInstructorTrainingsRequestDto();
 
         when(trainingService.getInstructorListOfTrainings(
-                eq(requestDto.getUserName()),
-                eq(null),
-                eq(null),
-                eq(requestDto.getCustomerName()))).thenReturn(Collections.emptyList());
+            eq(requestDto.getUserName()),
+            eq(null),
+            eq(null),
+            eq(requestDto.getCustomerName()))).thenReturn(Collections.emptyList());
         when(trainingMapper.mapInstructorTrainingEntitiesToTrainingDtos(anyList())).thenReturn(Collections.emptyList());
 
         // When
         ResponseEntity<List<InstructorTrainingsResponseDto>> response = trainingController.getInstructorTrainings(
-                requestDto, username, password);
+            requestDto, username, password);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -90,7 +90,7 @@ public class TrainingControllerTest {
 
         // When
         ResponseEntity<String> response = trainingController.createTraining(requestDto,
-                username, password);
+            username, password);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);

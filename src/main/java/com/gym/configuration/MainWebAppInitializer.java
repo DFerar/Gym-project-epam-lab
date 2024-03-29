@@ -1,4 +1,4 @@
-package com.gym;
+package com.gym.configuration;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -14,13 +14,13 @@ public class MainWebAppInitializer implements WebApplicationInitializer {
     public void onStartup(final ServletContext sc) throws ServletException {
 
         AnnotationConfigWebApplicationContext root =
-                new AnnotationConfigWebApplicationContext();
+            new AnnotationConfigWebApplicationContext();
 
         root.scan("com.gym");
         sc.addListener(new ContextLoaderListener(root));
 
         ServletRegistration.Dynamic appServlet =
-                sc.addServlet("mvc", new DispatcherServlet(new GenericWebApplicationContext()));
+            sc.addServlet("mvc", new DispatcherServlet(new GenericWebApplicationContext()));
         appServlet.setLoadOnStartup(1);
         appServlet.addMapping("/");
     }

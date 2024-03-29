@@ -1,11 +1,16 @@
 package trainingTypeTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import com.gym.controller.TrainingTypeController;
 import com.gym.entity.TrainingTypeEntity;
 import com.gym.mapper.TrainingMapper;
 import com.gym.responseDto.trainingResponse.TrainingTypeResponseDto;
 import com.gym.service.AuthenticationService;
 import com.gym.service.TrainingTypeService;
+import java.util.Collections;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +19,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Collections;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class TrainingTypeControllerTest {
@@ -42,13 +41,13 @@ public class TrainingTypeControllerTest {
         List<TrainingTypeEntity> trainingTypeEntities = Collections.singletonList(new TrainingTypeEntity());
         when(trainingTypeService.getAllTrainingTypes()).thenReturn(trainingTypeEntities);
         List<TrainingTypeResponseDto> trainingTypeResponseDtos = Collections.singletonList(
-                new TrainingTypeResponseDto());
+            new TrainingTypeResponseDto());
         when(trainingMapper.mapTrainingTypeEntitiesToTrainingTypeResponseDto(trainingTypeEntities))
-                .thenReturn(trainingTypeResponseDtos);
+            .thenReturn(trainingTypeResponseDtos);
 
         // When
         ResponseEntity<List<TrainingTypeResponseDto>> response = trainingTypeController.getAllTrainingTypes(
-                RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
+            RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7));
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

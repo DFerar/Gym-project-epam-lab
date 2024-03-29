@@ -1,5 +1,6 @@
-package com.gym;
+package com.gym.configuration;
 
+import com.gym.AppConfig;
 import com.gym.logging.LoggingInterceptor;
 import com.gym.logging.MdcInterceptor;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.gym.controller")
+@ComponentScan(basePackages = "com.gym")
 @Import(AppConfig.class)
 public class WebConfig implements WebMvcConfigurer {
     @Override

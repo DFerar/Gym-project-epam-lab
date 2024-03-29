@@ -1,22 +1,26 @@
 package mapperTest;
 
-import com.gym.entity.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.gym.entity.CustomerEntity;
+import com.gym.entity.GymUserEntity;
+import com.gym.entity.InstructorEntity;
+import com.gym.entity.TrainingEntity;
+import com.gym.entity.TrainingType;
+import com.gym.entity.TrainingTypeEntity;
 import com.gym.mapper.TrainingMapper;
 import com.gym.requestDto.trainingRequest.CreateTrainingRequestDto;
 import com.gym.responseDto.trainingResponse.CustomerTrainingsResponseDto;
 import com.gym.responseDto.trainingResponse.InstructorTrainingsResponseDto;
 import com.gym.responseDto.trainingResponse.TrainingTypeResponseDto;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 public class TrainingMapperTest {
@@ -30,7 +34,8 @@ public class TrainingMapperTest {
         TrainingEntity trainingEntity = createMockTrainingEntity();
         trainingEntities.add(trainingEntity);
         //When
-        List<CustomerTrainingsResponseDto> result = trainingMapper.mapCustomerTrainingEntitiesToTrainingDtos(trainingEntities);
+        List<CustomerTrainingsResponseDto> result =
+            trainingMapper.mapCustomerTrainingEntitiesToTrainingDtos(trainingEntities);
         //Then
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getTrainingName()).isEqualTo(trainingEntity.getTrainingName());
@@ -45,7 +50,8 @@ public class TrainingMapperTest {
         TrainingEntity trainingEntity = createMockTrainingEntity();
         trainingEntities.add(trainingEntity);
         //When
-        List<InstructorTrainingsResponseDto> result = trainingMapper.mapInstructorTrainingEntitiesToTrainingDtos(trainingEntities);
+        List<InstructorTrainingsResponseDto> result = trainingMapper
+            .mapInstructorTrainingEntitiesToTrainingDtos(trainingEntities);
         //Then
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getTrainingName()).isEqualTo(trainingEntity.getTrainingName());
@@ -66,7 +72,8 @@ public class TrainingMapperTest {
         TrainingEntity result = trainingMapper.mapCreateTrainingRequestDtoToTrainingEntity(requestDto);
         //Then
         assertThat(result.getCustomer().getGymUserEntity().getUserName()).isEqualTo(requestDto.getCustomerUserName());
-        assertThat(result.getInstructor().getGymUserEntity().getUserName()).isEqualTo(requestDto.getInstructorUserName());
+        assertThat(result.getInstructor().getGymUserEntity().getUserName()).isEqualTo(
+            requestDto.getInstructorUserName());
         assertThat(result.getTrainingDuration()).isEqualTo(requestDto.getTrainingDuration());
         assertThat(result.getTrainingName()).isEqualTo(requestDto.getTrainingName());
     }
@@ -81,7 +88,7 @@ public class TrainingMapperTest {
         trainingTypeEntities.add(trainingTypeEntity);
         //When
         List<TrainingTypeResponseDto> result = trainingMapper.mapTrainingTypeEntitiesToTrainingTypeResponseDto(
-                trainingTypeEntities);
+            trainingTypeEntities);
         //Then
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getTrainingTypeName()).isEqualTo(trainingTypeEntity.getTrainingTypeName());

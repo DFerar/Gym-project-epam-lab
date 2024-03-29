@@ -1,5 +1,8 @@
 package mapperTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingType;
@@ -12,19 +15,15 @@ import com.gym.responseDto.instructorResponse.CreateInstructorResponseDto;
 import com.gym.responseDto.instructorResponse.GetInstructorProfileResponseDto;
 import com.gym.responseDto.instructorResponse.UpdateInstructorProfileResponseDto;
 import com.gym.service.GymUserService;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class InstructorMapperTest {
@@ -41,7 +40,7 @@ public class InstructorMapperTest {
         requestDto.setLastName(RandomStringUtils.randomAlphabetic(7));
 
         when(gymUserService.generateUniqueUserName(requestDto.getFirstName(), requestDto.getLastName()))
-                .thenReturn(RandomStringUtils.randomAlphabetic(7));
+            .thenReturn(RandomStringUtils.randomAlphabetic(7));
         //When
         GymUserEntity result = instructorMapper.mapCreateInstructorRequestDtoToUserEntity(requestDto);
         //Then
@@ -88,7 +87,7 @@ public class InstructorMapperTest {
         instructorEntity.setCustomers(new HashSet<>());
         //When
         GetInstructorProfileResponseDto result = instructorMapper.mapInstructorEntityToGetInstructorResponseDto(
-                instructorEntity);
+            instructorEntity);
         //Then
         assertThat(result.getFirstName()).isEqualTo(instructorEntity.getGymUserEntity().getFirstName());
         assertThat(result.getLastName()).isEqualTo(instructorEntity.getGymUserEntity().getLastName());
@@ -126,9 +125,9 @@ public class InstructorMapperTest {
         updatedInstructor.setCustomers(new HashSet<>());
         //When
         UpdateInstructorProfileResponseDto result = instructorMapper.mapInstructorEntityToUpdateInstructorResponseDto(
-                updatedInstructor);
+            updatedInstructor);
         //Then
-        assertThat(result. getUserName()).isEqualTo(updatedInstructor.getGymUserEntity().getUserName());
+        assertThat(result.getUserName()).isEqualTo(updatedInstructor.getGymUserEntity().getUserName());
         assertThat(result.getFirstName()).isEqualTo(updatedInstructor.getGymUserEntity().getFirstName());
         assertThat(result.getLastName()).isEqualTo(updatedInstructor.getGymUserEntity().getLastName());
         assertThat(result.getIsActive()).isEqualTo(updatedInstructor.getGymUserEntity().getIsActive());
@@ -148,7 +147,7 @@ public class InstructorMapperTest {
         instructorEntities.add(instructorEntity);
         //When
         List<InstructorForCustomerResponseDto> result = instructorMapper.mapInstructorEntitiesToInstructorResponseDto(
-                instructorEntities);
+            instructorEntities);
         //Then
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getUserName()).isEqualTo(instructorEntity.getGymUserEntity().getUserName());

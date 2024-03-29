@@ -51,7 +51,7 @@ Content-Type: application/json
 
 {
   "userName": "Test.Customer",
-  "oldPassword": "M5%@h*XS*0",
+  "oldPassword": "cToRn7$cy6",
   "newPassword": "1234567889"
 }
 

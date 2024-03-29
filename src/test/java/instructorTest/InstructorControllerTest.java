@@ -1,5 +1,8 @@
 package instructorTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import com.gym.controller.InstructorController;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
@@ -12,6 +15,8 @@ import com.gym.responseDto.instructorResponse.GetNotAssignedOnCustomerInstructor
 import com.gym.responseDto.instructorResponse.UpdateInstructorProfileResponseDto;
 import com.gym.service.AuthenticationService;
 import com.gym.service.InstructorService;
+import java.util.Collections;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,12 +25,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Collections;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class InstructorControllerTest {
@@ -49,9 +48,9 @@ public class InstructorControllerTest {
         InstructorEntity instructorEntity = new InstructorEntity();
         when(instructorMapper.mapCreateInstructorRequestDtoToUserEntity(requestDto)).thenReturn(userEntity);
         when(instructorService.createInstructor(userEntity, requestDto.getSpecialization()))
-                .thenReturn(instructorEntity);
+            .thenReturn(instructorEntity);
         when(instructorMapper.mapToResponseDto(instructorEntity.getGymUserEntity())).thenReturn(
-                new CreateInstructorResponseDto());
+            new CreateInstructorResponseDto());
 
         // When
         ResponseEntity<CreateInstructorResponseDto> response = instructorController.createInstructor(requestDto);
@@ -71,11 +70,11 @@ public class InstructorControllerTest {
 
         when(instructorService.getInstructorByUsername(username)).thenReturn(instructorEntity);
         when(instructorMapper.mapInstructorEntityToGetInstructorResponseDto(instructorEntity)).thenReturn(
-                new GetInstructorProfileResponseDto());
+            new GetInstructorProfileResponseDto());
 
         // When
         ResponseEntity<GetInstructorProfileResponseDto> response = instructorController.getInstructor(username,
-                loginUserName, loginPassword);
+            loginUserName, loginPassword);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -92,13 +91,14 @@ public class InstructorControllerTest {
         InstructorEntity instructorEntity = new InstructorEntity();
 
         when(instructorMapper.mapUpdateInstructorRequestDtoToUserEntity(newData)).thenReturn(gymUserEntityFromNewData);
-        when(instructorService.updateInstructor(gymUserEntityFromNewData, newData.getSpecialization())).thenReturn(instructorEntity);
+        when(instructorService.updateInstructor(gymUserEntityFromNewData, newData.getSpecialization()))
+            .thenReturn(instructorEntity);
         when(instructorMapper.mapInstructorEntityToUpdateInstructorResponseDto(instructorEntity))
-                .thenReturn(new UpdateInstructorProfileResponseDto());
+            .thenReturn(new UpdateInstructorProfileResponseDto());
 
         // When
         ResponseEntity<UpdateInstructorProfileResponseDto> response = instructorController.updateInstructor(newData,
-                loginUserName, loginPassword);
+            loginUserName, loginPassword);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -114,13 +114,13 @@ public class InstructorControllerTest {
         List<InstructorEntity> instructorEntities = Collections.emptyList();
 
         when(instructorService.getInstructorsNotAssignedToCustomerByCustomerUserName(username))
-                .thenReturn(instructorEntities);
+            .thenReturn(instructorEntities);
         when(instructorMapper.mapInstructorEntitiesToInstructorDtos(instructorEntities))
-                .thenReturn(Collections.emptyList());
+            .thenReturn(Collections.emptyList());
 
         // When
         ResponseEntity<List<GetNotAssignedOnCustomerInstructorsResponseDto>> response =
-                instructorController.getNotAssignedInstructors(username, loginUserName, loginPassword);
+            instructorController.getNotAssignedInstructors(username, loginUserName, loginPassword);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -137,7 +137,7 @@ public class InstructorControllerTest {
 
         // When
         ResponseEntity<String> response = instructorController.instructorActivation(
-                username, isActive, loginUserName, loginPassword);
+            username, isActive, loginUserName, loginPassword);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
