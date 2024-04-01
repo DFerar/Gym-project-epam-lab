@@ -1,0 +1,90 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+---
+
+spring:
+  config:
+    name: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gym
+    username: "gym"
+    password: "gym"
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  flyway:
+    baseline-on-migrate: true
+    locations: "classpath:db/migrations"
+
+---
+
+spring:
+  config:
+    name: local
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gym
+    username: "gym"
+    password: "gym"
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  flyway:
+    baseline-on-migrate: true
+    locations: "classpath:db/migrations"
+
+---
+
+spring:
+  config:
+    name: prod
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gym
+    username: "gym"
+    password: "gym"
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  flyway:
+    baseline-on-migrate: true
+    locations: "classpath:db/migrations"
+
+---
+
+spring:
+  config:
+    name: test
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gym
+    username: "gym"
+    password: "gym"
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  flyway:
+    baseline-on-migrate: true
+    locations: "classpath:db/migrations"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health, info, prometheus"
+  endpoint:
+    health:
+      show-details: always
+
+
+
+
+

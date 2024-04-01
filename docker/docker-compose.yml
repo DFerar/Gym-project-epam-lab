@@ -13,16 +13,6 @@ services:
       - postgres-stud-db-data:/var/lib/postgresql/data
     networks:
       - stud-network
-  tomcat-stud:
-    image: tomcat:10.0-jdk17-corretto
-    depends_on:
-      - postgres-stud
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./webapps:/usr/local/tomcat/webapps
-    networks:
-      - stud-network
 
 volumes:
   postgres-stud-db-data:
