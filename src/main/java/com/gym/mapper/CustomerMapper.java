@@ -1,5 +1,7 @@
 package com.gym.mapper;
 
+import static com.gym.utils.Utils.generatePassword;
+
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
@@ -10,14 +12,10 @@ import com.gym.responseDto.customerResponse.GetCustomerProfileResponseDto;
 import com.gym.responseDto.customerResponse.InstructorForCustomerResponseDto;
 import com.gym.responseDto.customerResponse.UpdateCustomerProfileResponseDto;
 import com.gym.service.GymUserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.sql.Date;
 import java.util.List;
 import java.util.Set;
-
-import static com.gym.utils.Utils.generatePassword;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +36,7 @@ public class CustomerMapper {
     public CustomerEntity mapCreateCustomerRequestDtoToCustomerEntity(CreateCustomerRequestDto customerDto) {
         CustomerEntity customerEntity = new CustomerEntity();
         customerEntity.setAddress(customerDto.getAddress());
-        customerEntity.setDateOfBirth(Date.valueOf(customerDto.getDateOfBirth()));
+        customerEntity.setDateOfBirth(customerDto.getDateOfBirth());
         return customerEntity;
     }
 
@@ -50,7 +48,7 @@ public class CustomerMapper {
     public GetCustomerProfileResponseDto mapCustomerEntityToGetCustomerResponseDto(CustomerEntity customerEntity) {
         return new GetCustomerProfileResponseDto(
                 customerEntity.getGymUserEntity().getFirstName(), customerEntity.getGymUserEntity().getLastName(),
-                customerEntity.getDateOfBirth().toString(), customerEntity.getAddress(), customerEntity.getGymUserEntity().getIsActive(),
+                customerEntity.getDateOfBirth(), customerEntity.getAddress(), customerEntity.getGymUserEntity().getIsActive(),
                 mapInstructorEntitiesToInstructorDtos(customerEntity.getInstructors())
         );
     }
@@ -68,7 +66,7 @@ public class CustomerMapper {
         GymUserEntity gymUserEntity = new GymUserEntity();
         gymUserEntity.setUserName(newData.getUserName());
         CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setDateOfBirth(Date.valueOf(newData.getDateOfBirth()));
+        customerEntity.setDateOfBirth(newData.getDateOfBirth());
         customerEntity.setAddress(newData.getAddress());
         return customerEntity;
     }
@@ -88,7 +86,7 @@ public class CustomerMapper {
                 updatedCustomer.getGymUserEntity().getUserName(),
                 updatedCustomer.getGymUserEntity().getFirstName(),
                 updatedCustomer.getGymUserEntity().getLastName(),
-                updatedCustomer.getDateOfBirth().toString(),
+                updatedCustomer.getDateOfBirth(),
                 updatedCustomer.getAddress(),
                 updatedCustomer.getGymUserEntity().getIsActive(),
                 mapInstructorEntitiesToInstructorDtos(updatedCustomer.getInstructors())

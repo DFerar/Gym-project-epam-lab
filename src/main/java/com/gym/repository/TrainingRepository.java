@@ -2,13 +2,12 @@ package com.gym.repository;
 
 import com.gym.entity.TrainingEntity;
 import com.gym.entity.TrainingType;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.sql.Date;
-import java.util.List;
 
 @Repository
 public interface TrainingRepository extends JpaRepository<TrainingEntity, Long> {
@@ -21,8 +20,8 @@ public interface TrainingRepository extends JpaRepository<TrainingEntity, Long> 
             "AND (:trainingTypeName IS NULL OR t.trainingType.trainingTypeName = :trainingTypeName)")
     List<TrainingEntity> findTrainingsByCustomerAndCriteria(
             @Param("customerUserName") String customerUserName,
-            @Param("fromDate") Date fromDate,
-            @Param("toDate") Date toDate,
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate,
             @Param("instructorName") String instructorName,
             @Param("trainingTypeName") TrainingType trainingTypeName
     );
@@ -34,8 +33,8 @@ public interface TrainingRepository extends JpaRepository<TrainingEntity, Long> 
             "AND (:customerName IS NULL OR t.customer.gymUserEntity.userName = :customerName)")
     List<TrainingEntity> findTrainingsByInstructorAndCriteria(
             @Param("instructorUserName") String instructorUserName,
-            @Param("fromDate") Date fromDate,
-            @Param("toDate") Date toDate,
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate,
             @Param("customerName") String customerName
     );
 

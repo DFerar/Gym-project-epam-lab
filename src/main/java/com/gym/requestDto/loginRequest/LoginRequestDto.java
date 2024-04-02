@@ -1,6 +1,6 @@
 package com.gym.requestDto.loginRequest;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginRequestDto {
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String userName;
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String password;
 }

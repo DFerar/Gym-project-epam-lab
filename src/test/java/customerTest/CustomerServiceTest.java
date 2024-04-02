@@ -17,7 +17,7 @@ import com.gym.repository.TrainingRepository;
 import com.gym.service.CustomerService;
 import com.gym.service.GymUserService;
 import com.gym.utils.Utils;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,7 +55,7 @@ public class CustomerServiceTest {
         GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password,
             true);
 
-        CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
+        CustomerEntity customerEntity = new CustomerEntity(1L, LocalDate.of(1990, 1, 1), address,
             gymUserEntity, null);
 
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(gymUserEntity);
@@ -79,7 +79,7 @@ public class CustomerServiceTest {
         GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userNameToDto, password,
             true);
 
-        CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
+        CustomerEntity customerEntity = new CustomerEntity(1L, LocalDate.of(1990, 1, 1), address,
             gymUserEntity, null);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
@@ -104,7 +104,7 @@ public class CustomerServiceTest {
 
         when(gymUserRepository.findByUserName(userName)).thenReturn(gymUserEntity);
         //When
-        customerService.changeCustomersActivity(userName, newActivity);
+        customerService.changeCustomersActivity(userName);
         //Assert
         verify(gymUserRepository, times(1)).save(gymUserEntity);
         assertThat(gymUserEntity.getIsActive()).isEqualTo(newActivity);
@@ -122,7 +122,7 @@ public class CustomerServiceTest {
         GymUserEntity userEntityFromNewData = new GymUserEntity(1L, firstName, lastName, userName, password,
             true);
 
-        CustomerEntity customerEntityFromData = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
+        CustomerEntity customerEntityFromData = new CustomerEntity(1L, LocalDate.of(1990, 1, 1), address,
             userEntityFromNewData, null);
 
         GymUserEntity updatedUser = new GymUserEntity();
@@ -150,7 +150,7 @@ public class CustomerServiceTest {
         String userNameOfInstructor = RandomStringUtils.randomAlphabetic(7);
         GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userNameOfInstructor, password,
             true);
-        CustomerEntity customerEntity = new CustomerEntity(1L, Date.valueOf("1990-01-01"), address,
+        CustomerEntity customerEntity = new CustomerEntity(1L, LocalDate.of(1990, 1, 1), address,
             gymUserEntity, null);
 
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);

@@ -14,7 +14,7 @@ import com.gym.responseDto.customerResponse.CreateCustomerResponseDto;
 import com.gym.responseDto.customerResponse.InstructorForCustomerResponseDto;
 import com.gym.responseDto.customerResponse.UpdateCustomerProfileResponseDto;
 import com.gym.service.GymUserService;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +57,7 @@ public class CustomerMapperTest {
         // Given
         CreateCustomerRequestDto customerDto = new CreateCustomerRequestDto();
         customerDto.setAddress(RandomStringUtils.randomAlphabetic(7));
-        customerDto.setDateOfBirth("1990-01-01");
+        customerDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
 
         // When
         CustomerEntity result = customerMapper.mapCreateCustomerRequestDtoToCustomerEntity(customerDto);
@@ -65,7 +65,7 @@ public class CustomerMapperTest {
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getAddress()).isEqualTo(customerDto.getAddress());
-        assertThat(result.getDateOfBirth()).isEqualTo(Date.valueOf(customerDto.getDateOfBirth()));
+        assertThat(result.getDateOfBirth()).isEqualTo(customerDto.getDateOfBirth());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class CustomerMapperTest {
         userEntity.setIsActive(true);
         customerEntity.setGymUserEntity(userEntity);
         customerEntity.setAddress(address);
-        customerEntity.setDateOfBirth(Date.valueOf("1990-01-01"));
+        customerEntity.setDateOfBirth(LocalDate.of(1990, 1, 1));
 
 
         Set<InstructorEntity> instructors = new HashSet<>();

@@ -140,7 +140,7 @@ class InstructorServiceTest {
 
         when(gymUserRepository.findByUserName(userName)).thenReturn(gymUserEntity);
         //When
-        instructorService.changeInstructorActivity(userName, newActivity);
+        instructorService.changeInstructorActivity(userName);
         //Assert
         verify(gymUserRepository, times(1)).save(gymUserEntity);
         assertThat(gymUserEntity.getIsActive()).isEqualTo(newActivity);

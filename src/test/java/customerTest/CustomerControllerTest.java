@@ -93,9 +93,9 @@ public class CustomerControllerTest {
         // Given
         UpdateCustomerProfileRequestDto newData = new UpdateCustomerProfileRequestDto();
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        ;
+
         String loginPassword = RandomStringUtils.randomAlphabetic(7);
-        ;
+
         GymUserEntity userEntityFromNewData = new GymUserEntity();
         CustomerEntity customerEntityFromNewData = new CustomerEntity();
 
@@ -134,13 +134,12 @@ public class CustomerControllerTest {
     public void shouldChangeCustomerActivity() {
         // Given
         String username = RandomStringUtils.randomAlphabetic(7);
-        Boolean isActive = true;
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = RandomStringUtils.randomAlphabetic(7);
 
         // When
         ResponseEntity<String> response = customerController.customerActivation(
-            username, isActive, loginUserName, loginPassword);
+            username,  loginUserName, loginPassword);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

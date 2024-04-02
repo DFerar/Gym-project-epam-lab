@@ -1,6 +1,8 @@
 package com.gym.requestDto.trainingRequest;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,14 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateTrainingRequestDto {
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String customerUserName;
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String instructorUserName;
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String trainingName;
-    @NotNull
-    private String trainingDate;
-    @NotNull
+    @NotNull(message = "Should not be empty")
+    private LocalDate trainingDate;
+    @NotNull(message = "Should not be empty")
     private Integer trainingDuration;
 }

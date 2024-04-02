@@ -8,6 +8,7 @@ import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
 import com.gym.service.GymUserService;
 import com.gym.utils.Utils;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,10 +67,11 @@ public class GymUserServiceTest {
         String firstName = RandomStringUtils.randomAlphabetic(7);
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String baseUserName = firstName + "." + lastName;
-        String generatedUserName = baseUserName + "2";
+        String generatedUserName = baseUserName + "1";
 
         when(gymUserRepository.existsByUserName(baseUserName)).thenReturn(true);
-        when(gymUserRepository.findMaxUserId()).thenReturn(1L);
+        when(gymUserRepository.findGymUserEntitiesByFirstNameAndLastName(firstName, lastName))
+            .thenReturn(List.of(new GymUserEntity()));
         //When
         String result = gymUserService.generateUniqueUserName(firstName, lastName);
         //Assert

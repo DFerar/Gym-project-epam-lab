@@ -4,8 +4,8 @@ POST http://localhost:8080/customer/create
 Content-Type: application/json
 
 {
-  "firstName": "Test",
-  "lastName": "Customer",
+  "firstName": "123",
+  "lastName": "123",
   "dateOfBirth": "1997-01-01",
   "address": "test address"
 }
@@ -16,8 +16,8 @@ POST http://localhost:8080/instructor/create
 Content-Type: application/json
 
 {
-  "firstName": "Test",
-  "lastName": "Instructor",
+  "firstName": "",
+  "lastName": "",
   "specialization": "CARDIO"
 }
 

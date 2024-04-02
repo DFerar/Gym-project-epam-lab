@@ -10,13 +10,12 @@ import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -48,12 +47,12 @@ public class CustomerService {
     }
 
     @Transactional
-    public void changeCustomersActivity(String username, Boolean newActivity) {
+    public void changeCustomersActivity(String username) {
         GymUserEntity gymUserEntity = gymUserRepository.findByUserName(username);
         if (gymUserEntity == null) {
             throw new UserNotFoundException("User not found");
         }
-        gymUserEntity.setIsActive(newActivity);
+        gymUserEntity.setIsActive(!gymUserEntity.getIsActive());
         gymUserRepository.save(gymUserEntity);
         log.info("Activity changed on customer: {}", gymUserEntity);
     }

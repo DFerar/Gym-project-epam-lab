@@ -19,7 +19,7 @@ import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import com.gym.repository.TrainingTypeRepository;
 import com.gym.service.TrainingService;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -88,8 +88,8 @@ public class TrainingServiceTest {
     public void shouldGetCustomerListOfTrainings() {
         //Given
         String customerUserName = RandomStringUtils.randomAlphabetic(7);
-        Date fromDate = Date.valueOf("2024-01-01");
-        Date toDate = Date.valueOf("2024-03-03");
+        LocalDate fromDate = LocalDate.of(2024, 1, 1);
+        LocalDate toDate = LocalDate.of(2024, 3, 3);
         String instructorName = RandomStringUtils.randomAlphabetic(7);
         TrainingType trainingTypeName = CARDIO;
 
@@ -107,8 +107,8 @@ public class TrainingServiceTest {
     @Test
     public void shouldGetInstructorListOfTrainings() {
         String instructorUserName = RandomStringUtils.randomAlphabetic(7);
-        Date fromDate = Date.valueOf("2024-01-01");
-        Date toDate = Date.valueOf("2024-03-03");
+        LocalDate fromDate = LocalDate.of(2024, 1, 1);
+        LocalDate toDate = LocalDate.of(2024, 3, 3);
         String customerName = RandomStringUtils.randomAlphabetic(7);
 
         List<TrainingEntity> expectedTrainings = Collections.singletonList(new TrainingEntity());

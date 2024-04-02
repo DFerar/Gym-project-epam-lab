@@ -1,6 +1,10 @@
 package com.gym.service;
 
-import com.gym.entity.*;
+import com.gym.entity.CustomerEntity;
+import com.gym.entity.InstructorEntity;
+import com.gym.entity.TrainingEntity;
+import com.gym.entity.TrainingType;
+import com.gym.entity.TrainingTypeEntity;
 import com.gym.exceptionHandler.CustomerNotFoundException;
 import com.gym.exceptionHandler.InstructorNotFoundException;
 import com.gym.exceptionHandler.TrainingTypeNotFoundException;
@@ -9,13 +13,12 @@ import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import com.gym.repository.TrainingTypeRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.sql.Date;
-import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -56,15 +59,15 @@ public class TrainingService {
         log.info("Created training:{}", savedTraining);
     }
 
-    public List<TrainingEntity> getCustomerListOfTrainings(String customerUserName, Date fromDate, Date toDate,
-                                                        String instructorName, TrainingType trainingTypeName) {
+    public List<TrainingEntity> getCustomerListOfTrainings(String customerUserName, LocalDate fromDate, LocalDate toDate,
+                                                           String instructorName, TrainingType trainingTypeName) {
         return trainingRepository.findTrainingsByCustomerAndCriteria(
                customerUserName, fromDate, toDate, instructorName, trainingTypeName
         );
     }
 
-    public List<TrainingEntity> getInstructorListOfTrainings(String userName, Date fromDate,
-                                                          Date toDate, String customerName) {
+    public List<TrainingEntity> getInstructorListOfTrainings(String userName, LocalDate fromDate,
+                                                          LocalDate toDate, String customerName) {
         return trainingRepository.findTrainingsByInstructorAndCriteria(
                 userName, fromDate, toDate, customerName
         );

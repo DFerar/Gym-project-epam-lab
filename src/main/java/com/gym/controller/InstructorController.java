@@ -93,11 +93,10 @@ public class InstructorController {
     @PatchMapping("/activate/{username}")
     @Operation(summary = "Activate an instructor", description = "Changes the activation status of an instructor")
     public ResponseEntity<String> instructorActivation(@PathVariable String username,
-                                                       @RequestParam Boolean isActive,
                                                        @RequestParam String loginUserName,
                                                        @RequestParam String loginPassword) {
         authenticationService.matchInstructorCredentials(loginUserName, loginPassword);
-        instructorService.changeInstructorActivity(username, isActive);
+        instructorService.changeInstructorActivity(username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

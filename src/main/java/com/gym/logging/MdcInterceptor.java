@@ -3,10 +3,9 @@ package com.gym.logging;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.UUID;
 import org.slf4j.MDC;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import java.util.UUID;
 
 public class MdcInterceptor implements HandlerInterceptor {
 
@@ -15,6 +14,8 @@ public class MdcInterceptor implements HandlerInterceptor {
         String transactionId = UUID.randomUUID().toString();
         MDC.put("transactionId", transactionId);
         MDC.put("requestId", request.getHeader("X-Request-ID"));
+        MDC.put("uri", request.getRequestURI());
+        MDC.put("httpMethod", request.getMethod());
         return true;
     }
 

@@ -131,13 +131,12 @@ public class InstructorControllerTest {
     public void shouldChangeInstructorActivity() {
         // Given
         String username = RandomStringUtils.randomAlphabetic(7);
-        Boolean isActive = true;
         String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = RandomStringUtils.randomAlphabetic(7);
 
         // When
         ResponseEntity<String> response = instructorController.instructorActivation(
-            username, isActive, loginUserName, loginPassword);
+            username, loginUserName, loginPassword);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);

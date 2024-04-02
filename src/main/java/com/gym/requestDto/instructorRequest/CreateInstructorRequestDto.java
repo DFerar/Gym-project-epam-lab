@@ -1,7 +1,7 @@
 package com.gym.requestDto.instructorRequest;
 
 import com.gym.entity.TrainingType;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateInstructorRequestDto {
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String firstName;
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String lastName;
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private TrainingType specialization;
 }

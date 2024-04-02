@@ -13,7 +13,7 @@ import com.gym.requestDto.trainingRequest.CreateTrainingRequestDto;
 import com.gym.responseDto.trainingResponse.CustomerTrainingsResponseDto;
 import com.gym.responseDto.trainingResponse.InstructorTrainingsResponseDto;
 import com.gym.responseDto.trainingResponse.TrainingTypeResponseDto;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -65,7 +65,7 @@ public class TrainingMapperTest {
         CreateTrainingRequestDto requestDto = new CreateTrainingRequestDto();
         requestDto.setCustomerUserName(RandomStringUtils.randomAlphabetic(7));
         requestDto.setInstructorUserName(RandomStringUtils.randomAlphabetic(7));
-        requestDto.setTrainingDate("2024-03-25");
+        requestDto.setTrainingDate(LocalDate.of(2024, 3, 25));
         requestDto.setTrainingDuration(60);
         requestDto.setTrainingName(RandomStringUtils.randomAlphabetic(10));
         //When
@@ -97,7 +97,7 @@ public class TrainingMapperTest {
     private TrainingEntity createMockTrainingEntity() {
         TrainingEntity trainingEntity = new TrainingEntity();
         trainingEntity.setTrainingName(RandomStringUtils.randomAlphabetic(10));
-        trainingEntity.setTrainingDate(Date.valueOf("2024-03-25"));
+        trainingEntity.setTrainingDate(LocalDate.of(2024, 3, 25));
         trainingEntity.setTrainingDuration(60);
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity();
         trainingTypeEntity.setTrainingTypeName(TrainingType.CARDIO);

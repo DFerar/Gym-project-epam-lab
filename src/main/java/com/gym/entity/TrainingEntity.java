@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import java.sql.Date;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,7 +38,7 @@ public class TrainingEntity {
     @JoinColumn(name = "training_type_id")
     private TrainingTypeEntity trainingType;
     @Column(name = "training_date")
-    private Date trainingDate;
+    private LocalDate trainingDate;
     @Column(name = "training_duration")
     private Integer trainingDuration;
 }

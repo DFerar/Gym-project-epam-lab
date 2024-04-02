@@ -13,11 +13,10 @@ import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingTypeRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -72,12 +71,12 @@ public class InstructorService {
     }
 
     @Transactional
-    public void changeInstructorActivity(String username, Boolean newActivity) {
+    public void changeInstructorActivity(String username) {
         GymUserEntity gymUserEntity = gymUserRepository.findByUserName(username);
         if (gymUserEntity == null) {
             throw new UserNotFoundException("User not found");
         }
-        gymUserEntity.setIsActive(newActivity);
+        gymUserEntity.setIsActive(!gymUserEntity.getIsActive());
         gymUserRepository.save(gymUserEntity);
         log.info("Activity changed on user:{}", gymUserEntity);
     }

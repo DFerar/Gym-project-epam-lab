@@ -93,11 +93,10 @@ public class CustomerController {
     @PatchMapping("/activate/{username}")
     @Operation(summary = "Activate a customer", description = "Changes the activation status of a customer")
     public ResponseEntity<String> customerActivation(@PathVariable String username,
-                                                     @RequestParam Boolean isActive,
                                                      @RequestParam String loginUserName,
                                                      @RequestParam String loginPassword) {
         authenticationService.matchCustomerCredentials(loginUserName, loginPassword);
-        customerService.changeCustomersActivity(username, isActive);
+        customerService.changeCustomersActivity(username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

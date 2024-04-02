@@ -1,6 +1,8 @@
 package com.gym.requestDto.customerRequest;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,14 +11,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateCustomerProfileRequestDto {
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String userName;
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String firstName;
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String lastName;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     private String address;
-    @NotNull
+    @NotNull(message = "Should not be empty")
     private Boolean isActive;
 }

@@ -1,6 +1,7 @@
 package com.gym.requestDto.instructorRequest;
 
 import com.gym.entity.TrainingType;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,14 +12,14 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateInstructorProfileRequestDto {
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String userName;
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String firstName;
-    @NotNull
+    @NotEmpty(message = "Should not be empty")
     private String lastName;
     @ReadOnlyProperty
     private TrainingType specialization;
-    @NotNull
+    @NotNull(message = "Should not be empty")
     private Boolean isActive;
 }

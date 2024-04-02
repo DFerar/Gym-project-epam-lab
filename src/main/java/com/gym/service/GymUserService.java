@@ -27,18 +27,15 @@ public class GymUserService {
         return gymUserRepository.save(gymUserEntity);
     }
 
+    @Transactional
     public String generateUniqueUserName(String firstName, String lastName) {
         String baseUserName = firstName + "." + lastName;
         Boolean userNameExist = gymUserRepository.existsByUserName(baseUserName);
         if (userNameExist) {
-            long nextUserId = getNextAvailableUserId() + 1L;
-            return baseUserName + Long.toString(nextUserId);
+            int nextUserSuffix = gymUserRepository.findGymUserEntitiesByFirstNameAndLastName(firstName, lastName).size();
+            return baseUserName + nextUserSuffix;
         } else {
             return baseUserName;
         }
-    }
-
-    private long getNextAvailableUserId() {
-        return gymUserRepository.findMaxUserId();
     }
 }

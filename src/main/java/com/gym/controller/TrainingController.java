@@ -40,8 +40,8 @@ public class TrainingController {
         @RequestParam String loginPassword) {
         authenticationService.matchCustomerCredentials(loginUsername, loginPassword);
         List<TrainingEntity> trainingEntities = trainingService.getCustomerListOfTrainings(requestDto.getUserName(),
-            trainingMapper.mapStringDateToObject(requestDto.getFromDate()),
-            trainingMapper.mapStringDateToObject(requestDto.getToDate()),
+            requestDto.getFromDate(),
+            requestDto.getToDate(),
             requestDto.getInstructorName(),
             requestDto.getTrainingType());
         return new ResponseEntity<>(trainingMapper.mapCustomerTrainingEntitiesToTrainingDtos(trainingEntities),
@@ -58,8 +58,8 @@ public class TrainingController {
         authenticationService.matchInstructorCredentials(loginUsername, loginPassword);
         List<TrainingEntity> trainingEntities = trainingService.getInstructorListOfTrainings(
             requestDto.getUserName(),
-            trainingMapper.mapStringDateToObject(requestDto.getFromDate()),
-            trainingMapper.mapStringDateToObject(requestDto.getToDate()),
+            requestDto.getFromDate(),
+            requestDto.getToDate(),
             requestDto.getCustomerName());
         return new ResponseEntity<>(trainingMapper.mapInstructorTrainingEntitiesToTrainingDtos(trainingEntities),
             HttpStatus.OK);
