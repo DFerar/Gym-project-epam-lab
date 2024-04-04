@@ -5,9 +5,9 @@ import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingType;
 import com.gym.entity.TrainingTypeEntity;
-import com.gym.exceptionHandler.InstructorNotFoundException;
-import com.gym.exceptionHandler.TrainingTypeNotFoundException;
-import com.gym.exceptionHandler.UserNotFoundException;
+import com.gym.exception.InstructorNotFoundException;
+import com.gym.exception.TrainingTypeNotFoundException;
+import com.gym.exception.UserNotFoundException;
 import com.gym.mapper.InstructorMapper;
 import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
@@ -28,11 +28,19 @@ public class InstructorService {
     private final TrainingTypeRepository trainingTypeRepository;
     private final InstructorMapper instructorMapper;
 
+    /**
+     * Creates a new instructor and saves it in the database, logging the process.
+     *
+     * @param gymUserEntity  GymUserEntity object for the new instructor.
+     * @param specialization TrainingType object for the instructor's specialization.
+     * @return InstructorEntity representing the newly created and saved instructor.
+     * @throws TrainingTypeNotFoundException When the provided training type is not found.
+     */
     @Transactional
     public InstructorEntity createInstructor(GymUserEntity gymUserEntity, TrainingType specialization) {
         GymUserEntity savedUser = gymUserRepository.save(gymUserEntity);
         TrainingTypeEntity trainingType =
-                trainingTypeRepository.findByTrainingTypeName(specialization);
+            trainingTypeRepository.findByTrainingTypeName(specialization);
         if (trainingType == null) {
             throw new TrainingTypeNotFoundException("Training type not found");
         }
@@ -42,6 +50,14 @@ public class InstructorService {
         return instructorEntity;
     }
 
+    /**
+     * Updates instructor and GymUserEntity details in the database.
+     *
+     * @param userEntity     GymUserEntity object containing the updated details.
+     * @param specialization TrainingType for the instructor's updated specialization.
+     * @return InstructorEntity representing the updated instructor.
+     * @throws InstructorNotFoundException When an instructor with the given username is not found.
+     */
     @Transactional
     public InstructorEntity updateInstructor(GymUserEntity userEntity, TrainingType specialization) {
         GymUserEntity updatedUser = gymUserService.updateUser(userEntity);
@@ -50,7 +66,7 @@ public class InstructorService {
         trainingType.setTrainingTypeName(specialization);
 
         InstructorEntity instructorEntity = instructorRepository.findInstructorEntityByGymUserEntityUserName(
-                updatedUser.getUserName());
+            updatedUser.getUserName());
         if (instructorEntity == null) {
             throw new InstructorNotFoundException("Instructor not found");
         }
@@ -61,6 +77,13 @@ public class InstructorService {
         return updatedInstructor;
     }
 
+    /**
+     * Retrieves an InstructorEntity based on a provided username.
+     *
+     * @param username The username associated with the instructor.
+     * @return InstructorEntity associated with the username.
+     * @throws InstructorNotFoundException When an instructor with the given username is not found.
+     */
     public InstructorEntity getInstructorByUsername(String username) {
         InstructorEntity instructorEntity = instructorRepository.findInstructorEntityByGymUserEntityUserName(username);
         if (instructorEntity == null) {
@@ -70,6 +93,12 @@ public class InstructorService {
         return instructorEntity;
     }
 
+    /**
+     * Changes the activity status of an instructor.
+     *
+     * @param username The username associated with the instructor.
+     * @throws UserNotFoundException When a user with the given username is not found.
+     */
     @Transactional
     public void changeInstructorActivity(String username) {
         GymUserEntity gymUserEntity = gymUserRepository.findByUserName(username);
@@ -81,6 +110,12 @@ public class InstructorService {
         log.info("Activity changed on user:{}", gymUserEntity);
     }
 
+    /**
+     * Retrieves all instructors not currently assigned to a particular customer.
+     *
+     * @param customerUsername The username of the customer.
+     * @return a list of InstructorEntity objects not assigned to the customer.
+     */
     public List<InstructorEntity> getInstructorsNotAssignedToCustomerByCustomerUserName(String customerUsername) {
         log.info("Got instructors not assigned to customer:{}", customerUsername);
         return instructorRepository.findUnassignedInstructorsByCustomerUsername(customerUsername);

@@ -1,8 +1,8 @@
 package com.gym.controller;
 
+import com.gym.dto.response.training.TrainingTypeResponseDto;
 import com.gym.entity.TrainingTypeEntity;
 import com.gym.mapper.TrainingMapper;
-import com.gym.responseDto.trainingResponse.TrainingTypeResponseDto;
 import com.gym.service.AuthenticationService;
 import com.gym.service.TrainingTypeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +25,14 @@ public class TrainingTypeController {
     private final AuthenticationService authenticationService;
     private final TrainingMapper trainingMapper;
 
+    /**
+     * This is @GetMapping("/all") or getAllTrainingTypes method.
+     * It retrieves a list of all training types available in the system.
+     *
+     * @param loginUserName The username of the requestee.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<List<TrainingTypeResponseDto>>} A list of all training types in the system.
+     */
     @GetMapping("/all")
     @Operation(summary = "Get all training types", description = "Returns a list of all training types")
     public ResponseEntity<List<TrainingTypeResponseDto>> getAllTrainingTypes(@RequestParam String loginUserName,

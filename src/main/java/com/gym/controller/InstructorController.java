@@ -1,15 +1,15 @@
 package com.gym.controller;
 
 
+import com.gym.dto.request.instructor.CreateInstructorRequestDto;
+import com.gym.dto.request.instructor.UpdateInstructorProfileRequestDto;
+import com.gym.dto.response.instructor.CreateInstructorResponseDto;
+import com.gym.dto.response.instructor.GetInstructorProfileResponseDto;
+import com.gym.dto.response.instructor.GetNotAssignedOnCustomerInstructorsResponseDto;
+import com.gym.dto.response.instructor.UpdateInstructorProfileResponseDto;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.mapper.InstructorMapper;
-import com.gym.requestDto.instructorRequest.CreateInstructorRequestDto;
-import com.gym.requestDto.instructorRequest.UpdateInstructorProfileRequestDto;
-import com.gym.responseDto.instructorResponse.CreateInstructorResponseDto;
-import com.gym.responseDto.instructorResponse.GetInstructorProfileResponseDto;
-import com.gym.responseDto.instructorResponse.GetNotAssignedOnCustomerInstructorsResponseDto;
-import com.gym.responseDto.instructorResponse.UpdateInstructorProfileResponseDto;
 import com.gym.service.AuthenticationService;
 import com.gym.service.InstructorService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,6 +38,14 @@ public class InstructorController {
     private final InstructorMapper instructorMapper;
     private final AuthenticationService authenticationService;
 
+    /**
+     * This is @PostMapping("/create") or createInstructor method.
+     * It creates a new instructor entity and maps those details into
+     * a response data transfer object to be returned to the client.
+     *
+     * @param instructorDto The client request body containing details for instructor creation.
+     * @return {@code ResponseEntity<CreateInstructorResponseDto>} The created instructor details mapped into a response data transfer object.
+     */
     @PostMapping("/create")
     @Operation(summary = "Create an instructor", description = "Creates a new instructor and returns their data")
     public ResponseEntity<CreateInstructorResponseDto> createInstructor(
@@ -49,6 +57,16 @@ public class InstructorController {
             HttpStatus.CREATED);
     }
 
+    /**
+     * This is @GetMapping("/{username}") or getInstructor method.
+     * It returns the details of an instructor entity identified by
+     * the supplied username as a response data transfer object.
+     *
+     * @param username      The unique identifier of the instructor whose data is to be retrieved.
+     * @param loginUserName The username of the requestee who is seeking information.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<GetInstructorProfileResponseDto>} The response data transfer object of the identified instructor.
+     */
     @GetMapping("/{username}")
     @Operation(summary = "Get instructor data", description = "Returns the data of an instructor by their username")
     public ResponseEntity<GetInstructorProfileResponseDto> getInstructor(@PathVariable String username,
@@ -60,6 +78,16 @@ public class InstructorController {
             HttpStatus.OK);
     }
 
+    /**
+     * This is @PutMapping("/update") or updateInstructor method.
+     * It updates an instructor entity's details with the supplied new information
+     * and returns the updated details as a response data transfer object.
+     *
+     * @param newData       New details to update into the instructor profile.
+     * @param loginUserName The username of the requestee who is asking for profile update.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<UpdateInstructorProfileResponseDto>} The updated instructor details in a response data transfer object.
+     */
     @PutMapping("/update")
     @Operation(summary = "Update instructor data", description =
         "Updates an instructor's data and returns the updated data")
@@ -76,6 +104,15 @@ public class InstructorController {
             HttpStatus.OK);
     }
 
+    /**
+     * This is @GetMapping("/unassigned-trainers/{username}") or getNotAssignedInstructors method.
+     * It fetches a list of instructors who are not assigned to the specified customer.
+     *
+     * @param username      The username of the customer for whom instructors are to be retrieved.
+     * @param loginUserName The username of the requestee.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<List<GetNotAssignedOnCustomerInstructorsResponseDto>>} The list of instructors available for assignment.
+     */
     @GetMapping("/unassigned-trainers/{username}")
     @Operation(summary = "Get unassigned instructors", description =
         "Returns a list of instructors not assigned to a specific customer")
@@ -90,6 +127,15 @@ public class InstructorController {
             HttpStatus.OK);
     }
 
+    /**
+     * This is @PatchMapping("/activate/{username}") or instructorActivation method.
+     * It changes the status of a specified instructor from active to inactive or vice versa.
+     *
+     * @param username      The username of the instructor to be activated/deactivated.
+     * @param loginUserName The username of the requestee.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<String>} An HTTP status indicating the success or failure of the activation/deactivation operation.
+     */
     @PatchMapping("/activate/{username}")
     @Operation(summary = "Activate an instructor", description = "Changes the activation status of an instructor")
     public ResponseEntity<String> instructorActivation(@PathVariable String username,

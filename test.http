@@ -4,8 +4,8 @@ POST http://localhost:8080/customer/create
 Content-Type: application/json
 
 {
-  "firstName": "123",
-  "lastName": "123",
+  "firstName": "Test",
+  "lastName": "Customer",
   "dateOfBirth": "1997-01-01",
   "address": "test address"
 }
@@ -16,8 +16,8 @@ POST http://localhost:8080/instructor/create
 Content-Type: application/json
 
 {
-  "firstName": "",
-  "lastName": "",
+  "firstName": "Test",
+  "lastName": "Instructor",
   "specialization": "CARDIO"
 }
 
@@ -51,7 +51,7 @@ Content-Type: application/json
 
 {
   "userName": "Test.Customer",
-  "oldPassword": "cToRn7$cy6",
+  "oldPassword": "k1fD?d+jLZ",
   "newPassword": "1234567889"
 }
 
@@ -129,7 +129,7 @@ Content-Type: application/json
 
 ###
 //activate customer
-PATCH http://localhost:8080/customer/activate/Test.Customer2?isActive=true&loginUserName=admin.admin&loginPassword=admin
+PATCH http://localhost:8080/customer/activate/Test.Customer2?loginUserName=admin.admin&loginPassword=admin
 Content-Type: application/x-www-form-urlencoded
 
 <> 2024-03-24T152714.500.html
@@ -137,7 +137,7 @@ Content-Type: application/x-www-form-urlencoded
 
 ###
 //activate instructor
-PATCH http://localhost:8080/instructor/activate/Test.Instructor2?isActive=true&loginUserName=admin.admin&loginPassword=admin
+PATCH http://localhost:8080/instructor/activate/Test.Instructor2?loginUserName=admin.admin&loginPassword=admin
 Content-Type: application/x-www-form-urlencoded
 
 ###
