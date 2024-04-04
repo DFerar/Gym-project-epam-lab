@@ -1,8 +1,5 @@
 package com.gym.entity;
 
-import lombok.ToString;
-
-@ToString
 public enum TrainingType {
-    CARDIO, TRX, CYCLE
+    CARDIO, TRX, CYCLE, KEK, BOX, ABS
 }

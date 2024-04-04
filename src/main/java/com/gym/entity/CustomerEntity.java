@@ -1,14 +1,24 @@
 package com.gym.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "customer", schema = "public", catalog = "gym")
@@ -16,24 +26,22 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "instructors")
-@SequenceGenerator(name = "customer_SEQ",sequenceName = "customer_seq", allocationSize = 1)
+@SequenceGenerator(name = "customer_SEQ", sequenceName = "customer_seq", allocationSize = 1)
 public class CustomerEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_SEQ")
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
-    @Basic
+    private LocalDate dateOfBirth;
     @Column(name = "address")
     private String address;
     @OneToOne
     @JoinColumn(name = "user_id")
     private GymUserEntity gymUserEntity;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "customer_instructor",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "instructor_id"))
+        joinColumns = @JoinColumn(name = "customer_id"),
+        inverseJoinColumns = @JoinColumn(name = "instructor_id"))
     private Set<InstructorEntity> instructors = new HashSet<>();
 }

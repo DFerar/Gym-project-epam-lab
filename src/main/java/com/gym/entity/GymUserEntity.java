@@ -1,6 +1,12 @@
 package com.gym.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SequenceGenerator(name = "gym_user_SEQ", sequenceName = "gym_user_seq",  allocationSize = 1)
+@SequenceGenerator(name = "gym_user_SEQ", sequenceName = "gym_user_seq", allocationSize = 1)
 public class GymUserEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gym_user_SEQ")
     @Id

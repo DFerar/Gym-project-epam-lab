@@ -3,6 +3,7 @@ plugins {
     id 'jacoco'
     id 'org.flywaydb.flyway' version '10.8.1'
     id 'checkstyle'
+    id 'war'
 }
 
 group = 'com.gym'
@@ -12,13 +13,22 @@ repositories {
     mavenCentral()
 }
 
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
 dependencies {
     //core
     implementation 'org.springframework:spring-context:6.1.3'
+    implementation 'org.springframework:spring-webmvc:6.1.4'
+    implementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
     implementation 'org.slf4j:slf4j-api:2.0.7'
     implementation 'ch.qos.logback:logback-classic:1.4.14'
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
+    implementation 'org.hibernate.validator:hibernate-validator-annotation-processor:8.0.1.Final'
     //test
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
@@ -38,6 +48,8 @@ dependencies {
     implementation 'org.postgresql:postgresql:42.6.0'
     //utils
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.2.0'
 }
 
 test {
@@ -58,11 +70,17 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                     "com/gym/GymCRMApp.*",
                     "com/gym/entity/**.*",
-                    "com/gym/storage/StorageInitializer.*",
-                    "com/gym/AppConfig.*",
-                    "com/gym/GymCRMFacade.*",
                     "com/gym/repositories/**.*",
-                    "com/gym/dto/**.*"
+                    "com/gym/requestDto/customerRequest/**.*",
+                    "com/gym/requestDto/instructorRequest/**.*",
+                    "com/gym/requestDto/loginRequest/**.*",
+                    "com/gym/requestDto/trainingRequest/**.*",
+                    "com/gym/responseDto/customerResponse/**.*",
+                    "com/gym/responseDto/instructorResponse/**.*",
+                    "com/gym/responseDto/trainingResponse/**.*",
+                    "com/gym/configuration/**.*",
+                    "com/gym/logging/**.*",
+                    "com/gym/AppConfig.*"
             ])
         }))
     }

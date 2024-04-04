@@ -1,23 +1,24 @@
 package com.gym.service;
 
-import com.gym.dto.TrainingDto;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
+import com.gym.entity.TrainingType;
 import com.gym.entity.TrainingTypeEntity;
+import com.gym.exceptionHandler.CustomerNotFoundException;
+import com.gym.exceptionHandler.InstructorNotFoundException;
+import com.gym.exceptionHandler.TrainingTypeNotFoundException;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import com.gym.repository.TrainingTypeRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.sql.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
 
 
 @Service
@@ -28,60 +29,48 @@ public class TrainingService {
     private final CustomerRepository customerRepository;
     private final InstructorRepository instructorRepository;
     private final TrainingTypeRepository trainingTypeRepository;
-    private final AuthenticationService authenticationService;
 
     @Transactional
-    public TrainingDto createTraining(String userName, String password, TrainingDto trainingDto) {
-        checkInstructorCredentials(userName, password);
-        TrainingEntity trainingEntity = new TrainingEntity();
-        trainingEntity.setTrainingName(trainingDto.getTrainingName());
-        trainingEntity.setTrainingDate(trainingDto.getTrainingDate());
-        trainingEntity.setTrainingDuration(trainingDto.getTrainingDuration());
-
-        CustomerEntity customerEntity = customerRepository.findById(trainingDto.getCustomerId())
-                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
+    public void createTraining(TrainingEntity trainingEntity) {
+        CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(
+                trainingEntity.getCustomer().getGymUserEntity().getUserName());
+        if (customerEntity == null) {
+            throw new CustomerNotFoundException("Customer not found");
+        }
         trainingEntity.setCustomer(customerEntity);
 
-        InstructorEntity instructorEntity = instructorRepository.findById(trainingDto.getInstructorId())
-                .orElseThrow(() -> new NoSuchElementException("Instructor not found"));
+        InstructorEntity instructorEntity = instructorRepository.findInstructorEntityByGymUserEntityUserName(
+                trainingEntity.getInstructor().getGymUserEntity().getUserName());
+        if (instructorEntity == null) {
+            throw new InstructorNotFoundException("Instructor not found");
+        }
         trainingEntity.setInstructor(instructorEntity);
 
-        TrainingTypeEntity trainingTypeEntity = trainingTypeRepository.findById(trainingDto.getTrainingTypeId())
-                .orElseThrow(() -> new NoSuchElementException("Training type not found"));
+        TrainingTypeEntity trainingTypeEntity = trainingTypeRepository.findByTrainingTypeName(
+                instructorEntity.getTrainingTypeEntity().getTrainingTypeName());
+        if (trainingTypeEntity == null) {
+            throw new TrainingTypeNotFoundException("Training Type not found");
+        }
         trainingEntity.setTrainingType(trainingTypeEntity);
 
         TrainingEntity savedTraining = trainingRepository.save(trainingEntity);
         updateInstructors(customerEntity, instructorEntity);
-        log.info("Instructors of customers were updated: {}", trainingDto.getCustomerId());
-        log.info("Created training:{}", trainingDto);
-        return entityToDto(savedTraining);
+        log.info("Instructors of customers were updated: {}", customerEntity.getId());
+        log.info("Created training:{}", savedTraining);
     }
 
-    public List<TrainingDto> getCustomerListOfTrainings(CustomerEntity customerEntity, Date fromDate, Date toDate,
-                                                        String instructorName, String trainingTypeName) {
-        List<TrainingEntity> trainingEntities = trainingRepository.findTrainingsByCustomerAndCriteria(
-                customerEntity.getId(), fromDate, toDate, instructorName, trainingTypeName
+    public List<TrainingEntity> getCustomerListOfTrainings(String customerUserName, LocalDate fromDate, LocalDate toDate,
+                                                           String instructorName, TrainingType trainingTypeName) {
+        return trainingRepository.findTrainingsByCustomerAndCriteria(
+               customerUserName, fromDate, toDate, instructorName, trainingTypeName
         );
-        return trainingEntities.stream()
-                .map(this::entityToDto)
-                .toList();
     }
 
-    public List<TrainingDto> getInstructorListOfTrainings(InstructorEntity instructorEntity, Date fromDate,
-                                                          Date toDate, String customerName) {
-        List<TrainingEntity> trainingEntities = trainingRepository.findTrainingsByInstructorAndCriteria(
-                instructorEntity.getId(), fromDate, toDate, customerName
+    public List<TrainingEntity> getInstructorListOfTrainings(String userName, LocalDate fromDate,
+                                                          LocalDate toDate, String customerName) {
+        return trainingRepository.findTrainingsByInstructorAndCriteria(
+                userName, fromDate, toDate, customerName
         );
-        return trainingEntities.stream()
-                .map(this::entityToDto)
-                .toList();
-    }
-
-    private TrainingDto entityToDto(TrainingEntity savedTraining) {
-        return new TrainingDto(savedTraining.getId(), savedTraining.getCustomer().getId(),
-                savedTraining.getInstructor().getId(), savedTraining.getTrainingName(),
-                savedTraining.getTrainingType().getId(),
-                savedTraining.getTrainingDate(), savedTraining.getTrainingDuration());
     }
 
     private void updateInstructors(CustomerEntity customerEntity, InstructorEntity instructorEntity) {
@@ -89,12 +78,6 @@ public class TrainingService {
         instructorEntities.add(instructorEntity);
         customerEntity.setInstructors(instructorEntities);
         customerRepository.save(customerEntity);
-    }
-
-    private void checkInstructorCredentials(String userName, String password) {
-        if (!authenticationService.matchInstructorCredentials(userName, password)) {
-            throw new SecurityException("authentication failed");
-        }
     }
 }
 

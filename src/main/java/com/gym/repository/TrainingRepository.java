@@ -1,40 +1,40 @@
 package com.gym.repository;
 
 import com.gym.entity.TrainingEntity;
+import com.gym.entity.TrainingType;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
-import java.util.List;
-
 @Repository
 public interface TrainingRepository extends JpaRepository<TrainingEntity, Long> {
 
     @Query("SELECT t FROM TrainingEntity t " +
-            "WHERE t.customer.id = :customerId " +
-            "AND (:fromDate IS NULL OR t.trainingDate >= :fromDate)" +
-            "AND (:toDate IS NULL OR t.trainingDate <= :toDate)" +
+            "WHERE t.customer.gymUserEntity.userName = :customerUserName " +
+            "AND (cast(:fromDate as date) IS NULL OR t.trainingDate >= :fromDate)" +
+            "AND (cast(:toDate as date) IS NULL OR t.trainingDate <= :toDate)" +
             "AND (:instructorName IS NULL OR t.instructor.gymUserEntity.userName = :instructorName)" +
             "AND (:trainingTypeName IS NULL OR t.trainingType.trainingTypeName = :trainingTypeName)")
     List<TrainingEntity> findTrainingsByCustomerAndCriteria(
-            @Param("customerId") Long customerId,
-            @Param("fromDate") Date fromDate,
-            @Param("toDate") Date toDate,
+            @Param("customerUserName") String customerUserName,
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate,
             @Param("instructorName") String instructorName,
-            @Param("trainingTypeName") String trainingTypeName
+            @Param("trainingTypeName") TrainingType trainingTypeName
     );
 
     @Query("SELECT t FROM TrainingEntity t " +
-            "WHERE t.instructor.id = :instructorId " +
-            "AND (:fromDate IS NULL OR t.trainingDate >= :fromDate) " +
-            "AND (:toDate IS NULL OR t.trainingDate <= :toDate) " +
+            "WHERE t.instructor.gymUserEntity.userName = :instructorUserName " +
+            "AND (cast(:fromDate as date) IS NULL OR t.trainingDate >= :fromDate) " +
+            "AND (cast(:toDate as date) IS NULL OR t.trainingDate <= :toDate) " +
             "AND (:customerName IS NULL OR t.customer.gymUserEntity.userName = :customerName)")
     List<TrainingEntity> findTrainingsByInstructorAndCriteria(
-            @Param("instructorId") Long instructorId,
-            @Param("fromDate") Date fromDate,
-            @Param("toDate") Date toDate,
+            @Param("instructorUserName") String instructorUserName,
+            @Param("fromDate") LocalDate fromDate,
+            @Param("toDate") LocalDate toDate,
             @Param("customerName") String customerName
     );
 

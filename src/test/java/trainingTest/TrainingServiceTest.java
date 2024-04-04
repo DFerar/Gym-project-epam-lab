@@ -1,31 +1,33 @@
 package trainingTest;
 
-import com.gym.dto.TrainingDto;
+import static com.gym.entity.TrainingType.CARDIO;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.gym.entity.CustomerEntity;
+import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
+import com.gym.entity.TrainingType;
 import com.gym.entity.TrainingTypeEntity;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import com.gym.repository.TrainingTypeRepository;
-import com.gym.service.AuthenticationService;
 import com.gym.service.TrainingService;
-import com.gym.utils.Utils;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.sql.Date;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -38,120 +40,85 @@ public class TrainingServiceTest {
     private InstructorRepository instructorRepository;
     @Mock
     private TrainingTypeRepository trainingTypeRepository;
-    @Mock
-    private AuthenticationService authenticationService;
     @InjectMocks
     private TrainingService trainingService;
 
     @Test
     public void shouldCreateTraining() {
         //Given
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = Utils.generatePassword();
-        TrainingDto trainingDto = new TrainingDto(1L, 1L, 1L, "Test.training", 1L,
-                Date.valueOf("2024-01-01"), 1);
+        String userNameForCustomer = RandomStringUtils.randomAlphabetic(7);
+        String userNameForInstructor = RandomStringUtils.randomAlphabetic(7);
 
+        TrainingEntity trainingEntity = new TrainingEntity();
         CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1L);
-
         InstructorEntity instructorEntity = new InstructorEntity();
-        instructorEntity.setId(1L);
-
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity();
-        trainingTypeEntity.setId(1L);
+        GymUserEntity gymUserEntityForCustomer = new GymUserEntity();
+        gymUserEntityForCustomer.setUserName(userNameForCustomer);
+        GymUserEntity gymUserEntityForInstructor = new GymUserEntity();
+        gymUserEntityForInstructor.setUserName(userNameForInstructor);
+        customerEntity.setGymUserEntity(gymUserEntityForCustomer);
+        instructorEntity.setGymUserEntity(gymUserEntityForInstructor);
+        instructorEntity.setTrainingTypeEntity(trainingTypeEntity);
 
-        TrainingEntity savedTraining = new TrainingEntity();
-        savedTraining.setId(1L);
-        savedTraining.setCustomer(customerEntity);
-        savedTraining.setInstructor(instructorEntity);
-        savedTraining.setTrainingType(trainingTypeEntity);
-        savedTraining.setTrainingName("Test.training");
-        savedTraining.setTrainingDate(Date.valueOf("2024-01-01"));
-        savedTraining.setTrainingDuration(1);
 
-        when(authenticationService.matchInstructorCredentials(loginUserName, loginPassword)).thenReturn(true);
-        when(customerRepository.findById(trainingDto.getCustomerId())).thenReturn(Optional.of(customerEntity));
-        when(instructorRepository.findById(trainingDto.getInstructorId())).thenReturn(Optional.of(instructorEntity));
-        when(trainingTypeRepository.findById(trainingDto.getTrainingTypeId())).thenReturn(Optional.of(trainingTypeEntity));
-        when(trainingRepository.save(any(TrainingEntity.class))).thenReturn(savedTraining);
+        trainingEntity.setCustomer(customerEntity);
+        trainingEntity.setInstructor(instructorEntity);
+
+        when(customerRepository.findCustomerEntityByGymUserEntityUserName(anyString()))
+            .thenReturn(customerEntity);
+        when(instructorRepository.findInstructorEntityByGymUserEntityUserName(anyString()))
+            .thenReturn(instructorEntity);
+        when(trainingTypeRepository.findByTrainingTypeName(any()))
+            .thenReturn(trainingTypeEntity);
+        when(trainingRepository.save(trainingEntity))
+            .thenReturn(trainingEntity);
         //When
-        TrainingDto result = trainingService.createTraining(loginUserName, loginPassword, trainingDto);
+        trainingService.createTraining(trainingEntity);
         //Assert
-        assertThat(result).isEqualTo(trainingDto);
+        verify(customerRepository, times(1)).findCustomerEntityByGymUserEntityUserName(
+            anyString());
+        verify(instructorRepository, times(1)).findInstructorEntityByGymUserEntityUserName(
+            anyString());
+        verify(trainingTypeRepository, times(1)).findByTrainingTypeName(any());
+        verify(trainingRepository, times(1)).save(trainingEntity);
     }
 
     @Test
-    public void shouldGetCustomerListOfTraining() {
+    public void shouldGetCustomerListOfTrainings() {
         //Given
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1L);
-
-        InstructorEntity instructorEntity = new InstructorEntity();
-        instructorEntity.setId(1L);
-
-        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity();
-        trainingTypeEntity.setId(1L);
-
-        TrainingEntity trainingEntity = new TrainingEntity();
-        trainingEntity.setId(1L);
-        trainingEntity.setCustomer(customerEntity);
-        trainingEntity.setInstructor(instructorEntity);
-        trainingEntity.setTrainingType(trainingTypeEntity);
-        trainingEntity.setTrainingName(RandomStringUtils.randomAlphabetic(7));
-        trainingEntity.setTrainingDate(Date.valueOf("2024-01-01"));
-        trainingEntity.setTrainingDuration(1);
-
-        Date fromDate = Date.valueOf("2022-01-01");
-        Date toDate = Date.valueOf("2024-12-31");
+        String customerUserName = RandomStringUtils.randomAlphabetic(7);
+        LocalDate fromDate = LocalDate.of(2024, 1, 1);
+        LocalDate toDate = LocalDate.of(2024, 3, 3);
         String instructorName = RandomStringUtils.randomAlphabetic(7);
-        String trainingTypeName = RandomStringUtils.randomAlphabetic(7);
+        TrainingType trainingTypeName = CARDIO;
 
-        List<TrainingEntity> trainingEntities = List.of(trainingEntity);
-
-        when(trainingRepository.findTrainingsByCustomerAndCriteria(
-                customerEntity.getId(), fromDate, toDate, instructorName, trainingTypeName)).thenReturn(trainingEntities);
+        List<TrainingEntity> expectedTrainings = Collections.singletonList(new TrainingEntity());
+        when(trainingRepository.findTrainingsByCustomerAndCriteria(customerUserName, fromDate, toDate,
+            instructorName, trainingTypeName))
+            .thenReturn(expectedTrainings);
         //When
-        List<TrainingDto> result = trainingService.getCustomerListOfTrainings(customerEntity, fromDate, toDate,
-                instructorName, trainingTypeName);
+        List<TrainingEntity> actualTrainings = trainingService.getCustomerListOfTrainings(customerUserName, fromDate,
+            toDate, instructorName, trainingTypeName);
         //Assert
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(actualTrainings).isEqualTo(expectedTrainings);
     }
 
     @Test
     public void shouldGetInstructorListOfTrainings() {
-        //Given
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1L);
-
-        InstructorEntity instructorEntity = new InstructorEntity();
-        instructorEntity.setId(1L);
-
-        TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity();
-        trainingTypeEntity.setId(1L);
-
-        TrainingEntity trainingEntity = new TrainingEntity();
-        trainingEntity.setId(1L);
-        trainingEntity.setCustomer(customerEntity);
-        trainingEntity.setInstructor(instructorEntity);
-        trainingEntity.setTrainingType(trainingTypeEntity);
-        trainingEntity.setTrainingName(RandomStringUtils.randomAlphabetic(7));
-        trainingEntity.setTrainingDate(Date.valueOf("2024-01-01"));
-        trainingEntity.setTrainingDuration(1);
-
-        Date fromDate = Date.valueOf("2022-01-01");
-        Date toDate = Date.valueOf("2024-12-31");
+        String instructorUserName = RandomStringUtils.randomAlphabetic(7);
+        LocalDate fromDate = LocalDate.of(2024, 1, 1);
+        LocalDate toDate = LocalDate.of(2024, 3, 3);
         String customerName = RandomStringUtils.randomAlphabetic(7);
 
-        List<TrainingEntity> trainingEntities = List.of(trainingEntity);
+        List<TrainingEntity> expectedTrainings = Collections.singletonList(new TrainingEntity());
+        when(trainingRepository.findTrainingsByInstructorAndCriteria(instructorUserName, fromDate, toDate,
+            customerName))
+            .thenReturn(expectedTrainings);
 
-        when(trainingRepository.findTrainingsByInstructorAndCriteria(instructorEntity.getId(), fromDate, toDate, customerName))
-                .thenReturn(trainingEntities);
-        //When
-        List<TrainingDto> result = trainingService.getInstructorListOfTrainings(instructorEntity, fromDate, toDate,
-                customerName);
-        //Assert
-        assertThat(result).isNotNull();
-        assertThat(result.size()).isEqualTo(1);
+        List<TrainingEntity> actualTrainings = trainingService.getInstructorListOfTrainings(instructorUserName,
+            fromDate, toDate, customerName);
+
+        assertThat(actualTrainings).isEqualTo(expectedTrainings);
     }
 }

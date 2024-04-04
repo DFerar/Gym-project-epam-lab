@@ -1,21 +1,20 @@
 package userTest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
 import com.gym.service.GymUserService;
 import com.gym.utils.Utils;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class GymUserServiceTest {
@@ -28,20 +27,24 @@ public class GymUserServiceTest {
     public void shouldUpdateUser() {
         //Given
         Long userId = 1L;
+
         String firstName = RandomStringUtils.randomAlphabetic(7);
         String lastName = RandomStringUtils.randomAlphabetic(7);
         Boolean isActive = true;
         String password = Utils.generatePassword();
 
         GymUserEntity existingUser = new GymUserEntity(userId, RandomStringUtils.randomAlphabetic(7),
-                RandomStringUtils.randomAlphabetic(7),
-                RandomStringUtils.randomAlphabetic(7), password, false);
-        when(gymUserRepository.findById(userId)).thenReturn(Optional.of(existingUser));
-        when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(existingUser);
+            RandomStringUtils.randomAlphabetic(7),
+            RandomStringUtils.randomAlphabetic(7), password, false);
+
+        GymUserEntity newGymUserEntity = new GymUserEntity(userId, firstName, lastName, existingUser.getUserName(),
+            password, isActive);
+        when(gymUserRepository.findByUserName(existingUser.getUserName())).thenReturn(existingUser);
+        when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(newGymUserEntity);
         //When
-        GymUserEntity result = gymUserService.updateUser(userId, firstName, lastName, isActive);
+        GymUserEntity result = gymUserService.updateUser(newGymUserEntity);
         //Assert
-        assertThat(result).isEqualTo(existingUser);
+        assertThat(result).isEqualTo(newGymUserEntity);
     }
 
     @Test
@@ -64,10 +67,11 @@ public class GymUserServiceTest {
         String firstName = RandomStringUtils.randomAlphabetic(7);
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String baseUserName = firstName + "." + lastName;
-        String generatedUserName = baseUserName + "2";
+        String generatedUserName = baseUserName + "1";
 
         when(gymUserRepository.existsByUserName(baseUserName)).thenReturn(true);
-        when(gymUserRepository.findMaxUserId()).thenReturn(1L);
+        when(gymUserRepository.findGymUserEntitiesByFirstNameAndLastName(firstName, lastName))
+            .thenReturn(List.of(new GymUserEntity()));
         //When
         String result = gymUserService.generateUniqueUserName(firstName, lastName);
         //Assert

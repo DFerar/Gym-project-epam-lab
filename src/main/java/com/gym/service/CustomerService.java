@@ -1,22 +1,21 @@
 package com.gym.service;
 
-import com.gym.dto.CustomerDto;
-import com.gym.dto.TrainingDto;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
+import com.gym.entity.InstructorEntity;
+import com.gym.exceptionHandler.CustomerNotFoundException;
+import com.gym.exceptionHandler.UserNotFoundException;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.GymUserRepository;
+import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.sql.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import static com.gym.utils.Utils.generatePassword;
 
 @Service
 @RequiredArgsConstructor
@@ -26,132 +25,79 @@ public class CustomerService {
     private final GymUserRepository gymUserRepository;
     private final GymUserService gymUserService;
     private final TrainingRepository trainingRepository;
-    private final TrainingService trainingService;
-    private final AuthenticationService authenticationService;
+    private final InstructorRepository instructorRepository;
 
     @Transactional
-    public CustomerDto createCustomer(CustomerDto customer) {
-        GymUserEntity gymUserEntity = customerDtoToUserEntity(customer);
+    public CustomerEntity createCustomer(CustomerEntity customerEntity, GymUserEntity gymUserEntity) {
         GymUserEntity savedUser = gymUserRepository.save(gymUserEntity);
-        CustomerEntity customerEntity = customerDtoToCustomerEntity(customer, savedUser);
+        customerEntity.setGymUserEntity(savedUser);
         CustomerEntity savedCustomer = customerRepository.save(customerEntity);
-        log.info("Creating customer: {}", customer);
-        return entityToDto(savedCustomer, savedUser);
+        log.info("Creating customer: {}", savedCustomer);
+        return savedCustomer;
     }
 
     @Transactional
-    public CustomerDto getCustomerById(String loginUserName, String loginPassword, Long customerId) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        CustomerEntity customerEntity = customerRepository.findById(customerId)
-                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
-        GymUserEntity gymUserEntity = customerEntity.getGymUserEntity();
-        log.info("Got customer by id: {}", customerId);
-        return entityToDto(customerEntity, gymUserEntity);
-    }
-
-    @Transactional
-    public CustomerDto getCustomerByUserName(String loginUserName, String loginPassword, String userName) {
-        checkCredentialsMatching(loginUserName, loginPassword);
+    public CustomerEntity getCustomerByUserName(String userName) {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
         if (customerEntity == null) {
-            throw new NoSuchElementException("Customer not found");
+            throw new CustomerNotFoundException("Customer not found");
         }
         log.info("Got customer with username: {}", userName);
-        return entityToDto(customerEntity, customerEntity.getGymUserEntity());
+        return customerEntity;
     }
 
     @Transactional
-    public void changeCustomerPassword(String loginUserName, String loginPassword, Long userId, String password) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        GymUserEntity gymUserEntity = gymUserRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-        gymUserEntity.setPassword(password);
+    public void changeCustomersActivity(String username) {
+        GymUserEntity gymUserEntity = gymUserRepository.findByUserName(username);
+        if (gymUserEntity == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        gymUserEntity.setIsActive(!gymUserEntity.getIsActive());
         gymUserRepository.save(gymUserEntity);
-        log.info("Password changed on user: {}", userId);
+        log.info("Activity changed on customer: {}", gymUserEntity);
     }
 
     @Transactional
-    public void changeCustomersActivity(String loginUserName, String loginPassword, Long userId,
-                                        Boolean newActivity) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        GymUserEntity gymUserEntity = gymUserRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-        gymUserEntity.setIsActive(newActivity);
-        gymUserRepository.save(gymUserEntity);
-        log.info("Activity changed on customer: {}", userId);
-    }
+    public CustomerEntity updateCustomer(GymUserEntity userEntityFromData, CustomerEntity customerEntityFromData) {
+        GymUserEntity updatedUser = gymUserService.updateUser(userEntityFromData);
 
-    @Transactional
-    public CustomerDto updateCustomer(String loginUserName, String loginPassword, CustomerDto newData) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        GymUserEntity updatedUser = gymUserService.updateUser(newData.getUserId(), newData.getFirstName(),
-                newData.getLastName(), newData.getIsActive());
-
-        CustomerEntity customerEntity = customerRepository.findById(newData.getId())
-                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
-        customerEntity.setAddress(newData.getAddress());
+        CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(
+                updatedUser.getUserName());
+        if (customerEntity == null) {
+            throw new CustomerNotFoundException("Customer not found");
+        }
+        customerEntity.setAddress(customerEntityFromData.getAddress());
+        customerEntity.setDateOfBirth(customerEntityFromData.getDateOfBirth());
+        customerEntity.setGymUserEntity(updatedUser);
         CustomerEntity updatedCustomer = customerRepository.save(customerEntity);
-        log.info("Customer updated: {}", newData);
-        return entityToDto(updatedCustomer, updatedUser);
+        log.info("Customer updated: {}", updatedCustomer);
+        return updatedCustomer;
     }
 
     @Transactional
-    public void deleteCustomerByUserName(String loginUserName, String loginPassword, String userName) {
-        checkCredentialsMatching(loginUserName, loginPassword);
+    public void deleteCustomerByUserName(String userName) {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
         if (customerEntity == null) {
-            throw new NoSuchElementException("Customer not found");
+            throw new CustomerNotFoundException("Customer not found");
         }
         trainingRepository.deleteTrainingEntitiesByCustomerGymUserEntityUserName(userName);
         gymUserRepository.deleteGymUserEntitiesByUserName(userName);
         customerRepository.delete(customerEntity);
         log.info("Customer deleted: {}", userName);
     }
-
     @Transactional
-    public List<TrainingDto> getCustomerTrainings(String loginUserName, String loginPassword,
-                                                  String customerName, Date fromDate, Date toDate,
-                                                  String instructorName,
-                                                  String trainingTypeName) {
-        checkCredentialsMatching(loginUserName, loginPassword);
-        CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(customerName);
+    public Set<InstructorEntity> changeCustomerInstructors(String userName, List<String> usernames) {
+        CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
         if (customerEntity == null) {
-            throw new NoSuchElementException("Customer not found");
+            throw new CustomerNotFoundException("Customer not found");
         }
-        log.info("Got list of trainings of customer: {}", customerName);
-        return trainingService.getCustomerListOfTrainings(customerEntity, fromDate, toDate, instructorName,
-                trainingTypeName);
-
-    }
-
-    private CustomerDto entityToDto(CustomerEntity savedCustomer, GymUserEntity savedUser) {
-        return new CustomerDto(savedCustomer.getId(), savedCustomer.getDateOfBirth(),
-                savedCustomer.getAddress(), savedUser.getId(), savedUser.getFirstName(), savedUser.getLastName(),
-                savedUser.getUserName(), savedUser.getIsActive());
-    }
-
-    private CustomerEntity customerDtoToCustomerEntity(CustomerDto customerDto, GymUserEntity savedUser) {
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setAddress(customerDto.getAddress());
-        customerEntity.setGymUserEntity(savedUser);
-        customerEntity.setDateOfBirth(customerDto.getDateOfBirth());
-        return customerEntity;
-    }
-
-    private GymUserEntity customerDtoToUserEntity(CustomerDto customer) {
-        GymUserEntity gymUserEntity = new GymUserEntity();
-        gymUserEntity.setFirstName(customer.getFirstName());
-        gymUserEntity.setLastName(customer.getLastName());
-        gymUserEntity.setPassword(generatePassword());
-        gymUserEntity.setUserName(gymUserService.generateUniqueUserName(customer.getFirstName(),
-                customer.getLastName()));
-        gymUserEntity.setIsActive(customer.getIsActive());
-        return gymUserEntity;
-    }
-
-    private void checkCredentialsMatching(String userName, String password) {
-        if (!authenticationService.matchCustomerCredentials(userName, password)) {
-            throw new SecurityException("authentication failed");
-        }
+        Set<InstructorEntity> instructorEntities = usernames.stream()
+                .map(instructorRepository::findInstructorEntityByGymUserEntityUserName)
+                .collect(Collectors.toSet());
+        Set<InstructorEntity> existingInstructorEntities = customerEntity.getInstructors();
+        existingInstructorEntities.addAll(instructorEntities);
+        customerEntity.setInstructors(existingInstructorEntities);
+        customerRepository.save(customerEntity);
+        return customerEntity.getInstructors();
     }
 }
