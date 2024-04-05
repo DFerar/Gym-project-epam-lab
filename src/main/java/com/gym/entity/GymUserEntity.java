@@ -32,4 +32,6 @@ public class GymUserEntity {
     private String password;
     @Column(name = "is_active")
     private Boolean isActive;
+    @Column(name = "user_index")
+    private Integer userIndex;
 }

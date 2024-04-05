@@ -36,7 +36,7 @@ public class CustomerService {
      */
     @Transactional
     public CustomerEntity createCustomer(CustomerEntity customerEntity, GymUserEntity gymUserEntity) {
-        GymUserEntity savedUser = gymUserRepository.save(gymUserEntity);
+        GymUserEntity savedUser = gymUserService.createUser(gymUserEntity);
         customerEntity.setGymUserEntity(savedUser);
         CustomerEntity savedCustomer = customerRepository.save(customerEntity);
         log.info("Creating customer: {}", savedCustomer);

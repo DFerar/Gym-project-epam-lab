@@ -37,8 +37,6 @@ public class InstructorMapper {
         gymUserEntity.setFirstName(instructorDto.getFirstName());
         gymUserEntity.setLastName(instructorDto.getLastName());
         gymUserEntity.setPassword(generatePassword());
-        gymUserEntity.setUserName(gymUserService.generateUniqueUserName(instructorDto.getFirstName(),
-            instructorDto.getLastName()));
         gymUserEntity.setIsActive(true);
         return gymUserEntity;
     }

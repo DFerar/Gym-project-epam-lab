@@ -54,13 +54,13 @@ class InstructorServiceTest {
         String firstName = RandomStringUtils.randomAlphabetic(7);
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String userName = RandomStringUtils.randomAlphabetic(7);
-        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password, true);
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password, true, 1);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
         InstructorEntity instructorEntity = new InstructorEntity(1L, trainingTypeEntity, gymUserEntity, null);
 
-        when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(gymUserEntity);
+        when(gymUserService.createUser(any())).thenReturn(gymUserEntity);
         when(instructorMapper.mapUserEntityToInstructorEntity(any(), any())).thenReturn(instructorEntity);
         when(trainingTypeRepository.findByTrainingTypeName(any(TrainingType.class))).thenReturn(trainingTypeEntity);
         //When
@@ -80,7 +80,8 @@ class InstructorServiceTest {
         String userNameOfInstructor = RandomStringUtils.randomAlphabetic(7);
 
 
-        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userNameOfInstructor, password, true);
+        GymUserEntity gymUserEntity =
+            new GymUserEntity(1L, firstName, lastName, userNameOfInstructor, password, true, 1);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
@@ -101,7 +102,7 @@ class InstructorServiceTest {
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String userName = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity updatedUser = new GymUserEntity(1L, firstName, lastName, userName, password, true);
+        GymUserEntity updatedUser = new GymUserEntity(1L, firstName, lastName, userName, password, true, 1);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
@@ -128,7 +129,7 @@ class InstructorServiceTest {
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String userName = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName, userName, password, true);
+        GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName, userName, password, true, 1);
 
         when(gymUserRepository.findByUserName(userName)).thenReturn(gymUserEntity);
         //When

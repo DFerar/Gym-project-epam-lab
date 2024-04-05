@@ -1,4 +1,4 @@
-package com.gym;
+package com.gym.config;
 
 import com.gym.logging.LoggingInterceptor;
 import com.gym.logging.MdcInterceptor;

@@ -38,7 +38,7 @@ public class InstructorService {
      */
     @Transactional
     public InstructorEntity createInstructor(GymUserEntity gymUserEntity, TrainingType specialization) {
-        GymUserEntity savedUser = gymUserRepository.save(gymUserEntity);
+        GymUserEntity savedUser = gymUserService.createUser(gymUserEntity);
         TrainingTypeEntity trainingType =
             trainingTypeRepository.findByTrainingTypeName(specialization);
         if (trainingType == null) {

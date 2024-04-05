@@ -35,22 +35,28 @@ public class GymUserService {
     }
 
     /**
-     * Generates a unique username based on a provided first and last name.
+     * This method is used to create a GymUserEntity. It verifies if a user with the same userName exists
+     * in the database. If there is no existing user with the same username, it sets the user index to 1 and
+     * creates a user. Otherwise, it increments the index by 1 and creates a user with the new index.
      *
-     * @param firstName The user's first name.
-     * @param lastName  The user's last name.
-     * @return A unique username for the user.
+     * @param gymUserEntityFromDto Object containing the details of the gym user to be created
+     * @return gymUserEntityFromDto object after saving it in the database
      */
     @Transactional
-    public String generateUniqueUserName(String firstName, String lastName) {
-        String baseUserName = firstName + "." + lastName;
-        Boolean userNameExist = gymUserRepository.existsByUserName(baseUserName);
-        if (userNameExist) {
-            int nextUserSuffix =
-                gymUserRepository.findGymUserEntitiesByFirstNameAndLastName(firstName, lastName).size() + 1;
-            return baseUserName + nextUserSuffix;
+    public GymUserEntity createUser(GymUserEntity gymUserEntityFromDto) {
+        String baseUserName = gymUserEntityFromDto.getFirstName() + "." + gymUserEntityFromDto.getLastName();
+        Boolean userNameExists = gymUserRepository.existsByUserName(baseUserName);
+        if (!userNameExists) {
+            gymUserEntityFromDto.setUserIndex(1);
+            gymUserEntityFromDto.setUserName(baseUserName);
         } else {
-            return baseUserName;
+            int maxIndex = gymUserRepository.findMaxUserIndexByFirstNameAndLastName(gymUserEntityFromDto.getFirstName(),
+                gymUserEntityFromDto.getLastName());
+            int suffix = maxIndex + 1;
+            gymUserEntityFromDto.setUserIndex(suffix);
+            String userName = baseUserName + suffix;
+            gymUserEntityFromDto.setUserName(userName);
         }
+        return gymUserRepository.save(gymUserEntityFromDto);
     }
 }

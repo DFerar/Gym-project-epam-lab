@@ -1,9 +1,9 @@
 spring:
   config:
     activate:
-      on-profile: "dev"
+      on-profile: "test"
   datasource:
-    url: jdbc:postgresql://localhost:5432/gym
+    url: jdbc:postgresql://localhost:5432/gym_test
     username: "gym"
     password: "gym"
     driver-class-name: org.postgresql.Driver

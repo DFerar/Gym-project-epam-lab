@@ -34,8 +34,6 @@ public class CustomerMapper {
         gymUserEntity.setFirstName(customer.getFirstName());
         gymUserEntity.setLastName(customer.getLastName());
         gymUserEntity.setPassword(generatePassword());
-        gymUserEntity.setUserName(gymUserService.generateUniqueUserName(customer.getFirstName(),
-            customer.getLastName()));
         gymUserEntity.setIsActive(true);
         return gymUserEntity;
     }
