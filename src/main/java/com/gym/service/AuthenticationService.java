@@ -6,6 +6,7 @@ import com.gym.repository.CustomerRepository;
 import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ public class AuthenticationService {
     private final CustomerRepository customerRepository;
     private final InstructorRepository instructorRepository;
     private final GymUserRepository gymUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Validates customer credentials. If credentials not valid, throws LoginException.
@@ -54,7 +56,7 @@ public class AuthenticationService {
             throw new LoginException("Wrong credentials");
         } else {
             GymUserEntity gymUserEntity = gymUserRepository.findByUserName(loginUsername);
-            gymUserEntity.setPassword(newPassword);
+            gymUserEntity.setPassword(passwordEncoder.encode(newPassword));
             gymUserRepository.save(gymUserEntity);
         }
     }

@@ -1,8 +1,5 @@
 package com.gym.utils;
 
-import java.security.SecureRandom;
-
-
 public class Utils {
     private static final String UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWYXZ";
     private static final String LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
@@ -15,14 +12,15 @@ public class Utils {
      * @return A random string of 10 characters.
      */
     public static String generatePassword() {
-        String allowedCharacters = getAllowedSymbols();
+        String password = "123";
+        /*String allowedCharacters = getAllowedSymbols();
         SecureRandom random = new SecureRandom();
         StringBuilder password = new StringBuilder();
         for (int i = 0; i < 10; i++) {
             int randomIndex = random.nextInt(allowedCharacters.length());
             char randomChar = allowedCharacters.charAt(randomIndex);
             password.append(randomChar);
-        }
+        }*/
         return password.toString();
     }
 

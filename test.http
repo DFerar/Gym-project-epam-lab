@@ -24,6 +24,7 @@ Content-Type: application/json
 ###
 //create training with created customer and created instructor
 POST http://localhost:8080/training/create?loginUsername=admin.admin&loginPassword=admin
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTEiLCJpYXQiOjE3MTI3MzU0NzgsImV4cCI6MTAwMDAwMTcxMjczNTQ3N30.imQQyaNQfzB2g7VW2BHSKjLcVCGyd8_vb6_CovmxMz1k-y4ZK19_maPUjQhWJX2i
 Content-Type: application/json
 
 {
@@ -58,6 +59,7 @@ Content-Type: application/json
 ###
 //get customer by username
 GET http://localhost:8080/customer/Test.Customer?loginUserName=admin.admin&loginPassword=admin
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTEiLCJpYXQiOjE3MTI3MzU0NzgsImV4cCI6MTAwMDAwMTcxMjczNTQ3N30.imQQyaNQfzB2g7VW2BHSKjLcVCGyd8_vb6_CovmxMz1k-y4ZK19_maPUjQhWJX2i
 
 <> f.txt
 <> 2024-03-24T150514.500.html
@@ -66,6 +68,7 @@ GET http://localhost:8080/customer/Test.Customer?loginUserName=admin.admin&login
 ###
 //get instructor by username
 GET http://localhost:8080/instructor/Test.Instructor?loginUserName=admin.admin&loginPassword=admin
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTEiLCJpYXQiOjE3MTI3MzU0NzgsImV4cCI6MTAwMDAwMTcxMjczNTQ3N30.imQQyaNQfzB2g7VW2BHSKjLcVCGyd8_vb6_CovmxMz1k-y4ZK19_maPUjQhWJX2i
 
 <> f-2.txt
 
@@ -212,6 +215,7 @@ Content-Type: application/json
 ###
 //get all training types
 GET http://localhost:8080/training-type/all?loginUserName=admin.admin&loginPassword=admin
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTEiLCJpYXQiOjE3MTI3MzU0NzgsImV4cCI6MTAwMDAwMTcxMjczNTQ3N30.imQQyaNQfzB2g7VW2BHSKjLcVCGyd8_vb6_CovmxMz1k-y4ZK19_maPUjQhWJX2i
 
 <> 2024-03-24T161512.200.json
 <> 2024-03-24T161502.400.html

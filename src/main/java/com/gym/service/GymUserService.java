@@ -7,6 +7,7 @@ import com.gym.repository.GymUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class GymUserService {
     private final GymUserRepository gymUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Updates a GymUserEntity's fields and saves it in the database.
@@ -57,6 +59,7 @@ public class GymUserService {
             String userName = baseUserName + suffix;
             gymUserEntityFromDto.setUserName(userName);
         }
+        gymUserEntityFromDto.setPassword(passwordEncoder.encode(gymUserEntityFromDto.getPassword()));
         return gymUserRepository.save(gymUserEntityFromDto);
     }
 }
