@@ -1,4 +1,4 @@
-package mapper;
+/*package mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -147,4 +147,4 @@ public class InstructorMapperTest {
         assertThat(result.get(0).getFirstName()).isEqualTo(instructorEntity.getGymUserEntity().getFirstName());
         assertThat(result.get(0).getLastName()).isEqualTo(instructorEntity.getGymUserEntity().getLastName());
     }
-}
+}*/

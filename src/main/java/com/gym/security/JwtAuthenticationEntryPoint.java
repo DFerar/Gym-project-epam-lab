@@ -13,7 +13,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @SneakyThrows
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
-                         AuthenticationException authException){
+                         AuthenticationException authException) {
 
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
     }

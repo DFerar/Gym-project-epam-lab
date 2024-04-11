@@ -62,8 +62,8 @@ public class InstructorMapper {
      * @param savedUser GymUserEntity object.
      * @return CreateInstructorResponseDto containing the mapped values.
      */
-    public CreateInstructorResponseDto mapToResponseDto(GymUserEntity savedUser) {
-        return new CreateInstructorResponseDto(savedUser.getUserName(), savedUser.getPassword());
+    public CreateInstructorResponseDto mapToResponseDto(GymUserEntity savedUser, String password) {
+        return new CreateInstructorResponseDto(savedUser.getUserName(), password);
     }
 
     /**

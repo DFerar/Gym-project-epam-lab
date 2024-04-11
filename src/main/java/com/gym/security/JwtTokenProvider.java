@@ -6,21 +6,17 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 import javax.crypto.SecretKey;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenProvider {
 
-    @Value("${token.signing.key}")
-    private String jwtSecret;
+    private String jwtSecret = "53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A753HY123ID1123";
 
-    @Value("${token.expiration}")
-    private long jwtExpirationDate;
+    private long jwtExpirationDate = 3000000000L;
 
-    // generate JWT token
-    public String generateToken(Authentication authentication){
+    public String generateToken(Authentication authentication) {
 
         String username = authentication.getName();
 
@@ -38,12 +34,7 @@ public class JwtTokenProvider {
         return token;
     }
 
-    private Key key(){
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
-    }
-
-    // get username from JWT token
-    public String getUsername(String token){
+    public String getUsername(String token) {
 
         return Jwts.parser()
             .verifyWith((SecretKey) key())
@@ -53,13 +44,15 @@ public class JwtTokenProvider {
             .getSubject();
     }
 
-    // validate JWT token
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         Jwts.parser()
             .verifyWith((SecretKey) key())
             .build()
             .parse(token);
         return true;
+    }
 
+    private Key key() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 }

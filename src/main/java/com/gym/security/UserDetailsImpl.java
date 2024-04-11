@@ -5,19 +5,16 @@ import com.gym.entity.GymUserEntity;
 import java.io.Serial;
 import java.util.Collection;
 import java.util.Objects;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserDetailsImpl implements UserDetails {
 
-
-    /**
-     * this class uses UserDetails Interface which is available in spring
-     * security core library
-     */
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Getter
     private Long id;
 
     private String username;
@@ -31,17 +28,12 @@ public class UserDetailsImpl implements UserDetails {
         this.id = id;
         this.username = username;
         this.password = password;
-
     }
 
     public static UserDetailsImpl build(GymUserEntity user) {
         return new UserDetailsImpl(user.getId(),
             user.getUserName(),
             user.getPassword());
-    }
-
-    public Long getId() {
-        return id;
     }
 
     @Override
@@ -87,9 +79,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority>
-    getAuthorities() {
-
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
 }

@@ -1,13 +1,14 @@
 package com.gym.config;
 
+import com.gym.security.CustomAuthFilter;
 import com.gym.security.JwtAuthenticationEntryPoint;
-import com.gym.security.JwtAuthenticationFilter;
+import com.gym.security.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,11 +25,14 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthEntryPoint;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
+
 
     @Bean
     @SneakyThrows
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        CustomAuthFilter customAuthFilter = new CustomAuthFilter(authenticationManager());
+        customAuthFilter.setFilterProcessesUrl("/login");
         http
             .csrf(AbstractHttpConfigurer::disable)
             .cors(httpSecurityCorsConfigurer -> {
@@ -42,23 +46,25 @@ public class SecurityConfig {
                 source.registerCorsConfiguration("/**", config);
             })
             .authorizeHttpRequests((requests) -> requests
-                .requestMatchers( "/auth/token", "/customer/create", "/instructor/create").permitAll()
+                .requestMatchers("/login", "/customer/create", "/instructor/create").permitAll()
                 .anyRequest().authenticated()
             )
-            .passwordManagement(httpSecurityPasswordManagementConfigurer -> passwordEncoder())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
+            .addFilter(customAuthFilter)
             .addFilterBefore(
-                jwtAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter.class
-            );
+                jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class
+            )
+            .httpBasic(httpSecurityHttpBasicConfigurer -> httpSecurityHttpBasicConfigurer.authenticationEntryPoint(
+                jwtAuthEntryPoint));
         return http.build();
     }
 
     @Bean
     @SneakyThrows
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager() {
+        return authentication -> new UsernamePasswordAuthenticationToken(authentication.getPrincipal(),
+            authentication.getCredentials(), authentication.getAuthorities());
     }
 
     @Bean

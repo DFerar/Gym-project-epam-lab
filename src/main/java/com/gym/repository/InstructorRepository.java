@@ -19,6 +19,4 @@ public interface InstructorRepository extends JpaRepository<InstructorEntity, Lo
     List<InstructorEntity> findUnassignedInstructorsByCustomerUsername(
         @Param("customerUsername") String customerUsername
     );
-
-    boolean existsByGymUserEntityUserNameAndGymUserEntityPassword(String userName, String password);
 }

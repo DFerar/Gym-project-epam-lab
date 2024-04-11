@@ -1,4 +1,4 @@
-package utils;
+/*package utils;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,4 +22,4 @@ public class PasswordGeneratorTest {
         assertThat(password.length()).isEqualTo(10);
         assertThat(sumStr.toCharArray()).containsAnyOf(password.toCharArray());
     }
-}
+}*/

@@ -23,8 +23,8 @@ Content-Type: application/json
 
 ###
 //create training with created customer and created instructor
-POST http://localhost:8080/training/create?loginUsername=admin.admin&loginPassword=admin
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTEiLCJpYXQiOjE3MTI3MzU0NzgsImV4cCI6MTAwMDAwMTcxMjczNTQ3N30.imQQyaNQfzB2g7VW2BHSKjLcVCGyd8_vb6_CovmxMz1k-y4ZK19_maPUjQhWJX2i
+POST http://localhost:8080/training/create
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTAiLCJpYXQiOjE3MTI4Mjc4MjYsImV4cCI6MTcxNTgyNzgyNX0.x00QinECqhgM0cuiRr__McteU_-ZfM6Vo3Il-E9qLimZzXwL6qzEL0y30TwKWnbQ
 Content-Type: application/json
 
 {
@@ -36,30 +36,22 @@ Content-Type: application/json
 }
 
 ###
-//user login
-GET http://localhost:8080/auth/login
-Content-Type: application/json
-
-{
-  "userName": "admin.admin",
-  "password": "admin"
-}
-
-###
 PUT http://localhost:8080/auth/update
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTAiLCJpYXQiOjE3MTI4Mjc4MjYsImV4cCI6MTcxNTgyNzgyNX0.x00QinECqhgM0cuiRr__McteU_-ZfM6Vo3Il-E9qLimZzXwL6qzEL0y30TwKWnbQ
 //update password, you need to change password, because it is randon(look for it in database
 Content-Type: application/json
 
 {
-  "userName": "Test.Customer",
-  "oldPassword": "osHcT(4BmZ",
-  "newPassword": "1234567889"
+  "userName": "Test.Customer14",
+  "oldPassword": "123",
+  "newPassword": "1234"
 }
 
 ###
 //get customer by username
-GET http://localhost:8080/customer/Test.Customer?loginUserName=admin.admin&loginPassword=admin
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTEiLCJpYXQiOjE3MTI3MzU0NzgsImV4cCI6MTAwMDAwMTcxMjczNTQ3N30.imQQyaNQfzB2g7VW2BHSKjLcVCGyd8_vb6_CovmxMz1k-y4ZK19_maPUjQhWJX2i
+GET http://localhost:8080/customer/Test.Customer
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTAiLCJpYXQiOjE3MTI4Mjc4MjYsImV4cCI6MTcxNTgyNzgyNX0.x00QinECqhgM0cuiRr__McteU_-ZfM6Vo3Il-E9qLimZzXwL6qzEL0y30TwKWnbQ
+
 
 <> f.txt
 <> 2024-03-24T150514.500.html
@@ -68,7 +60,7 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTEiLCJpY
 ###
 //get instructor by username
 GET http://localhost:8080/instructor/Test.Instructor?loginUserName=admin.admin&loginPassword=admin
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTEiLCJpYXQiOjE3MTI3MzU0NzgsImV4cCI6MTAwMDAwMTcxMjczNTQ3N30.imQQyaNQfzB2g7VW2BHSKjLcVCGyd8_vb6_CovmxMz1k-y4ZK19_maPUjQhWJX2i
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTAiLCJpYXQiOjE3MTI4Mjc4MjYsImV4cCI6MTcxNTgyNzgyNX0.x00QinECqhgM0cuiRr__McteU_-ZfM6Vo3Il-E9qLimZzXwL6qzEL0y30TwKWnbQ
 
 <> f-2.txt
 
