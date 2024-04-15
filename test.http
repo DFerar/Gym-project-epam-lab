@@ -24,7 +24,7 @@ Content-Type: application/json
 ###
 //create training with created customer and created instructor
 POST http://localhost:8080/training/create
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTAiLCJpYXQiOjE3MTI4Mjc4MjYsImV4cCI6MTcxNTgyNzgyNX0.x00QinECqhgM0cuiRr__McteU_-ZfM6Vo3Il-E9qLimZzXwL6qzEL0y30TwKWnbQ
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTAiLCJpYXQiOjE3MTI4NDc3NDMsImV4cCI6MTcxNTg0Nzc0M30.VxKiWce1vdJCMRgWvScT5TwJ8du-Tg2ryNHtVBLzyPo9pi_OC1vtB4Z03U9S1f1n
 Content-Type: application/json
 
 {
@@ -49,8 +49,8 @@ Content-Type: application/json
 
 ###
 //get customer by username
-GET http://localhost:8080/customer/Test.Customer
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTAiLCJpYXQiOjE3MTI4Mjc4MjYsImV4cCI6MTcxNTgyNzgyNX0.x00QinECqhgM0cuiRr__McteU_-ZfM6Vo3Il-E9qLimZzXwL6qzEL0y30TwKWnbQ
+GET http://localhost:8080/customer/Test.Customer13
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMzEiLCJleHAiOjE3MTMyNDM3MjIsImlhdCI6MTcxMzIxMzcyMn0.bzb5UeqAHdQvFvHAt3cxNqo_-5TxoRYOqTz-Jqdlev7wFMubmOk8pjs_O-9DWWjZ
 
 
 <> f.txt

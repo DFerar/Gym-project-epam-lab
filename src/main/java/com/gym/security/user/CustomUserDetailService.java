@@ -1,4 +1,4 @@
-package com.gym.security;
+package com.gym.security.user;
 
 import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
@@ -16,12 +16,10 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         GymUserEntity user = userRepository.findByUserName(username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
-
         return UserDetailsImpl.build(user);
     }
 }

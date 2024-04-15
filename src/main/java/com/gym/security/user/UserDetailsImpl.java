@@ -1,4 +1,4 @@
-package com.gym.security;
+package com.gym.security.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gym.entity.GymUserEntity;
