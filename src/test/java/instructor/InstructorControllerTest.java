@@ -100,7 +100,6 @@ public class InstructorControllerTest {
     @Test
     public void shouldGetNotAssignedInstructors() {
         // Given
-        String username = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = RandomStringUtils.randomAlphabetic(7);
         List<InstructorEntity> instructorEntities = Collections.emptyList();
 
