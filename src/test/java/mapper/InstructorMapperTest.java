@@ -1,4 +1,4 @@
-/*package mapper;
+package mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -61,7 +61,7 @@ public class InstructorMapperTest {
         savedUser.setUserName(RandomStringUtils.randomAlphabetic(7));
         savedUser.setPassword(RandomStringUtils.randomAlphanumeric(7));
         //When
-        CreateInstructorResponseDto result = instructorMapper.mapToResponseDto(savedUser);
+        CreateInstructorResponseDto result = instructorMapper.mapToResponseDto(savedUser, savedUser.getPassword());
         //Then
         assertThat(result.getUserName()).isEqualTo(savedUser.getUserName());
         assertThat(result.getPassword()).isEqualTo(savedUser.getPassword());
@@ -147,4 +147,4 @@ public class InstructorMapperTest {
         assertThat(result.get(0).getFirstName()).isEqualTo(instructorEntity.getGymUserEntity().getFirstName());
         assertThat(result.get(0).getLastName()).isEqualTo(instructorEntity.getGymUserEntity().getLastName());
     }
-}*/
+}

@@ -24,6 +24,13 @@ public class JwtTokenProvider {
     @Value("${token.expiration}")
     private long jwtExpirationDate;
 
+    /**
+     * Generate JWT token for authenticated user.
+     *
+     * @param authentication - the authentication object containing the user's details
+     * @return token - a JWT token
+     * @throws JOSEException - if the application fails to generate the token
+     */
     public String generateToken(Authentication authentication) throws JOSEException {
         String username = authentication.getName();
         Date currentDate = new Date();
@@ -37,15 +44,19 @@ public class JwtTokenProvider {
             .expirationTime(expireDate)
             .build();
 
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS384), claimsSet);
+        SignedJWT signedJwt = new SignedJWT(new JWSHeader(JWSAlgorithm.HS384), claimsSet);
 
-        signedJWT.sign(signer);
+        signedJwt.sign(signer);
 
-        String token = signedJWT.serialize();
-
-        return token;
+        return signedJwt.serialize();
     }
 
+    /**
+     * Retrieve the username from given JWT token.
+     *
+     * @param token - passed JWT token
+     * @return username - username extracted from JWT token
+     */
     public String getUsername(String token) {
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
@@ -58,6 +69,11 @@ public class JwtTokenProvider {
             .getSubject();
     }
 
+    /**
+     * Constructs and returns a key for signing JWT.
+     *
+     * @return key - a secret key used for signing JWT
+     */
     private Key key() {
         return new SecretKeySpec(jwtSecret.getBytes(), "HmacSHA384");
     }

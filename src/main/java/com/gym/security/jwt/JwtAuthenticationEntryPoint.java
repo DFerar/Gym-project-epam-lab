@@ -9,6 +9,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    /**
+     * This method will be triggered anytime a user tries to access a resource that requires authentication and they do not provide
+     * valid authentication credentials. It sends an HTTP status code 401 (Unauthorised) in the response.
+     *
+     * @param request       - the HttpServletRequest
+     * @param response      - the HttpServletResponse
+     * @param authException - the AuthenticationException thrown
+     */
     @Override
     @SneakyThrows
     public void commence(HttpServletRequest request,

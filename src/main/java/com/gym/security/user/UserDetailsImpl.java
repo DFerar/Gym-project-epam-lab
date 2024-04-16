@@ -22,14 +22,18 @@ public class UserDetailsImpl implements UserDetails {
     @JsonIgnore
     private String password;
 
-    public UserDetailsImpl(Long id, String username,
-                           String password) {
-
+    /**
+     * Constructor.
+     */
+    public UserDetailsImpl(Long id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
     }
 
+    /**
+     * Builder.
+     */
     public static UserDetailsImpl build(GymUserEntity user) {
         return new UserDetailsImpl(user.getId(),
             user.getUserName(),

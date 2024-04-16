@@ -1,4 +1,4 @@
-/*package type;
+package type;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -7,11 +7,9 @@ import com.gym.controller.TrainingTypeController;
 import com.gym.dto.response.training.TrainingTypeResponseDto;
 import com.gym.entity.TrainingTypeEntity;
 import com.gym.mapper.TrainingMapper;
-import com.gym.service.AuthenticationService;
 import com.gym.service.TrainingTypeService;
 import java.util.Collections;
 import java.util.List;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,9 +22,6 @@ import org.springframework.http.ResponseEntity;
 public class TrainingTypeControllerTest {
     @Mock
     private TrainingTypeService trainingTypeService;
-
-    @Mock
-    private AuthenticationService authenticationService;
 
     @Mock
     private TrainingMapper trainingMapper;
@@ -47,12 +42,11 @@ public class TrainingTypeControllerTest {
 
         // When
         ResponseEntity<List<TrainingTypeResponseDto>> response =
-            trainingTypeController.getAllTrainingTypes(RandomStringUtils.randomAlphabetic(7),
-                RandomStringUtils.randomAlphabetic(7));
+            trainingTypeController.getAllTrainingTypes();
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody()).isEqualTo(trainingTypeResponseDtos);
     }
-}*/
+}

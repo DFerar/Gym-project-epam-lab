@@ -1,4 +1,4 @@
-/*package training;
+package training;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -12,11 +12,9 @@ import com.gym.dto.request.training.CreateTrainingRequestDto;
 import com.gym.dto.response.training.CustomerTrainingsResponseDto;
 import com.gym.dto.response.training.InstructorTrainingsResponseDto;
 import com.gym.mapper.TrainingMapper;
-import com.gym.service.AuthenticationService;
 import com.gym.service.TrainingService;
 import java.util.Collections;
 import java.util.List;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,9 +29,6 @@ public class TrainingControllerTest {
     private TrainingService trainingService;
 
     @Mock
-    private AuthenticationService authenticationService;
-
-    @Mock
     private TrainingMapper trainingMapper;
 
     @InjectMocks
@@ -42,15 +37,13 @@ public class TrainingControllerTest {
     @Test
     public void shouldGetCustomerTrainings() {
         // Given
-        String username = RandomStringUtils.randomAlphabetic(7);
-        String password = RandomStringUtils.randomAlphabetic(7);
         GetCustomerTrainingListRequestDto requestDto = new GetCustomerTrainingListRequestDto();
 
         when(trainingMapper.mapCustomerTrainingEntitiesToTrainingDtos(anyList())).thenReturn(Collections.emptyList());
 
         // When
         ResponseEntity<List<CustomerTrainingsResponseDto>> response =
-            trainingController.getCustomerTrainings(requestDto, username, password);
+            trainingController.getCustomerTrainings(requestDto);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -60,8 +53,6 @@ public class TrainingControllerTest {
     @Test
     public void shouldGetInstructorTrainings() {
         // Given
-        String username = RandomStringUtils.randomAlphabetic(7);
-        String password = RandomStringUtils.randomAlphabetic(7);
         GetInstructorTrainingsRequestDto requestDto = new GetInstructorTrainingsRequestDto();
 
         when(trainingService.getInstructorListOfTrainings(eq(requestDto.getUserName()), eq(null), eq(null),
@@ -70,7 +61,7 @@ public class TrainingControllerTest {
 
         // When
         ResponseEntity<List<InstructorTrainingsResponseDto>> response =
-            trainingController.getInstructorTrainings(requestDto, username, password);
+            trainingController.getInstructorTrainings(requestDto);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -80,14 +71,12 @@ public class TrainingControllerTest {
     @Test
     public void shouldCreateTraining() {
         // Given
-        String username = RandomStringUtils.randomAlphabetic(7);
-        String password = RandomStringUtils.randomAlphabetic(7);
         CreateTrainingRequestDto requestDto = new CreateTrainingRequestDto();
 
         // When
-        ResponseEntity<String> response = trainingController.createTraining(requestDto, username, password);
+        ResponseEntity<String> response = trainingController.createTraining(requestDto);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
-}*/
+}

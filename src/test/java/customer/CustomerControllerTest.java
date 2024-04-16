@@ -1,4 +1,4 @@
-/*package customer;
+package customer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -16,7 +16,6 @@ import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.mapper.CustomerMapper;
 import com.gym.mapper.InstructorMapper;
-import com.gym.service.AuthenticationService;
 import com.gym.service.CustomerService;
 import java.util.Collections;
 import java.util.HashSet;
@@ -42,9 +41,6 @@ public class CustomerControllerTest {
     @Mock
     private InstructorMapper instructorMapper;
 
-    @Mock
-    private AuthenticationService authenticationService;
-
     @InjectMocks
     private CustomerController customerController;
 
@@ -56,23 +52,18 @@ public class CustomerControllerTest {
         when(customerMapper.mapCreateCustomerRequestDtoToUserEntity(requestDto)).thenReturn(new GymUserEntity());
         when(customerMapper.mapCreateCustomerRequestDtoToCustomerEntity(requestDto)).thenReturn(customerEntity);
         when(customerService.createCustomer(customerEntity, new GymUserEntity())).thenReturn(customerEntity);
-        when(customerMapper.mapCustomerEntityToCreateResponseDto(customerEntity.getGymUserEntity())).thenReturn(
-            new CreateCustomerResponseDto());
 
         // When
         ResponseEntity<CreateCustomerResponseDto> response = customerController.createCustomer(requestDto);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(response.getBody()).isNotNull();
     }
 
     @Test
     public void shouldGetCustomerByUsername() {
         // Given
         String username = RandomStringUtils.randomAlphabetic(7);
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = RandomStringUtils.randomAlphabetic(7);
         CustomerEntity customerEntity = new CustomerEntity();
 
         when(customerService.getCustomerByUserName(username)).thenReturn(customerEntity);
@@ -81,7 +72,7 @@ public class CustomerControllerTest {
 
         // When
         ResponseEntity<GetCustomerProfileResponseDto> response =
-            customerController.getCustomerByUsername(username, loginUserName, loginPassword);
+            customerController.getCustomerByUsername(username);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -92,10 +83,6 @@ public class CustomerControllerTest {
     public void shouldUpdateCustomer() {
         // Given
         UpdateCustomerProfileRequestDto newData = new UpdateCustomerProfileRequestDto();
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-
-        String loginPassword = RandomStringUtils.randomAlphabetic(7);
-
         GymUserEntity userEntityFromNewData = new GymUserEntity();
         CustomerEntity customerEntityFromNewData = new CustomerEntity();
 
@@ -108,7 +95,7 @@ public class CustomerControllerTest {
 
         // When
         ResponseEntity<UpdateCustomerProfileResponseDto> response =
-            customerController.updateCustomer(newData, loginUserName, loginPassword);
+            customerController.updateCustomer(newData);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -119,12 +106,8 @@ public class CustomerControllerTest {
     public void shouldDeleteCustomer() {
         // Given
         String username = RandomStringUtils.randomAlphabetic(7);
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = RandomStringUtils.randomAlphabetic(7);
-
-
         // When
-        ResponseEntity<String> response = customerController.deleteCustomer(username, loginUserName, loginPassword);
+        ResponseEntity<String> response = customerController.deleteCustomer(username);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -134,12 +117,8 @@ public class CustomerControllerTest {
     public void shouldChangeCustomerActivity() {
         // Given
         String username = RandomStringUtils.randomAlphabetic(7);
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = RandomStringUtils.randomAlphabetic(7);
-
         // When
-        ResponseEntity<String> response = customerController.customerActivation(username, loginUserName, loginPassword);
-
+        ResponseEntity<String> response = customerController.customerActivation(username);
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
@@ -148,8 +127,6 @@ public class CustomerControllerTest {
     public void shouldUpdateCustomerInstructors() {
         // Given
         UpdateCustomerInstructorsRequestDto requestDto = new UpdateCustomerInstructorsRequestDto();
-        String loginUserName = "loginUser";
-        String loginPassword = "password";
         Set<InstructorEntity> instructorEntities = new HashSet<>();
 
         when(customerService.changeCustomerInstructors(requestDto.getCustomerUserName(),
@@ -159,10 +136,10 @@ public class CustomerControllerTest {
 
         // When
         ResponseEntity<List<InstructorForCustomerResponseDto>> response =
-            customerController.updateCustomerInstructors(requestDto, loginUserName, loginPassword);
+            customerController.updateCustomerInstructors(requestDto);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
     }
-}*/
+}

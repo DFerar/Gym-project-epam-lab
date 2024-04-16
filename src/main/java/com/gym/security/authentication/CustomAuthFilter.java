@@ -19,6 +19,14 @@ import org.springframework.stereotype.Component;
 public class CustomAuthFilter extends AbstractAuthenticationProcessingFilter {
     private final LoggingAttemptsService loggingAttemptsService;
 
+    /**
+     * Constructor for the CustomAuthFilter that sets up the AuthenticationManager, and the handlers for successful and failed authentication.
+     *
+     * @param loggingAttemptsService             the service to log attempts
+     * @param authenticationManager              the manager that handles the whole authentication process
+     * @param customAuthenticationSuccessHandler the handler which proceed after successful authentication
+     * @param customAuthenticationFailureHandler the handler which proceed after failed authentication
+     */
     public CustomAuthFilter(LoggingAttemptsService loggingAttemptsService,
                             @Lazy AuthenticationManager authenticationManager,
                             CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler,
@@ -29,6 +37,14 @@ public class CustomAuthFilter extends AbstractAuthenticationProcessingFilter {
         setAuthenticationFailureHandler(customAuthenticationFailureHandler);
     }
 
+    /**
+     * Attempts to authenticate a user based on a HttpServletRequest.
+     *
+     * @param request  -  the HttpServletRequest containing the username and password parameters.
+     * @param response - the HttpServletResponse.
+     * @return Authentication - a fully authenticated object including credentials.
+     * @throws BadCredentialsException - if the authentication process is unsuccessful
+     */
     @Override
     @SneakyThrows
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {

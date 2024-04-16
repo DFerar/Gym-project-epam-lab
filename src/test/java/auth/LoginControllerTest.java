@@ -1,12 +1,12 @@
-/*package auth;
+package auth;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.gym.controller.LoginController;
+import com.gym.controller.PasswordChangeController;
 import com.gym.dto.request.login.ChangeLoginRequestDto;
-import com.gym.service.AuthenticationService;
+import com.gym.service.PasswordChangeService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,25 +19,11 @@ import org.springframework.http.ResponseEntity;
 @ExtendWith(MockitoExtension.class)
 public class LoginControllerTest {
     @Mock
-    private AuthenticationService authenticationService;
+    private PasswordChangeService passwordChangeService;
 
     @InjectMocks
-    private LoginController loginController;
+    private PasswordChangeController passwordChangeController;
 
-    @Test
-    public void shouldLogin() {
-        // Given
-        LoginRequestDto requestDto = new LoginRequestDto();
-        requestDto.setUserName(RandomStringUtils.randomAlphabetic(7));
-        requestDto.setPassword(RandomStringUtils.randomAlphabetic(7));
-
-
-        // When
-        ResponseEntity<String> response = loginController.login(requestDto);
-
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
 
     @Test
     public void shouldChangePassword() {
@@ -48,11 +34,11 @@ public class LoginControllerTest {
         requestDto.setNewPassword(RandomStringUtils.randomAlphabetic(7));
 
         // When
-        ResponseEntity<String> response = loginController.changeLogin(requestDto);
+        ResponseEntity<String> response = passwordChangeController.changeLogin(requestDto);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        verify(authenticationService, times(1)).changeUsersPassword(requestDto.getUserName(),
+        verify(passwordChangeService, times(1)).changeUsersPassword(requestDto.getUserName(),
             requestDto.getOldPassword(), requestDto.getNewPassword());
     }
-}*/
+}

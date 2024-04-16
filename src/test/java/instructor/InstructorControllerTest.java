@@ -1,4 +1,4 @@
-/*package instructor;
+package instructor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -13,7 +13,6 @@ import com.gym.dto.response.instructor.UpdateInstructorProfileResponseDto;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.mapper.InstructorMapper;
-import com.gym.service.AuthenticationService;
 import com.gym.service.InstructorService;
 import java.util.Collections;
 import java.util.List;
@@ -34,9 +33,6 @@ public class InstructorControllerTest {
     @Mock
     private InstructorMapper instructorMapper;
 
-    @Mock
-    private AuthenticationService authenticationService;
-
     @InjectMocks
     private InstructorController instructorController;
 
@@ -49,8 +45,8 @@ public class InstructorControllerTest {
         when(instructorMapper.mapCreateInstructorRequestDtoToUserEntity(requestDto)).thenReturn(userEntity);
         when(instructorService.createInstructor(userEntity, requestDto.getSpecialization())).thenReturn(
             instructorEntity);
-        when(instructorMapper.mapToResponseDto(instructorEntity.getGymUserEntity())).thenReturn(
-            new CreateInstructorResponseDto());
+        when(instructorMapper.mapToResponseDto(instructorEntity.getGymUserEntity(),
+            userEntity.getPassword())).thenReturn(new CreateInstructorResponseDto());
 
         // When
         ResponseEntity<CreateInstructorResponseDto> response = instructorController.createInstructor(requestDto);
@@ -64,8 +60,6 @@ public class InstructorControllerTest {
     public void shouldGetInstructor() {
         // Given
         String username = RandomStringUtils.randomAlphabetic(7);
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = RandomStringUtils.randomAlphabetic(7);
         InstructorEntity instructorEntity = new InstructorEntity();
 
         when(instructorService.getInstructorByUsername(username)).thenReturn(instructorEntity);
@@ -74,7 +68,7 @@ public class InstructorControllerTest {
 
         // When
         ResponseEntity<GetInstructorProfileResponseDto> response =
-            instructorController.getInstructor(username, loginUserName, loginPassword);
+            instructorController.getInstructor(username);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -85,8 +79,6 @@ public class InstructorControllerTest {
     public void shouldUpdateInstructor() {
         // Given
         UpdateInstructorProfileRequestDto newData = new UpdateInstructorProfileRequestDto();
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
-        String loginPassword = RandomStringUtils.randomAlphabetic(7);
         GymUserEntity gymUserEntityFromNewData = new GymUserEntity();
         InstructorEntity instructorEntity = new InstructorEntity();
 
@@ -98,7 +90,7 @@ public class InstructorControllerTest {
 
         // When
         ResponseEntity<UpdateInstructorProfileResponseDto> response =
-            instructorController.updateInstructor(newData, loginUserName, loginPassword);
+            instructorController.updateInstructor(newData);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -109,18 +101,15 @@ public class InstructorControllerTest {
     public void shouldGetNotAssignedInstructors() {
         // Given
         String username = RandomStringUtils.randomAlphabetic(7);
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = RandomStringUtils.randomAlphabetic(7);
         List<InstructorEntity> instructorEntities = Collections.emptyList();
 
-        when(instructorService.getInstructorsNotAssignedToCustomerByCustomerUserName(username)).thenReturn(
-            instructorEntities);
         when(instructorMapper.mapInstructorEntitiesToInstructorDtos(instructorEntities)).thenReturn(
             Collections.emptyList());
 
         // When
         ResponseEntity<List<GetNotAssignedOnCustomerInstructorsResponseDto>> response =
-            instructorController.getNotAssignedInstructors(username, loginUserName, loginPassword);
+            instructorController.getNotAssignedInstructors(loginPassword);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -130,15 +119,13 @@ public class InstructorControllerTest {
     @Test
     public void shouldChangeInstructorActivity() {
         // Given
-        String username = RandomStringUtils.randomAlphabetic(7);
-        String loginUserName = RandomStringUtils.randomAlphabetic(7);
         String loginPassword = RandomStringUtils.randomAlphabetic(7);
 
         // When
         ResponseEntity<String> response =
-            instructorController.instructorActivation(username, loginUserName, loginPassword);
+            instructorController.instructorActivation(loginPassword);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
-}*/
+}

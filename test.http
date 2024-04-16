@@ -20,11 +20,19 @@ Content-Type: application/json
   "lastName": "Instructor",
   "specialization": "CARDIO"
 }
+###
+//login
+POST http://localhost:8080/login?username=Test.Customer2&password=<iH6BI9H6i
+
+###
+//logout
+POST http://localhost:8080/logout?username=Test.Customer2&password=<iH6BI9H6i
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMiIsImV4cCI6MTcxMzI5NDAxNCwiaWF0IjoxNzEzMjY0MDE0fQ.TSCNvgiAjrceJ5ISmIQLtGPg6jNwowDFI2hCpH_9mHJktvt6SpeJTE4CdybNZhxi
 
 ###
 //create training with created customer and created instructor
 POST http://localhost:8080/training/create
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMTAiLCJpYXQiOjE3MTI4NDc3NDMsImV4cCI6MTcxNTg0Nzc0M30.VxKiWce1vdJCMRgWvScT5TwJ8du-Tg2ryNHtVBLzyPo9pi_OC1vtB4Z03U9S1f1n
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0Lkluc3RydWN0b3IiLCJleHAiOjE3MTMyOTEyMzksImlhdCI6MTcxMzI2MTIzOX0.2HKwWHT2So3VwFtO7aDhrZpnZI2Gq-39EU6X-CMD5K-vsIc1f8rAapvrYMU0YG1W
 Content-Type: application/json
 
 {
@@ -49,8 +57,8 @@ Content-Type: application/json
 
 ###
 //get customer by username
-GET http://localhost:8080/customer/Test.Customer13
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMzEiLCJleHAiOjE3MTMyNDM3MjIsImlhdCI6MTcxMzIxMzcyMn0.bzb5UeqAHdQvFvHAt3cxNqo_-5TxoRYOqTz-Jqdlev7wFMubmOk8pjs_O-9DWWjZ
+GET http://localhost:8080/customer/Test.Customer
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMiIsImV4cCI6MTcxMzI5NDAxNCwiaWF0IjoxNzEzMjY0MDE0fQ.TSCNvgiAjrceJ5ISmIQLtGPg6jNwowDFI2hCpH_9mHJktvt6SpeJTE4CdybNZhxi
 
 
 <> f.txt

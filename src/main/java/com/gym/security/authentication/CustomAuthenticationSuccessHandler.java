@@ -19,6 +19,15 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private final TokenRepository tokenRepository;
     private final TokenMapper tokenMapper;
 
+    /**
+     * Takes an HttpServletRequest, HttpServletResponse and Authentication, generates a JWT token,
+     * saves it in the token repository and sets it in the Authorization header of the response.
+     *
+     * @param request        - the HttpServletRequest which contains the login request information.
+     * @param response       - the HttpServletResponse
+     * @param authentication - the Authentication object containing the authentication details.
+     * @throws Exception - if the token cannot be generated, saved, or set in the response.
+     */
     @Override
     @SneakyThrows
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

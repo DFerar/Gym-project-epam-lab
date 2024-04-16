@@ -48,11 +48,29 @@ CREATE TABLE IF NOT EXISTS Customer_instructor
     PRIMARY KEY (customer_id, instructor_id)
 );
 
+CREATE TABLE IF NOT EXISTS blocked_users (
+                                             ID BIGINT PRIMARY KEY,
+                                             username VARCHAR UNIQUE,
+                                             timestamp_of_blocking TIMESTAMP,
+                                             timestamp_of_unblocking TIMESTAMP
+);
+
+
+
+CREATE TABLE IF NOT EXISTS tokens (
+                                      ID BIGINT PRIMARY KEY,
+                                      token VARCHAR UNIQUE,
+                                      username VARCHAR,
+                                      is_valid BOOLEAN
+);
+
 CREATE SEQUENCE IF NOT EXISTS customer_SEQ;
 CREATE SEQUENCE IF NOT EXISTS instructor_SEQ;
 CREATE SEQUENCE IF NOT EXISTS training_SEQ;
 CREATE SEQUENCE IF NOT EXISTS gym_user_SEQ;
 CREATE SEQUENCE IF NOT EXISTS training_type_SEQ;
+CREATE SEQUENCE IF NOT EXISTS blocked_user_seq;
+CREATE SEQUENCE IF NOT EXISTS tokens_seq;
 
 INSERT INTO training_type
 VALUES (1, 'CARDIO'),

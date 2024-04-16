@@ -1,4 +1,4 @@
-/*package user;
+package user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,9 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 public class GymUserServiceTest {
+    @Mock
+    private PasswordEncoder passwordEncoder;
     @Mock
     private GymUserRepository gymUserRepository;
     @InjectMocks
@@ -61,10 +64,11 @@ public class GymUserServiceTest {
 
         when(gymUserRepository.existsByUserName(any(String.class))).thenReturn(false);
         when(gymUserRepository.save(any())).thenReturn(existingUser);
+        when(passwordEncoder.encode(any(String.class))).thenReturn(password);
         //When
         GymUserEntity savedUser = gymUserService.createUser(existingUser);
 
         assertThat(savedUser).isEqualTo(existingUser);
     }
 
-}*/
+}

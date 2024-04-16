@@ -1,4 +1,4 @@
-/*package customer;
+package customer;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +54,8 @@ public class CustomerServiceTest {
 
         GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password, true, 1);
 
-        CustomerEntity customerEntity = new CustomerEntity(1L, LocalDate.of(1990, 1, 1), address, gymUserEntity, null);
+        CustomerEntity customerEntity = new CustomerEntity(1L, LocalDate.of(1990, 1, 1),
+            address, gymUserEntity, null);
 
         when(gymUserService.createUser(any())).thenReturn(gymUserEntity);
         when(customerRepository.save(any(CustomerEntity.class))).thenReturn(customerEntity);
@@ -142,14 +143,16 @@ public class CustomerServiceTest {
         String userNameOfInstructor = RandomStringUtils.randomAlphabetic(7);
         GymUserEntity gymUserEntity =
             new GymUserEntity(1L, firstName, lastName, userNameOfInstructor, password, true, 1);
-        CustomerEntity customerEntity = new CustomerEntity(1L, LocalDate.of(1990, 1, 1), address, gymUserEntity, null);
+        CustomerEntity customerEntity = new CustomerEntity(1L, LocalDate.of(1990, 1, 1),
+            address, gymUserEntity, null);
         when(customerRepository.findCustomerEntityByGymUserEntityUserName(userName)).thenReturn(customerEntity);
         //When
         customerService.deleteCustomerByUserName(userName);
         //Assert
         verify(customerRepository, times(1)).delete(customerEntity);
         verify(gymUserRepository, times(1)).deleteGymUserEntitiesByUserName(userName);
-        verify(trainingRepository, times(1)).deleteTrainingEntitiesByCustomerGymUserEntityUserName(userName);
+        verify(trainingRepository, times(1))
+            .deleteTrainingEntitiesByCustomerGymUserEntityUserName(userName);
     }
 
     @Test
@@ -183,4 +186,4 @@ public class CustomerServiceTest {
         assertThat(result).contains(instructor2);
         verify(customerRepository, times(1)).save(customerEntity);
     }
-}*/
+}

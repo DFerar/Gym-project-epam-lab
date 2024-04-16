@@ -17,11 +17,16 @@ public class CustomConverter implements Converter<Jwt, AbstractAuthenticationTok
     private final UserDetailsService userDetailsService;
     private final HttpServletRequest request;
 
+    /**
+     * Converts a Jwt token into an UsernamePasswordAuthenticationToken.
+     *
+     * @param token - the Jwt token to convert.
+     * @return AbstractAuthenticationToken - the converted token.
+     */
     @Override
     public AbstractAuthenticationToken convert(Jwt token) {
         String tokenValue = request.getHeader("Authorization");
 
-        // If the token starts with "Bearer ", remove that portion
         if (tokenValue != null && tokenValue.startsWith("Bearer ")) {
             tokenValue = tokenValue.substring(7);
         }
