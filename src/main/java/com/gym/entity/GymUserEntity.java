@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,4 +35,6 @@ public class GymUserEntity {
     private Boolean isActive;
     @Column(name = "user_index")
     private Integer userIndex;
+    @Column(name = "time_of_blocking")
+    private LocalDateTime timeOfBlocking;
 }

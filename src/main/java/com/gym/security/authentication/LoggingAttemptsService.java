@@ -1,7 +1,10 @@
 package com.gym.security.authentication;
 
-import com.gym.entity.BlockedUserEntity;
-import com.gym.repository.security.BlockedUserRepository;
+import com.gym.entity.GymUserEntity;
+import com.gym.entity.TokenEntity;
+import com.gym.exception.UserNotFoundException;
+import com.gym.repository.GymUserRepository;
+import com.gym.repository.security.TokenRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,8 +18,9 @@ import org.springframework.stereotype.Component;
 public class LoggingAttemptsService {
     private static final int MAX_ATTEMPTS = 3;
     private static final int BLOCK_DURATION_MINUTES = 5;
-    private final BlockedUserRepository blockedUserRepository;
     private final ConcurrentHashMap<String, Integer> attemptsCache = new ConcurrentHashMap<>();
+    private final TokenRepository tokenRepository;
+    private final GymUserRepository gymUserRepository;
 
     /**
      * Adds a user to the login attempts cache. If user exceeds the max attempts, blocks the user.
@@ -39,18 +43,22 @@ public class LoggingAttemptsService {
      * @return Boolean - returns true if the user is blocked, false otherwise.
      */
     public Boolean isBlocked(String username) {
-        BlockedUserEntity blockedUserEntity = blockedUserRepository.findByUsername(username);
-        return blockedUserEntity != null;
+        LocalDateTime now = LocalDateTime.now();
+        GymUserEntity blockedUserEntity = gymUserRepository.findByUserName(username);
+        if (blockedUserEntity == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        return blockedUserEntity.getTimeOfBlocking() != null && !now.isAfter(blockedUserEntity.getTimeOfBlocking()
+            .plusMinutes(BLOCK_DURATION_MINUTES));
     }
 
     /**
-     * Removes expired blocks from the blocked user repository every 60 seconds.
+     * Deletes all tokens in database every two days.
      */
     @Transactional
-    @Scheduled(fixedRate = 60, timeUnit = TimeUnit.SECONDS)
-    public void removeExpiredBlocks() {
-        LocalDateTime now = LocalDateTime.now();
-        blockedUserRepository.deleteAllByTimestampOfUnblockingBefore(now);
+    @Scheduled(fixedRate = 2, timeUnit = TimeUnit.DAYS)
+    public void deleteTokens() {
+        tokenRepository.deleteAll();
     }
 
     /**
@@ -60,12 +68,18 @@ public class LoggingAttemptsService {
      */
     private void blockUser(String username) {
         LocalDateTime blockTime = LocalDateTime.now();
-        LocalDateTime unblockTime = LocalDateTime.now().plusMinutes(BLOCK_DURATION_MINUTES);
-        BlockedUserEntity blockedUserEntity = new BlockedUserEntity();
-        blockedUserEntity.setUsername(username);
-        blockedUserEntity.setTimestampOfBlocking(blockTime);
-        blockedUserEntity.setTimestampOfUnblocking(unblockTime);
-        blockedUserRepository.save(blockedUserEntity);
+        GymUserEntity gymUserEntity = gymUserRepository.findByUserName(username);
+        if (gymUserEntity == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        gymUserEntity.setTimeOfBlocking(blockTime);
+        gymUserRepository.save(gymUserEntity);
+        TokenEntity token = tokenRepository.findByUsername(username);
+        if (token == null) {
+            throw new UserNotFoundException("User not found");
+        }
+        token.setIsValid(false);
+        tokenRepository.save(token);
         attemptsCache.remove(username);
     }
 }

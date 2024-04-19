@@ -1,14 +1,8 @@
-package exception;
+package com.gym.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.gym.exception.CustomerNotFoundException;
-import com.gym.exception.GlobalExceptionHandler;
-import com.gym.exception.InstructorNotFoundException;
-import com.gym.exception.LoginException;
-import com.gym.exception.TrainingTypeNotFoundException;
-import com.gym.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,4 +1,4 @@
-package auth;
+package com.gym.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
-import com.gym.service.PasswordChangeService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

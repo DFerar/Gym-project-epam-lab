@@ -1,10 +1,9 @@
-package auth;
+package com.gym.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.gym.controller.PasswordChangeController;
 import com.gym.dto.request.login.ChangeLoginRequestDto;
 import com.gym.service.PasswordChangeService;
 import org.apache.commons.lang3.RandomStringUtils;

@@ -1,4 +1,4 @@
-package instructor;
+package com.gym.service;
 
 import static com.gym.entity.TrainingType.CARDIO;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,8 +15,6 @@ import com.gym.mapper.InstructorMapper;
 import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingTypeRepository;
-import com.gym.service.GymUserService;
-import com.gym.service.InstructorService;
 import com.gym.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +52,7 @@ class InstructorServiceTest {
         String firstName = RandomStringUtils.randomAlphabetic(7);
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String userName = RandomStringUtils.randomAlphabetic(7);
-        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password, true, 1);
+        GymUserEntity gymUserEntity = new GymUserEntity(1L, firstName, lastName, userName, password, true, 1, null);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
@@ -81,7 +79,7 @@ class InstructorServiceTest {
 
 
         GymUserEntity gymUserEntity =
-            new GymUserEntity(1L, firstName, lastName, userNameOfInstructor, password, true, 1);
+            new GymUserEntity(1L, firstName, lastName, userNameOfInstructor, password, true, 1, null);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
@@ -102,7 +100,7 @@ class InstructorServiceTest {
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String userName = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity updatedUser = new GymUserEntity(1L, firstName, lastName, userName, password, true, 1);
+        GymUserEntity updatedUser = new GymUserEntity(1L, firstName, lastName, userName, password, true, 1, null);
 
         TrainingTypeEntity trainingTypeEntity = new TrainingTypeEntity(1L, CARDIO);
 
@@ -129,7 +127,7 @@ class InstructorServiceTest {
         String lastName = RandomStringUtils.randomAlphabetic(7);
         String userName = RandomStringUtils.randomAlphabetic(7);
 
-        GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName, userName, password, true, 1);
+        GymUserEntity gymUserEntity = new GymUserEntity(userId, firstName, lastName, userName, password, true, 1, null);
 
         when(gymUserRepository.findByUserName(userName)).thenReturn(gymUserEntity);
         //When

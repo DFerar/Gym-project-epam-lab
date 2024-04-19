@@ -1,12 +1,13 @@
 CREATE TABLE IF NOT EXISTS Gym_user
 (
-    ID         BIGINT PRIMARY KEY,
-    first_name varchar(255) NOT NULL,
-    last_name  varchar(255) NOT NULL,
-    user_name  varchar(255) NOT NULL UNIQUE,
-    password   varchar(255) NOT NULL,
-    is_active  boolean      NOT NULL,
-    user_index int
+    ID               BIGINT PRIMARY KEY,
+    first_name       varchar(255) NOT NULL,
+    last_name        varchar(255) NOT NULL,
+    user_name        varchar(255) NOT NULL UNIQUE,
+    password         varchar(255) NOT NULL,
+    is_active        boolean      NOT NULL,
+    user_index       int,
+    time_of_blocking timestamp
 );
 
 CREATE TABLE IF NOT EXISTS Customer
@@ -48,20 +49,12 @@ CREATE TABLE IF NOT EXISTS Customer_instructor
     PRIMARY KEY (customer_id, instructor_id)
 );
 
-CREATE TABLE IF NOT EXISTS blocked_users (
-                                             ID BIGINT PRIMARY KEY,
-                                             username VARCHAR UNIQUE,
-                                             timestamp_of_blocking TIMESTAMP,
-                                             timestamp_of_unblocking TIMESTAMP
-);
-
-
-
-CREATE TABLE IF NOT EXISTS tokens (
-                                      ID BIGINT PRIMARY KEY,
-                                      token VARCHAR UNIQUE,
-                                      username VARCHAR,
-                                      is_valid BOOLEAN
+CREATE TABLE IF NOT EXISTS token
+(
+    ID       BIGINT PRIMARY KEY,
+    token    VARCHAR UNIQUE,
+    username VARCHAR,
+    is_valid BOOLEAN
 );
 
 CREATE SEQUENCE IF NOT EXISTS customer_SEQ;
@@ -69,7 +62,6 @@ CREATE SEQUENCE IF NOT EXISTS instructor_SEQ;
 CREATE SEQUENCE IF NOT EXISTS training_SEQ;
 CREATE SEQUENCE IF NOT EXISTS gym_user_SEQ;
 CREATE SEQUENCE IF NOT EXISTS training_type_SEQ;
-CREATE SEQUENCE IF NOT EXISTS blocked_user_seq;
 CREATE SEQUENCE IF NOT EXISTS tokens_seq;
 
 INSERT INTO training_type
@@ -79,9 +71,3 @@ VALUES (1, 'CARDIO'),
        (4, 'KEK'),
        (5, 'BOX'),
        (6, 'ABS');
-INSERT INTO gym_user
-VALUES (0, 'admin', 'admin', 'admin.admin', 'admin', true);
-INSERT INTO instructor
-VALUES (0, 1, 0);
-INSERT INTO customer
-VALUES (0, '1997-01-01', 'admin', 0)

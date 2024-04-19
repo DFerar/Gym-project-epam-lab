@@ -1,4 +1,4 @@
-package user;
+package com.gym.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import com.gym.entity.GymUserEntity;
 import com.gym.repository.GymUserRepository;
-import com.gym.service.GymUserService;
 import com.gym.utils.Utils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
@@ -37,10 +36,10 @@ public class GymUserServiceTest {
 
         GymUserEntity existingUser =
             new GymUserEntity(userId, RandomStringUtils.randomAlphabetic(7), RandomStringUtils.randomAlphabetic(7),
-                RandomStringUtils.randomAlphabetic(7), password, false, 1);
+                RandomStringUtils.randomAlphabetic(7), password, false, 1, null);
 
         GymUserEntity newGymUserEntity =
-            new GymUserEntity(userId, firstName, lastName, existingUser.getUserName(), password, isActive, 1);
+            new GymUserEntity(userId, firstName, lastName, existingUser.getUserName(), password, isActive, 1, null);
         when(gymUserRepository.findByUserName(existingUser.getUserName())).thenReturn(existingUser);
         when(gymUserRepository.save(any(GymUserEntity.class))).thenReturn(newGymUserEntity);
         //When
@@ -60,7 +59,7 @@ public class GymUserServiceTest {
 
         GymUserEntity existingUser =
             new GymUserEntity(userId, firstName, lastName, RandomStringUtils.randomAlphabetic(7), password, isActive,
-                1);
+                1, null);
 
         when(gymUserRepository.existsByUserName(any(String.class))).thenReturn(false);
         when(gymUserRepository.save(any())).thenReturn(existingUser);

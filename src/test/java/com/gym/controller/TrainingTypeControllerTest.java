@@ -1,9 +1,8 @@
-package type;
+package com.gym.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.gym.controller.TrainingTypeController;
 import com.gym.dto.response.training.TrainingTypeResponseDto;
 import com.gym.entity.TrainingTypeEntity;
 import com.gym.mapper.TrainingMapper;

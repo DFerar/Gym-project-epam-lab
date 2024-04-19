@@ -58,7 +58,7 @@ Content-Type: application/json
 ###
 //get customer by username
 GET http://localhost:8080/customer/Test.Customer
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMiIsImV4cCI6MTcxMzI5NDAxNCwiaWF0IjoxNzEzMjY0MDE0fQ.TSCNvgiAjrceJ5ISmIQLtGPg6jNwowDFI2hCpH_9mHJktvt6SpeJTE4CdybNZhxi
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMiIsImV4cCI6MTcxMzQ5NDI5NywiaWF0IjoxNzEzNDY0Mjk3fQ.7FHp8bQrF3I5M31XsfoPrZr8bwYkLplItHvgsgjq3TeB2C-St4KxqD5a39mMuee5
 
 
 <> f.txt

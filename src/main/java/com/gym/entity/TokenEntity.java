@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tokens")
+@Table(name = "token")
 public class TokenEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tokens_id_gen")

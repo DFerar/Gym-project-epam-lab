@@ -1,9 +1,8 @@
-package utils;
+package com.gym.utils;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.gym.utils.Utils;
 import org.junit.jupiter.api.Test;
 
 public class PasswordGeneratorTest {

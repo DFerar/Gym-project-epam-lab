@@ -2,7 +2,6 @@ package com.gym.health;
 
 import com.gym.repository.GymUserRepository;
 import java.sql.Connection;
-import java.util.Map;
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -22,7 +21,7 @@ public class DatabaseConnectionHealthIndicator implements HealthIndicator {
         long numberOfUsers = gymUserRepository.count();
         try (Connection connection = dataSource.getConnection()) {
             if (connection.isValid(1000)) {
-                return Health.up().withDetails(Map.of("numberOfUsers", numberOfUsers)).build();
+                return Health.up().withDetail("numberOfUsers", numberOfUsers).build();
             } else {
                 return Health.down().withDetail("Error", "Invalid Connection").build();
             }

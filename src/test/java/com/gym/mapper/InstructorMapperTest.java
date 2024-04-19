@@ -1,4 +1,4 @@
-package mapper;
+package com.gym.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,7 +12,6 @@ import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingType;
 import com.gym.entity.TrainingTypeEntity;
-import com.gym.mapper.InstructorMapper;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

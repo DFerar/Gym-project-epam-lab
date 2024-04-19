@@ -1,4 +1,4 @@
-package type;
+package com.gym.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import com.gym.entity.TrainingType;
 import com.gym.entity.TrainingTypeEntity;
 import com.gym.repository.TrainingTypeRepository;
-import com.gym.service.TrainingTypeService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

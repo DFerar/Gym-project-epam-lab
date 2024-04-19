@@ -1,9 +1,8 @@
-package instructor;
+package com.gym.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.gym.controller.InstructorController;
 import com.gym.dto.request.instructor.CreateInstructorRequestDto;
 import com.gym.dto.request.instructor.UpdateInstructorProfileRequestDto;
 import com.gym.dto.response.instructor.CreateInstructorResponseDto;

@@ -1,11 +1,10 @@
-package training;
+package com.gym.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-import com.gym.controller.TrainingController;
 import com.gym.dto.request.customer.GetCustomerTrainingListRequestDto;
 import com.gym.dto.request.instructor.GetInstructorTrainingsRequestDto;
 import com.gym.dto.request.training.CreateTrainingRequestDto;

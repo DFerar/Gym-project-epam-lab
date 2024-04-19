@@ -1,4 +1,4 @@
-package training;
+package com.gym.service;
 
 import static com.gym.entity.TrainingType.CARDIO;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +18,6 @@ import com.gym.repository.CustomerRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import com.gym.repository.TrainingTypeRepository;
-import com.gym.service.TrainingService;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;

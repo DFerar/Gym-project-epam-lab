@@ -29,9 +29,13 @@ public class CustomJwtDecoder implements JwtDecoder {
     @Override
     public Jwt decode(String token) throws JwtException {
         TokenEntity tokenFromDatabase = tokenRepository.findByToken(token);
+        if (tokenFromDatabase == null) {
+            throw new BadJwtException("invalid token");
+        }
         if (!tokenFromDatabase.getIsValid()) {
             throw new BadJwtException("invalid token");
         }
         return jwtDecoder.decode(token);
     }
 }
+

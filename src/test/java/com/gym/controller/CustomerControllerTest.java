@@ -1,9 +1,8 @@
-package customer;
+package com.gym.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import com.gym.controller.CustomerController;
 import com.gym.dto.request.customer.CreateCustomerRequestDto;
 import com.gym.dto.request.customer.UpdateCustomerInstructorsRequestDto;
 import com.gym.dto.request.customer.UpdateCustomerProfileRequestDto;
