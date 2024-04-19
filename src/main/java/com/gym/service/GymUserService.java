@@ -2,7 +2,7 @@ package com.gym.service;
 
 
 import com.gym.entity.GymUserEntity;
-import com.gym.exceptionHandler.UserNotFoundException;
+import com.gym.exception.UserNotFoundException;
 import com.gym.repository.GymUserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,13 @@ import org.springframework.stereotype.Service;
 public class GymUserService {
     private final GymUserRepository gymUserRepository;
 
+    /**
+     * Updates a GymUserEntity's fields and saves it in the database.
+     *
+     * @param userEntity GymUserEntity object containing the updated details.
+     * @return GymUserEntity representing the updated user.
+     * @throws UserNotFoundException When a user with the given username is not found.
+     */
     @Transactional
     public GymUserEntity updateUser(GymUserEntity userEntity) {
         GymUserEntity gymUserEntity = gymUserRepository.findByUserName(userEntity.getUserName());
@@ -27,15 +34,29 @@ public class GymUserService {
         return gymUserRepository.save(gymUserEntity);
     }
 
+    /**
+     * This method is used to create a GymUserEntity. It verifies if a user with the same userName exists
+     * in the database. If there is no existing user with the same username, it sets the user index to 1 and
+     * creates a user. Otherwise, it increments the index by 1 and creates a user with the new index.
+     *
+     * @param gymUserEntityFromDto Object containing the details of the gym user to be created
+     * @return gymUserEntityFromDto object after saving it in the database
+     */
     @Transactional
-    public String generateUniqueUserName(String firstName, String lastName) {
-        String baseUserName = firstName + "." + lastName;
-        Boolean userNameExist = gymUserRepository.existsByUserName(baseUserName);
-        if (userNameExist) {
-            int nextUserSuffix = gymUserRepository.findGymUserEntitiesByFirstNameAndLastName(firstName, lastName).size();
-            return baseUserName + nextUserSuffix;
+    public GymUserEntity createUser(GymUserEntity gymUserEntityFromDto) {
+        String baseUserName = gymUserEntityFromDto.getFirstName() + "." + gymUserEntityFromDto.getLastName();
+        Boolean userNameExists = gymUserRepository.existsByUserName(baseUserName);
+        if (!userNameExists) {
+            gymUserEntityFromDto.setUserIndex(1);
+            gymUserEntityFromDto.setUserName(baseUserName);
         } else {
-            return baseUserName;
+            int maxIndex = gymUserRepository.findMaxUserIndexByFirstNameAndLastName(gymUserEntityFromDto.getFirstName(),
+                gymUserEntityFromDto.getLastName());
+            int suffix = maxIndex + 1;
+            gymUserEntityFromDto.setUserIndex(suffix);
+            String userName = baseUserName + suffix;
+            gymUserEntityFromDto.setUserName(userName);
         }
+        return gymUserRepository.save(gymUserEntityFromDto);
     }
 }

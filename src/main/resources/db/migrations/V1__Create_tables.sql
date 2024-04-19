@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS Gym_user
     last_name  varchar(255) NOT NULL,
     user_name  varchar(255) NOT NULL UNIQUE,
     password   varchar(255) NOT NULL,
-    is_active  boolean      NOT NULL
+    is_active  boolean      NOT NULL,
+    user_index int
 );
 
 CREATE TABLE IF NOT EXISTS Customer

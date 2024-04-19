@@ -4,8 +4,8 @@ POST http://localhost:8080/customer/create
 Content-Type: application/json
 
 {
-  "firstName": "123",
-  "lastName": "123",
+  "firstName": "Test",
+  "lastName": "Customer",
   "dateOfBirth": "1997-01-01",
   "address": "test address"
 }
@@ -16,8 +16,8 @@ POST http://localhost:8080/instructor/create
 Content-Type: application/json
 
 {
-  "firstName": "",
-  "lastName": "",
+  "firstName": "Test",
+  "lastName": "Instructor",
   "specialization": "CARDIO"
 }
 
@@ -51,7 +51,7 @@ Content-Type: application/json
 
 {
   "userName": "Test.Customer",
-  "oldPassword": "cToRn7$cy6",
+  "oldPassword": "osHcT(4BmZ",
   "newPassword": "1234567889"
 }
 
@@ -76,7 +76,7 @@ Content-Type: application/json
 
 {
   "firstName": "Test",
-  "lastName": "Customer2",
+  "lastName": "CustomerNew",
   "dateOfBirth": "1998-01-01",
   "address": "test address 2"
 }
@@ -88,7 +88,7 @@ PUT http://localhost:8080/customer/update?loginUserName=admin.admin&loginPasswor
 Content-Type: application/json
 
 {
-  "userName": "Test.Customer2",
+  "userName": "Test.CustomerNew",
   "firstName": "Test",
   "lastName": "Customer_2",
   "dateOfBirth": "1999-01-01",
@@ -106,7 +106,7 @@ Content-Type: application/json
 
 {
   "firstName": "Test",
-  "lastName": "Instructor2",
+  "lastName": "InstructorNew",
   "specialization": "CYCLE"
 }
 
@@ -118,7 +118,7 @@ PUT http://localhost:8080/instructor/update?loginUserName=admin.admin&loginPassw
 Content-Type: application/json
 
 {
-  "userName": "Test.Instructor2",
+  "userName": "Test.InstructorNew",
   "firstName": "Test",
   "lastName": "Instructor_2",
   "specialization": "CYCLE",
@@ -129,7 +129,7 @@ Content-Type: application/json
 
 ###
 //activate customer
-PATCH http://localhost:8080/customer/activate/Test.Customer2?isActive=true&loginUserName=admin.admin&loginPassword=admin
+PATCH http://localhost:8080/customer/activate/Test.Customer2?loginUserName=admin.admin&loginPassword=admin
 Content-Type: application/x-www-form-urlencoded
 
 <> 2024-03-24T152714.500.html
@@ -137,7 +137,7 @@ Content-Type: application/x-www-form-urlencoded
 
 ###
 //activate instructor
-PATCH http://localhost:8080/instructor/activate/Test.Instructor2?isActive=true&loginUserName=admin.admin&loginPassword=admin
+PATCH http://localhost:8080/instructor/activate/Test.Instructor2?loginUserName=admin.admin&loginPassword=admin
 Content-Type: application/x-www-form-urlencoded
 
 ###
@@ -154,7 +154,7 @@ Content-Type: application/json
 
 ###
 //get not assigned on customer instructors
-GET http://localhost:8080/instructor/unassigned-trainers/Test.Customer2?loginUserName=admin.admin&loginPassword=admin
+GET http://localhost:8080/instructor/unassigned-trainers/Test.Customer?loginUserName=admin.admin&loginPassword=admin
 
 <> f-5.txt
 <> f-4.txt

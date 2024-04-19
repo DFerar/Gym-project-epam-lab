@@ -9,7 +9,11 @@ public class Utils {
     private static final String DIGITS = "0123456789";
     private static final String SYMBOLS = "!@#$%^&*()-=+?<>";
 
-    // TODO Tests?
+    /**
+     * Generates a random password of 10 characters. The set of allowed characters is defined in the getAllowedSymbols method.
+     *
+     * @return A random string of 10 characters.
+     */
     public static String generatePassword() {
         String allowedCharacters = getAllowedSymbols();
         SecureRandom random = new SecureRandom();
@@ -23,9 +27,9 @@ public class Utils {
     }
 
     private static String getAllowedSymbols() {
-        return UPPERCASE_LETTERS +
-                LOWERCASE_LETTERS +
-                DIGITS +
-                SYMBOLS;
+        return UPPERCASE_LETTERS
+            + LOWERCASE_LETTERS
+            + DIGITS
+            + SYMBOLS;
     }
 }

@@ -1,17 +1,17 @@
 package com.gym.controller;
 
+import com.gym.dto.request.customer.CreateCustomerRequestDto;
+import com.gym.dto.request.customer.UpdateCustomerInstructorsRequestDto;
+import com.gym.dto.request.customer.UpdateCustomerProfileRequestDto;
+import com.gym.dto.response.customer.CreateCustomerResponseDto;
+import com.gym.dto.response.customer.GetCustomerProfileResponseDto;
+import com.gym.dto.response.customer.InstructorForCustomerResponseDto;
+import com.gym.dto.response.customer.UpdateCustomerProfileResponseDto;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.mapper.CustomerMapper;
 import com.gym.mapper.InstructorMapper;
-import com.gym.requestDto.customerRequest.CreateCustomerRequestDto;
-import com.gym.requestDto.customerRequest.UpdateCustomerInstructorsRequestDto;
-import com.gym.requestDto.customerRequest.UpdateCustomerProfileRequestDto;
-import com.gym.responseDto.customerResponse.CreateCustomerResponseDto;
-import com.gym.responseDto.customerResponse.GetCustomerProfileResponseDto;
-import com.gym.responseDto.customerResponse.InstructorForCustomerResponseDto;
-import com.gym.responseDto.customerResponse.UpdateCustomerProfileResponseDto;
 import com.gym.service.AuthenticationService;
 import com.gym.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,6 +43,14 @@ public class CustomerController {
     private final InstructorMapper instructorMapper;
     private final AuthenticationService authenticationService;
 
+    /**
+     * This is @PostMapping("/create") or createCustomer method.
+     * It creates a new customer entity and maps those details into
+     * a response data transfer object to be returned to the client.
+     *
+     * @param customerDto The client request body containing details for customer creation.
+     * @return {@code ResponseEntity<CreateCustomerResponseDto>} The created customer details mapped into a response data transfer object.
+     */
     @PostMapping("/create")
     @Operation(summary = "Create a customer", description = "Creates a new customer and returns their data")
     public ResponseEntity<CreateCustomerResponseDto> createCustomer(
@@ -54,6 +62,16 @@ public class CustomerController {
             .getGymUserEntity()), HttpStatus.CREATED);
     }
 
+    /**
+     * This is @GetMapping("/{username}") or getCustomerByUsername method.
+     * It returns the details of a given customer entity identified by
+     * the supplied username as a response data transfer object.
+     *
+     * @param username      The unique identifier of the customer whose data is to be retrieved.
+     * @param loginUserName The username of the requestee who is seeking information.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<GetCustomerProfileResponseDto>} The response data transfer object of the identified customer.
+     */
     @GetMapping("/{username}")
     @Operation(summary = "Get customer data", description = "Returns the data of a customer by their username")
     public ResponseEntity<GetCustomerProfileResponseDto> getCustomerByUsername(@PathVariable String username,
@@ -65,6 +83,16 @@ public class CustomerController {
             HttpStatus.OK);
     }
 
+    /**
+     * This is @PutMapping("/update") or updateCustomer method.
+     * It updates a given customer entity's details with the supplied new information
+     * and returns the updated details as a response data transfer object.
+     *
+     * @param newData       New details to update into the customer profile.
+     * @param loginUserName The username of the requestee who is asking for profile update.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<UpdateCustomerProfileResponseDto>} The updated customer details in a response data transfer object.
+     */
     @PutMapping("/update")
     @Operation(summary = "Update customer data", description = "Updates a customer's data and returns the updated data")
     public ResponseEntity<UpdateCustomerProfileResponseDto> updateCustomer(
@@ -80,6 +108,15 @@ public class CustomerController {
             HttpStatus.OK);
     }
 
+    /**
+     * This is @DeleteMapping("/{username}") or deleteCustomer method.
+     * It deletes a given customer entity identified by the supplied username.
+     *
+     * @param username      The unique identifier of the customer to be deleted.
+     * @param loginUserName The username of the requestee who is asking for profile deletion.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<String>} An HTTP status indicating the success or failure of the deletion operation.
+     */
     @DeleteMapping("/{username}")
     @Operation(summary = "Delete a customer", description = "Deletes a customer by their username")
     public ResponseEntity<String> deleteCustomer(@PathVariable String username,
@@ -90,6 +127,15 @@ public class CustomerController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * This is @PatchMapping("/activate/{username}") or customerActivation method.
+     * It changes the activation status of a given customer entity identified by the supplied username.
+     *
+     * @param username      The unique identifier of the customer whose activation status is to be changed.
+     * @param loginUserName The username of the requestee.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<String>} An HTTP status indicating the success or failure of the activation operation.
+     */
     @PatchMapping("/activate/{username}")
     @Operation(summary = "Activate a customer", description = "Changes the activation status of a customer")
     public ResponseEntity<String> customerActivation(@PathVariable String username,
@@ -100,6 +146,16 @@ public class CustomerController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * This is @PutMapping("/instructorList") or updateCustomerInstructors method.
+     * It changes the list of instructors associated with a given customer
+     * and returns a list of the updated instructors.
+     *
+     * @param requestDto    The update request containing the customer and instructor details.
+     * @param loginUserName The username of the requestee who is asking for instructor update.
+     * @param loginPassword The password of the requestee.
+     * @return {@code ResponseEntity<List<InstructorForCustomerResponseDto>>} The updated instructor list as response data transfer objects.
+     */
     @PutMapping("/instructorList")
     @Operation(summary = "Update customer instructors", description = "Updates the list of instructors for a customer")
     public ResponseEntity<List<InstructorForCustomerResponseDto>> updateCustomerInstructors(
