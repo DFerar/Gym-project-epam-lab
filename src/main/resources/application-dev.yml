@@ -1,0 +1,28 @@
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gym
+    username: "gym"
+    password: "gym"
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  flyway:
+    baseline-on-migrate: true
+    locations: "classpath:db/migrations"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    health:
+      show-details: always
+
+token:
+  expiration: 30000000
+  key: "53A73E5F1C4E0A2D3B5F2D784E6A1B423D6F247D1F6E5C3A596D635A753HY123ID1123"

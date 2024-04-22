@@ -14,7 +14,6 @@ import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingTypeEntity;
-import com.gym.service.GymUserService;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class InstructorMapper {
-    private final GymUserService gymUserService;
 
     /**
      * Maps a CreateInstructorRequestDto object to a GymUserEntity object.
@@ -62,8 +60,8 @@ public class InstructorMapper {
      * @param savedUser GymUserEntity object.
      * @return CreateInstructorResponseDto containing the mapped values.
      */
-    public CreateInstructorResponseDto mapToResponseDto(GymUserEntity savedUser) {
-        return new CreateInstructorResponseDto(savedUser.getUserName(), savedUser.getPassword());
+    public CreateInstructorResponseDto mapToResponseDto(GymUserEntity savedUser, String password) {
+        return new CreateInstructorResponseDto(savedUser.getUserName(), password);
     }
 
     /**

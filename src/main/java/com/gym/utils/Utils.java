@@ -2,7 +2,6 @@ package com.gym.utils;
 
 import java.security.SecureRandom;
 
-
 public class Utils {
     private static final String UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWYXZ";
     private static final String LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";

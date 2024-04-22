@@ -59,9 +59,9 @@ public class CustomerMapper {
      * @param savedUser UserEntity object obtained after saving the customer details to database.
      * @return {@code CreateCustomerResponseDto} Response DTO according to the saved user entity.
      */
-    public CreateCustomerResponseDto mapCustomerEntityToCreateResponseDto(GymUserEntity savedUser) {
+    public CreateCustomerResponseDto mapCustomerEntityToCreateResponseDto(GymUserEntity savedUser, String password) {
         return new CreateCustomerResponseDto(savedUser.getUserName(),
-            savedUser.getPassword());
+            password);
     }
 
     /**
