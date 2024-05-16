@@ -12,6 +12,7 @@ import com.gym.repository.CustomerRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import com.gym.repository.TrainingTypeRepository;
+import com.gym.service.external.ExternalWorkloadCalculationService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +30,7 @@ public class TrainingService {
     private final CustomerRepository customerRepository;
     private final InstructorRepository instructorRepository;
     private final TrainingTypeRepository trainingTypeRepository;
+    private final ExternalWorkloadCalculationService externalWorkloadCalculationService;
 
     /**
      * Creates a new training record and saves it in the database, logging the process.
@@ -66,6 +68,8 @@ public class TrainingService {
         updateInstructors(customerEntity, instructorEntity);
         log.info("Instructors of customers were updated: {}", customerEntity.getId());
         log.info("Created training:{}", savedTraining);
+        externalWorkloadCalculationService.calculateWorkloadForCreation(instructorEntity, savedTraining);
+        log.info("Workload calculated for instructor: {}", instructorEntity.getGymUserEntity().getUserName());
     }
 
     /**

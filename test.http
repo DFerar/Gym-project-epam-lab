@@ -32,7 +32,7 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMiIsImV4c
 ###
 //create training with created customer and created instructor
 POST http://localhost:8080/training/create
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0Lkluc3RydWN0b3IiLCJleHAiOjE3MTMyOTEyMzksImlhdCI6MTcxMzI2MTIzOX0.2HKwWHT2So3VwFtO7aDhrZpnZI2Gq-39EU6X-CMD5K-vsIc1f8rAapvrYMU0YG1W
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyNCIsImV4cCI6MTcxNTkwMTczMywiaWF0IjoxNzE1ODcxNzMzfQ.mmv9LlCzKKHNHMClr-rDJBBK8uBoYz9sOFlXXSZbNl3jFZ2_QL6-lA1tImXfPr7h
 Content-Type: application/json
 
 {
@@ -40,7 +40,7 @@ Content-Type: application/json
   "instructorUserName": "Test.Instructor",
   "trainingName": "test training",
   "trainingDate": "2024-01-01",
-  "trainingDuration": 1
+  "trainingDuration": 3
 }
 
 ###
