@@ -39,4 +39,6 @@ public interface TrainingRepository extends JpaRepository<TrainingEntity, Long> 
     );
 
     void deleteTrainingEntitiesByCustomerGymUserEntityUserName(String username);
+
+    Boolean existsByCustomerGymUserEntityUserName(String username);
 }

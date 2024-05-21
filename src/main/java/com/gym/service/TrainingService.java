@@ -16,6 +16,7 @@ import com.gym.service.external.ExternalWorkloadCalculationService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -104,6 +105,21 @@ public class TrainingService {
         return trainingRepository.findTrainingsByInstructorAndCriteria(
             userName, fromDate, toDate, customerName
         );
+    }
+
+    /**
+     * Deletes a training record from the database.
+     *
+     * @param id The ID of the training record to be deleted.
+     */
+    @Transactional
+    public void deleteTraining(Long id) {
+        TrainingEntity trainingEntity = trainingRepository.findById(id).orElse(null);
+        if (trainingEntity == null) {
+            throw new NoSuchElementException("Training not found");
+        }
+        externalWorkloadCalculationService.calculateWorkloadForDeletion(trainingEntity.getInstructor(), trainingEntity);
+        trainingRepository.deleteById(id);
     }
 
     private void updateInstructors(CustomerEntity customerEntity, InstructorEntity instructorEntity) {

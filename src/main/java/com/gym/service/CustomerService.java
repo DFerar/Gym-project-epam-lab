@@ -3,12 +3,14 @@ package com.gym.service;
 import com.gym.entity.CustomerEntity;
 import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
+import com.gym.entity.TrainingEntity;
 import com.gym.exception.CustomerNotFoundException;
 import com.gym.exception.UserNotFoundException;
 import com.gym.repository.CustomerRepository;
 import com.gym.repository.GymUserRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
+import com.gym.service.external.ExternalWorkloadCalculationService;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +28,7 @@ public class CustomerService {
     private final GymUserService gymUserService;
     private final TrainingRepository trainingRepository;
     private final InstructorRepository instructorRepository;
+    private final ExternalWorkloadCalculationService externalWorkloadCalculationService;
 
     /**
      * Creates a new customer and saves it in the database, logging the process.
@@ -113,6 +116,12 @@ public class CustomerService {
         CustomerEntity customerEntity = customerRepository.findCustomerEntityByGymUserEntityUserName(userName);
         if (customerEntity == null) {
             throw new CustomerNotFoundException("Customer not found");
+        }
+        if (trainingRepository.existsByCustomerGymUserEntityUserName(userName)) {
+            List<TrainingEntity> trainingEntities = trainingRepository
+                .findTrainingsByCustomerAndCriteria(userName, null, null, null, null);
+            trainingEntities.forEach(trainingEntity -> externalWorkloadCalculationService.calculateWorkloadForDeletion(
+                trainingEntity.getInstructor(), trainingEntity));
         }
         trainingRepository.deleteTrainingEntitiesByCustomerGymUserEntityUserName(userName);
         gymUserRepository.deleteGymUserEntitiesByUserName(userName);

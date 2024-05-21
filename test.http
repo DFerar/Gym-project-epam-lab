@@ -27,12 +27,12 @@ POST http://localhost:8080/login?username=Test.Customer2&password=<iH6BI9H6i
 ###
 //logout
 POST http://localhost:8080/logout?username=Test.Customer2&password=<iH6BI9H6i
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyMiIsImV4cCI6MTcxMzI5NDAxNCwiaWF0IjoxNzEzMjY0MDE0fQ.TSCNvgiAjrceJ5ISmIQLtGPg6jNwowDFI2hCpH_9mHJktvt6SpeJTE4CdybNZhxi
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyNCIsImV4cCI6MTcxNjMyMTgwMSwiaWF0IjoxNzE2MjkxODAxfQ.7YmXaX6IAgurpTop1WkDix4tE8qYlBli2lE5VoAGVoROT0BgTmzxT2vJ26uEOxqG
 
 ###
 //create training with created customer and created instructor
 POST http://localhost:8080/training/create
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyNCIsImV4cCI6MTcxNTkwMTczMywiaWF0IjoxNzE1ODcxNzMzfQ.mmv9LlCzKKHNHMClr-rDJBBK8uBoYz9sOFlXXSZbNl3jFZ2_QL6-lA1tImXfPr7h
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyNCIsImV4cCI6MTcxNjMyMzU2OSwiaWF0IjoxNzE2MjkzNTY5fQ.lBjRWgc993du9ixrbQP8HutEUH2hTInzt-2sjX_wFn5_Mn0HgaXMVobrlOjamvRc
 Content-Type: application/json
 
 {

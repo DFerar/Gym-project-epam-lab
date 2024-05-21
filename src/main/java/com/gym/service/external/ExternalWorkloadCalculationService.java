@@ -3,36 +3,53 @@ package com.gym.service.external;
 import com.gym.dto.request.instructor.InstructorWorkloadRequest;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ExternalWorkloadCalculationService {
-    private final DiscoveryClient discoveryClient;
+    private final GymMicroserviceClient gymMicroserviceClient;
 
+    /**
+     * This method calculates the workload for creation of a new training session.
+     * It uses a circuit breaker and retry mechanism to handle failures when calling the external service.
+     *
+     * @param instructorEntity The instructor entity for which the workload is being calculated.
+     * @param trainingEntity   The training entity for which the workload is being calculated.
+     */
     public void calculateWorkloadForCreation(InstructorEntity instructorEntity, TrainingEntity trainingEntity) {
         var workloadRequest = getInstructorWorkloadRequest(instructorEntity, trainingEntity);
-        discoveryClient.getInstances("GymMicroserviceApplication").forEach(
-            instance -> {
-                String serviceUrl = instance.getUri().toString();
-                var restClient = RestClient.create();
-                var response = restClient
-                    .post()
-                    .uri(serviceUrl + "/workload/accept")
-                    .body(workloadRequest)
-                    .retrieve()
-                    .toBodilessEntity();
-                log.info("Instance: {}", instance.getUri());
-                log.info("Response: {}", response);
-            }
-        );
+        workloadRequest.setActionType("ADD");
+        gymMicroserviceClient.acceptWorkload(workloadRequest);
     }
 
+    /**
+     * This method calculates the workload for deletion of a training session.
+     * It calls the external service to perform the calculation.
+     *
+     * @param instructorEntity The instructor entity for which the workload is being calculated.
+     * @param trainingEntity   The training entity for which the workload is being calculated.
+     */
+    @CircuitBreaker(name = "cb")
+    @Retry(name = "retry", fallbackMethod = "fallback")
+    public void calculateWorkloadForDeletion(InstructorEntity instructorEntity, TrainingEntity trainingEntity) {
+        var workloadRequest = getInstructorWorkloadRequest(instructorEntity, trainingEntity);
+        workloadRequest.setActionType("DELETE");
+        gymMicroserviceClient.acceptWorkload(workloadRequest);
+    }
+
+    /**
+     * This method creates a new InstructorWorkloadRequest object from the given InstructorEntity and TrainingEntity.
+     *
+     * @param instructorEntity The instructor entity for which the workload is being calculated.
+     * @param trainingEntity   The training entity for which the workload is being calculated.
+     * @return The created InstructorWorkloadRequest object.
+     */
     private InstructorWorkloadRequest getInstructorWorkloadRequest(InstructorEntity instructorEntity,
                                                                    TrainingEntity trainingEntity) {
         InstructorWorkloadRequest workloadRequest = new InstructorWorkloadRequest();
@@ -42,7 +59,6 @@ public class ExternalWorkloadCalculationService {
         workloadRequest.setIsActive(instructorEntity.getGymUserEntity().getIsActive());
         workloadRequest.setTrainingDate(trainingEntity.getTrainingDate());
         workloadRequest.setTrainingDuration(trainingEntity.getTrainingDuration());
-        workloadRequest.setActionType("ADD");
         return workloadRequest;
     }
 }
