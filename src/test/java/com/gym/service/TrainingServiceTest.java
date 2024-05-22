@@ -18,6 +18,7 @@ import com.gym.repository.CustomerRepository;
 import com.gym.repository.InstructorRepository;
 import com.gym.repository.TrainingRepository;
 import com.gym.repository.TrainingTypeRepository;
+import com.gym.service.external.ExternalWorkloadCalculationService;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +40,8 @@ public class TrainingServiceTest {
     private InstructorRepository instructorRepository;
     @Mock
     private TrainingTypeRepository trainingTypeRepository;
+    @Mock
+    private ExternalWorkloadCalculationService externalWorkloadCalculationService;
     @InjectMocks
     private TrainingService trainingService;
 

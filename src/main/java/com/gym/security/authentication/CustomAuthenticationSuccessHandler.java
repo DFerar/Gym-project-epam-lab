@@ -25,7 +25,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
      * @param request        - the HttpServletRequest which contains the login request information.
      * @param response       - the HttpServletResponse
      * @param authentication - the Authentication object containing the authentication details.
-     * @throws Exception - if the token cannot be generated, saved, or set in the response.
      */
     @Override
     @SneakyThrows
