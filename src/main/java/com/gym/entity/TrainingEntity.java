@@ -14,12 +14,14 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "training", schema = "public", catalog = "gym")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"customer", "instructor", "trainingType"})
 @SequenceGenerator(name = "training_SEQ", sequenceName = "training_seq", allocationSize = 1)
 public class TrainingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training_SEQ")

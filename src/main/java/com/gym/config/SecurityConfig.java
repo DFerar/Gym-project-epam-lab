@@ -1,5 +1,6 @@
 package com.gym.config;
 
+import com.gym.properties.CorsProperties;
 import com.gym.properties.JwtProperties;
 import com.gym.security.authentication.CustomAuthFilter;
 import com.gym.security.jwt.CustomConverter;
@@ -7,7 +8,6 @@ import com.gym.security.jwt.CustomJwtDecoder;
 import com.gym.security.jwt.JwtAuthenticationEntryPoint;
 import com.gym.security.logout.CustomLogoutHandler;
 import io.jsonwebtoken.Jwts;
-import java.util.List;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableScheduling
-@EnableConfigurationProperties(JwtProperties.class)
+@EnableConfigurationProperties({JwtProperties.class, CorsProperties.class})
 public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthEntryPoint;
     private final CustomAuthFilter customAuthFilter;
@@ -57,7 +57,7 @@ public class SecurityConfig {
      */
     @Bean
     @SneakyThrows
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsProperties corsProperties) {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .cors(httpSecurityCorsConfigurer -> {
@@ -65,9 +65,9 @@ public class SecurityConfig {
                     new UrlBasedCorsConfigurationSource();
                 CorsConfiguration config = new CorsConfiguration();
                 config.setAllowCredentials(true);
-                config.addAllowedOrigin("http://localhost**");
-                config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
-                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+                config.addAllowedOrigin(corsProperties.getAllowedOrigins());
+                config.setAllowedHeaders(corsProperties.getAllowedHeaders());
+                config.setAllowedMethods(corsProperties.getAllowedMethods());
                 source.registerCorsConfiguration("/**", config);
             })
             .authorizeHttpRequests((requests) -> requests

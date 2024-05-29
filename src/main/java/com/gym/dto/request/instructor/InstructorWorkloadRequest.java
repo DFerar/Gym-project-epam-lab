@@ -15,5 +15,5 @@ public class InstructorWorkloadRequest {
     private Boolean isActive;
     private LocalDate trainingDate;
     private Integer trainingDuration;
-    private String actionType;
+    private ActionType actionType;
 }

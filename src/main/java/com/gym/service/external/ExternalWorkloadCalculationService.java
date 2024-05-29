@@ -1,5 +1,8 @@
 package com.gym.service.external;
 
+import static com.gym.dto.request.instructor.ActionType.ADD;
+import static com.gym.dto.request.instructor.ActionType.DELETE;
+
 import com.gym.dto.request.instructor.InstructorWorkloadRequest;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
@@ -22,7 +25,7 @@ public class ExternalWorkloadCalculationService {
      */
     public void calculateWorkloadForCreation(InstructorEntity instructorEntity, TrainingEntity trainingEntity) {
         var workloadRequest = getInstructorWorkloadRequest(instructorEntity, trainingEntity);
-        workloadRequest.setActionType("ADD");
+        workloadRequest.setActionType(ADD);
         gymMicroserviceClient.acceptWorkload(workloadRequest);
     }
 
@@ -35,7 +38,7 @@ public class ExternalWorkloadCalculationService {
      */
     public void calculateWorkloadForDeletion(InstructorEntity instructorEntity, TrainingEntity trainingEntity) {
         var workloadRequest = getInstructorWorkloadRequest(instructorEntity, trainingEntity);
-        workloadRequest.setActionType("DELETE");
+        workloadRequest.setActionType(DELETE);
         gymMicroserviceClient.acceptWorkload(workloadRequest);
     }
 
