@@ -6,7 +6,6 @@ import static com.gym.dto.request.instructor.ActionType.DELETE;
 import com.gym.dto.request.instructor.InstructorWorkloadRequest;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
-import com.gym.properties.KafkaProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ExternalWorkloadCalculationService {
     private final KafkaProducerService gymMicroserviceClient;
-    private final KafkaProperties kafkaProperties;
+    private static final String TOPIC = "gym-topic";
 
     /**
      * This method calculates the workload for creation of a new training session.
@@ -28,7 +27,8 @@ public class ExternalWorkloadCalculationService {
     public void calculateWorkloadForCreation(InstructorEntity instructorEntity, TrainingEntity trainingEntity) {
         var workloadRequest = getInstructorWorkloadRequest(instructorEntity, trainingEntity);
         workloadRequest.setActionType(ADD);
-        gymMicroserviceClient.sendMessage(kafkaProperties.getDefaultTopic(), workloadRequest);
+        var requestString = gymMicroserviceClient.convertObjectToString(workloadRequest);
+        gymMicroserviceClient.sendMessage(TOPIC, requestString);
     }
 
     /**
@@ -41,7 +41,8 @@ public class ExternalWorkloadCalculationService {
     public void calculateWorkloadForDeletion(InstructorEntity instructorEntity, TrainingEntity trainingEntity) {
         var workloadRequest = getInstructorWorkloadRequest(instructorEntity, trainingEntity);
         workloadRequest.setActionType(DELETE);
-        gymMicroserviceClient.sendMessage(kafkaProperties.getDefaultTopic(), workloadRequest);
+        var requestString = gymMicroserviceClient.convertObjectToString(workloadRequest);
+        gymMicroserviceClient.sendMessage(TOPIC, requestString);
     }
 
     /**

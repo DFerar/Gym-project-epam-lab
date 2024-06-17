@@ -22,7 +22,7 @@ Content-Type: application/json
 }
 ###
 //login
-POST http://localhost:8080/login?username=Test.Customer2&password=<iH6BI9H6i
+POST http://localhost:8080/login?username=Test.Customer&password=lQA^hY0aFM
 
 ###
 //logout
@@ -32,12 +32,12 @@ Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyNCIsImV4c
 ###
 //create training with created customer and created instructor
 POST http://localhost:8080/training/create
-Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyNCIsImV4cCI6MTcxNzY5OTM2MCwiaWF0IjoxNzE3NjY5MzYwfQ.YyseUNGADJu4cITz-yOUoC3zG-SHoD8H1OY926yGX3-6GJHhTWMoBziceNA4Ai99
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJUZXN0LkN1c3RvbWVyIiwiZXhwIjoxNzE4MzE3MDY4LCJpYXQiOjE3MTgyODcwNjh9._B4ab3QUrRF3nB_JhxVJ9QnE0yez563Ww8d3tY9RhhrFYoR57b7bkG7uNSSKgtCp
 Content-Type: application/json
 
 {
-  "customerUserName": "Test.Customer16",
-  "instructorUserName": "Test.Instructor9",
+  "customerUserName": "Test.Customer2",
+  "instructorUserName": "Test.Instructor2",
   "trainingName": "test training",
   "trainingDate": "2024-07-29",
   "trainingDuration": 3

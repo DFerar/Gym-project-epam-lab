@@ -8,7 +8,8 @@ import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
 import java.time.LocalDate;
-import org.apache.commons.lang.RandomStringUtils;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ExternalWorkloadCalculationServiceTest {
 
     @Mock
-    private GymMicroserviceClient gymMicroserviceClient;
+    private KafkaProducerService gymMicroserviceClient;
 
     @InjectMocks
     private ExternalWorkloadCalculationService externalWorkloadCalculationService;
@@ -41,7 +42,7 @@ public class ExternalWorkloadCalculationServiceTest {
         //When
         externalWorkloadCalculationService.calculateWorkloadForCreation(instructorEntity, trainingEntity);
         //Then
-        verify(gymMicroserviceClient, times(1)).acceptWorkload(any());
+        verify(gymMicroserviceClient, times(1)).sendMessage(any(), any());
     }
 
     @Test
@@ -60,7 +61,7 @@ public class ExternalWorkloadCalculationServiceTest {
         //When
         externalWorkloadCalculationService.calculateWorkloadForDeletion(instructorEntity, trainingEntity);
         //Then
-        verify(gymMicroserviceClient, times(1)).acceptWorkload(any());
+        verify(gymMicroserviceClient, times(1)).sendMessage(any(), any());
     }
 }
 

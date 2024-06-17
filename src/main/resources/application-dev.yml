@@ -5,10 +5,10 @@ spring:
     name: GymCrmApp
   kafka:
     bootstrap-servers: localhost:9092
-    consumer:
-      group-id: gym-group
     producer:
-      retries: 1
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      bootstrap-servers: localhost:9092
     template:
       default-topic: gym-topic
   config:
@@ -76,3 +76,11 @@ cors:
     - Authorization
     - Content-Type
   allow-credentials: true
+logging:
+  level:
+    root: INFO
+    com.gym: DEBUG
+
+
+
+
