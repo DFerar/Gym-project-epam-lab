@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class ExternalWorkloadCalculationService {
-    private final KafkaProducerService gymMicroserviceClient;
+    private final InstructorWorkloadProducer externalWorkloadProducer;
     private static final String TOPIC = "gym-topic";
 
     /**
@@ -27,8 +27,7 @@ public class ExternalWorkloadCalculationService {
     public void calculateWorkloadForCreation(InstructorEntity instructorEntity, TrainingEntity trainingEntity) {
         var workloadRequest = getInstructorWorkloadRequest(instructorEntity, trainingEntity);
         workloadRequest.setActionType(ADD);
-        var requestString = gymMicroserviceClient.convertObjectToString(workloadRequest);
-        gymMicroserviceClient.sendMessage(TOPIC, requestString);
+        externalWorkloadProducer.sendMessage(TOPIC, workloadRequest);
     }
 
     /**
@@ -41,8 +40,7 @@ public class ExternalWorkloadCalculationService {
     public void calculateWorkloadForDeletion(InstructorEntity instructorEntity, TrainingEntity trainingEntity) {
         var workloadRequest = getInstructorWorkloadRequest(instructorEntity, trainingEntity);
         workloadRequest.setActionType(DELETE);
-        var requestString = gymMicroserviceClient.convertObjectToString(workloadRequest);
-        gymMicroserviceClient.sendMessage(TOPIC, requestString);
+        externalWorkloadProducer.sendMessage(TOPIC, workloadRequest);
     }
 
     /**

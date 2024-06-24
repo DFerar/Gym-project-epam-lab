@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ExternalWorkloadCalculationServiceTest {
 
     @Mock
-    private KafkaProducerService gymMicroserviceClient;
+    private InstructorWorkloadProducer gymMicroserviceClient;
 
     @InjectMocks
     private ExternalWorkloadCalculationService externalWorkloadCalculationService;
