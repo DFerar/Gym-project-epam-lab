@@ -8,7 +8,6 @@ import com.gym.entity.GymUserEntity;
 import com.gym.entity.InstructorEntity;
 import com.gym.entity.TrainingEntity;
 import java.time.LocalDate;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +29,7 @@ public class ExternalWorkloadCalculationServiceTest {
     void shouldCalculateWorkloadForCreation() {
         //Given
         InstructorEntity instructorEntity = new InstructorEntity();
-        TrainingEntity trainingEntity = new TrainingEntity();
+        final TrainingEntity trainingEntity = new TrainingEntity();
         GymUserEntity gymUserEntity = new GymUserEntity();
         gymUserEntity.setUserName(RandomStringUtils.randomAlphabetic(10));
         gymUserEntity.setFirstName(RandomStringUtils.randomAlphabetic(10));
@@ -49,7 +48,7 @@ public class ExternalWorkloadCalculationServiceTest {
     void shouldCalculateWorkloadForDeleting() {
         //Given
         InstructorEntity instructorEntity = new InstructorEntity();
-        TrainingEntity trainingEntity = new TrainingEntity();
+        final TrainingEntity trainingEntity = new TrainingEntity();
         GymUserEntity gymUserEntity = new GymUserEntity();
         gymUserEntity.setUserName(RandomStringUtils.randomAlphabetic(10));
         gymUserEntity.setFirstName(RandomStringUtils.randomAlphabetic(10));

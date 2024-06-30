@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class ExternalWorkloadCalculationService {
-    private final InstructorWorkloadProducer externalWorkloadProducer;
     private static final String TOPIC = "gym-topic";
+    private final InstructorWorkloadProducer externalWorkloadProducer;
 
     /**
      * This method calculates the workload for creation of a new training session.
